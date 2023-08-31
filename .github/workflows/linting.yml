@@ -17,4 +17,4 @@ jobs:
         run: bundle install
 
       - name: Run Linting
-        run: bundle exec fastlane lint
+        run: bundle exec fastlane lint summary:$GITHUB_STEP_SUMMARY
