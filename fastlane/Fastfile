@@ -1,11 +1,13 @@
 skip_docs
 default_platform(:ios)
-ensure_xcode_version(version: "14.2")
 
 platform :ios do
 
     desc "Runs tests & code coverage check"
     lane :tests do
+        sh "brew install xcodes"
+        xcodes(version: "14.2")
+
         scan(
             workspace: "PayPalMessages.xcworkspace",
             scheme: "PayPalMessagesTests",
@@ -31,6 +33,9 @@ platform :ios do
 
     desc "Runs SwiftLint and returns any unmet warnings or errors"
     lane :lint do
+        sh "brew install xcodes"
+        xcodes(version: "14.2")
+
         swiftlint(
             mode: :lint,
             raise_if_swiftlint_error: true,
@@ -41,6 +46,9 @@ platform :ios do
     end
 
     lane :build do
+        sh "brew install xcodes"
+        xcodes(version: "14.2")
+
         pod_lib_lint
     end
 
