@@ -10,10 +10,10 @@ extension UIColor {
         let scanner = Scanner(string: hexString as String)
 
         if hexString.hasPrefix("#") {
-            scanner.scanLocation = 1
+            scanner.currentIndex = scanner.string.index(after: scanner.currentIndex)
         }
-        var color: UInt32 = 0
-        scanner.scanHexInt32(&color)
+        var color: UInt64 = 0
+        scanner.scanHexInt64(&color)
 
         let mask = 0x000000FF
         let redValue = Int(color >> 16) & mask
