@@ -14,6 +14,7 @@ This SDK supports Swift 5.7+. This SDK is written in Swift.
 This SDK supports:
 - CocoaPods
 - Swift Package Manager
+
 ### UI Frameworks
 
 This package supports:
@@ -48,4 +49,3 @@ This SDK follows Semantic Versioning through the use of [Semantic Release](https
 ## Feedback
 
 PayPal iOS SDK Messages is in active development and we welcome your feedback! [Submit feedback or report an issue](https://github.com/paypal/paypal-messages-ios/issues).
-
