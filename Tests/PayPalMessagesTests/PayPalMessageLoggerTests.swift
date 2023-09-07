@@ -11,10 +11,14 @@ final class PayPalMessageLoggerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        Logger.integrationName = "Test_SDK"
-        Logger.integrationVersion = "0.1.0"
-        Logger.deviceID = "987654321"
-        Logger.sessionID = "123456789"
+        BuildInfo.version = "1.0.0"
+
+        PayPalMessageConfig.setGlobalAnalytics(
+            integrationName: "Test_SDK",
+            integrationVersion: "0.1.0",
+            deviceID: "987654321",
+            sessionID: "123456789"
+        )
 
         // Inject mock sender to intercept log requests
         logger.sender = mockSender
@@ -49,6 +53,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
         }
 
         let expectedPayload: [String: Any] = [
+            "lib_version": "1.0.0",
+            "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
             "client_id": "testclientid",
             "integration_version": "0.1.0",
@@ -117,6 +123,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
         }
 
         let expectedPayload: [String: Any] = [
+            "lib_version": "1.0.0",
+            "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
             "client_id": "testclientid",
             "integration_version": "0.1.0",
@@ -189,6 +197,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
         }
 
         let expectedPayload: [String: Any] = [
+            "lib_version": "1.0.0",
+            "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
             "client_id": "testclientid",
             "integration_version": "0.1.0",
@@ -260,6 +270,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
         }
 
         let expectedPayload: [String: Any] = [
+            "lib_version": "1.0.0",
+            "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
             "client_id": "testclientid",
             "integration_version": "0.1.0",
@@ -314,6 +326,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
         }
 
         let expectedPayload: [String: Any] = [
+            "lib_version": "1.0.0",
+            "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
             "client_id": "testclientid",
             "integration_version": "0.1.0",
@@ -389,3 +403,4 @@ final class PayPalMessageLoggerTests: XCTestCase {
         XCTAssertTrue(isEqual)
     }
 }
+// swiftlint:disable:this file_length

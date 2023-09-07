@@ -188,7 +188,6 @@ struct SwiftUIContentView: View {
             }
 
             Divider()
-                .overlay(.gray)
 
             // MARK: PayPal Message
 

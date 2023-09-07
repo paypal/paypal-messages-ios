@@ -3,7 +3,7 @@ on:
     workflow_dispatch: {}
     push:
         branches:
-            - release
+            - main
 
 jobs:
     linting:
@@ -32,11 +32,6 @@ jobs:
                   # pulls all commits (needed for semantic release to correctly version)
                   fetch-depth: '0'
                   persist-credentials: false
-
-            - name: Setup node
-              uses: actions/setup-node@v3
-              with:
-                node-version: "lts/*"
 
             - name: Install Dependencies
               run: |

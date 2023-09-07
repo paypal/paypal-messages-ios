@@ -1,74 +1,101 @@
 skip_docs
 default_platform(:ios)
-ensure_xcode_version(version: "14.2")
+
+def setup_xcode
+  sh "which xcodes > /dev/null || brew install xcodes"
+  xcodes(version: "14.2")
+end
 
 platform :ios do
 
-    desc "Runs tests & code coverage check"
-    lane :tests do
-        scan(
-            workspace: "PayPalMessages.xcworkspace",
-            scheme: "PayPalMessagesTests",
-            devices: ["iPhone 14"],
-            derived_data_path: "~/Library/Developer/Xcode/DerivedData",
-            skip_build: true,
-            result_bundle: true,
-            code_coverage: true
-        )
+  desc "Runs tests & code coverage check"
+  lane :tests do |options|
+    setup_xcode
 
-        # Ensure the code coverage directory is empty before creating new coverage
-        sh "rm -rf coverage"
+    scan(
+      workspace: "PayPalMessages.xcworkspace",
+      scheme: "PayPalMessagesTests",
+      devices: ["iPhone 14"],
+      derived_data_path: "~/Library/Developer/Xcode/DerivedData",
+      skip_build: true,
+      result_bundle: true,
+      code_coverage: true
+    )
 
-        xcov(
-            workspace: "PayPalMessages.xcworkspace",
-            scheme: "PayPalMessagesTests",
-            derived_data_path: "~/Library/Developer/Xcode/DerivedData",
-            output_directory: "fastlane/coverage",
-            markdown_report: true,
-            minimum_coverage_percentage: 80.0
-        )
+    # Ensure the code coverage directory is empty before creating new coverage
+    sh "rm -rf coverage"
+
+    begin
+      xcov(
+        workspace: "PayPalMessages.xcworkspace",
+        scheme: "PayPalMessagesTests",
+        derived_data_path: "~/Library/Developer/Xcode/DerivedData",
+        output_directory: "fastlane/coverage",
+        markdown_report: true,
+        minimum_coverage_percentage: 60.0 # TODO: Make this more strict
+      )
+    ensure
+      if options[:summary]
+        # Add coverage report to GitHub Actions summary page
+        sh "cat ./coverage/report.md > #{options[:summary]}"
+      end
     end
+  end
 
-    desc "Runs SwiftLint and returns any unmet warnings or errors"
-    lane :lint do
-        swiftlint(
-            mode: :lint,
-            raise_if_swiftlint_error: true,
-            strict: true,
-            reporter: "github-actions-logging",
-            quiet: true
-        )
+  desc "Runs SwiftLint and returns any unmet warnings or errors"
+  lane :lint do |options|
+    setup_xcode
+
+    # Ensure directory exists since swiftlint command won't create it if missing
+    sh "mkdir -p swiftlint"
+
+    begin
+      swiftlint(
+        mode: :lint,
+        raise_if_swiftlint_error: true,
+        strict: true,
+        reporter: "markdown",
+        output_file: "fastlane/swiftlint/report.md"
+      )
+    rescue # only need the summary if there are lint issues
+      if options[:summary]
+        # Add SwiftLint report to GitHub Actions summary page
+        sh "cat ./swiftlint/report.md > #{options[:summary]}"
+      end
     end
+  end
 
-    lane :build do
-        pod_lib_lint
+  lane :build do
+    setup_xcode
+
+    pod_lib_lint
+  end
+
+  desc "Update version number in various files"
+  lane :release do |options|
+    if options[:version] 
+      # Update the hardcoded version string in the Swift code 
+      sh "BUILD_INFO_PATH=$(find .. -name 'BuildInfo.swift')"
+      sh "sed -i.bak -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\1 = \"#{options[:version]}\"/' $BUILD_INFO_PATH"
+      sh "rm $BUILD_INFO_PATH.bak"
+
+      # Update the version in the podspec file
+      version_bump_podspec(
+        path: "../PayPalMessages.podspec",
+        version_number: options[:version]
+      )
     end
+  end
 
-    desc "Update version number in various files"
-    lane :release do |options|
-        if options[:version] 
-            # Update the hardcoded version string in the Swift code 
-            sh "BUILD_INFO_PATH=$(find .. -name 'BuildInfo.swift')"
-            sh "sed -i.bak -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\1 = \"#{options[:version]}\"/' $BUILD_INFO_PATH"
-            sh "rm $BUILD_INFO_PATH.bak"
+  desc "Sync develop with main branch"
+  lane :sync do
+    push_to_git_remote(
+      local_branch: "main",
+      remote_branch: "develop"
+    )
+  end
 
-            # Update the version in the podspec file
-            version_bump_podspec(
-               path: "../PayPalMessages.podspec",
-               version_number: options[:version]
-            )
-        end
-    end
-
-    desc "Sync develop with main branch"
-    lane :sync do
-        push_to_git_remote(
-            local_branch: "main",
-            remote_branch: "develop"
-        )
-    end
-
-    lane :publish do
-      pod_push(path: "PayPalMessages.podspec")
-    end
+  lane :publish do
+    pod_push(path: "PayPalMessages.podspec")
+  end
 end

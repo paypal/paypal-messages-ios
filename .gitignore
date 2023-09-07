@@ -41,5 +41,6 @@ SampleApps/SPMTest/SPMTest.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Pa
 # Fastlane
 /fastlane/report.xml
 /fastlane/coverage
-/fastlane/test_output/
+/fastlane/test_output
+/fastlane/swiftlint
 

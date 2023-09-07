@@ -11,10 +11,10 @@ jobs:
     runs-on: macOS-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Dependencies
         run: bundle install
 
       - name: Run Unit Tests
-        run: bundle exec fastlane tests
+        run: bundle exec fastlane tests summary:$GITHUB_STEP_SUMMARY
