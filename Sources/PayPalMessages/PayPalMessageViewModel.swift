@@ -330,10 +330,10 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         let config = PayPalMessageConfig(
             data: .init(
                 clientID: clientID,
+                environment: environment,
                 amount: amount,
                 placement: placement,
-                offerType: offerType,
-                environment: environment
+                offerType: offerType
             ),
             style: .init(
                 logoType: logoType,
@@ -373,12 +373,12 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         let config = PayPalMessageModalConfig(
             data: .init(
                 clientID: clientID,
+                environment: environment,
                 amount: amount,
                 // currency: currency, TODO: Implement?
                 placement: placement,
                 offerType: offerType,
-                modalCloseButton: modalCloseButton,
-                environment: environment
+                modalCloseButton: modalCloseButton
             )
         )
         // Partner options

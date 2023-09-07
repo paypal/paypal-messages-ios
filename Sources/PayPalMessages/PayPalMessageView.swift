@@ -3,7 +3,10 @@ import SwiftUI
 
 public final class PayPalMessageView: UIControl {
 
+    public typealias Proxy<T> = AnyProxy<PayPalMessageView, T>
+
     // MARK: - Properties
+
     /// Delegate property in charge of announcing rendering and fetching events.
     @Proxy(\.viewModel.stateDelegate)
     public var stateDelegate: PayPalMessageViewStateDelegate?

@@ -179,11 +179,11 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     func makeConfig() -> PayPalMessageModalConfig {
         let config = PayPalMessageModalConfig(data: .init(
             clientID: self.clientID,
+            environment: self.environment,
             amount: self.amount,
             currency: self.currency,
             placement: self.placement,
-            offerType: self.offerType,
-            environment: self.environment
+            offerType: self.offerType
         ))
 
         config.data.merchantID = merchantID

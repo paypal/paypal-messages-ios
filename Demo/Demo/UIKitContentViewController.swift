@@ -266,6 +266,7 @@ class UIKitContentViewController: UIViewController {
         let config = PayPalMessageConfig(
             data: .init(
                 clientID: getCurrentClientID() ?? defaultMessageConfig.data.clientID,
+                environment: defaultMessageConfig.data.environment,
                 amount: getCurrentAmount(),
                 offerType: getCurrentOfferType()
             ),

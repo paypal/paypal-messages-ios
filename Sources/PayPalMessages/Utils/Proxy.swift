@@ -37,8 +37,3 @@ public struct AnyProxy<EnclosingType, Value> {
         self.keyPath = keyPath
     }
 }
-
-// Simple protocol that can be exteneded onto other types to infer the EnclosingType of AnyProxy
-public protocol ProxyContainer {
-    typealias Proxy<T> = AnyProxy<Self, T>
-}

@@ -32,10 +32,10 @@ struct SwiftUIContentView: View {
         let messageConfig: PayPalMessageConfig = .init(
             data: .init(
                 clientID: clientID,
+                environment: defaultMessageConfig.data.environment,
                 amount: amount,
                 placement: placement,
-                offerType: offerType,
-                environment: .sandbox
+                offerType: offerType
             ),
             style: .init(
                 logoType: logoType,

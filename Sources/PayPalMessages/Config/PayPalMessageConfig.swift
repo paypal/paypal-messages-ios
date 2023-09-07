@@ -28,10 +28,10 @@ public class PayPalMessageData: NSObject {
     /// Standard integration
     public init(
         clientID: String,
+        environment: Environment,
         amount: Double? = nil,
         placement: PayPalMessagePlacement? = nil,
-        offerType: PayPalMessageOfferType? = nil,
-        environment: Environment = .live
+        offerType: PayPalMessageOfferType? = nil
     ) {
         self.clientID = clientID
         self.amount = amount
@@ -44,11 +44,11 @@ public class PayPalMessageData: NSObject {
     public init(
         clientID: String,
         merchantID: String,
+        environment: Environment,
         partnerAttributionID: String,
         amount: Double? = nil,
         placement: PayPalMessagePlacement? = nil,
-        offerType: PayPalMessageOfferType? = nil,
-        environment: Environment = .live
+        offerType: PayPalMessageOfferType? = nil
     ) {
         self.clientID = clientID
         self.merchantID = merchantID

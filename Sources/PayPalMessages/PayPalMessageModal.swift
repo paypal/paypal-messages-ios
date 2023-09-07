@@ -4,6 +4,8 @@ import WebKit
 
 final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
+    typealias Proxy<T> = AnyProxy<PayPalMessageModal, T>
+
     // MARK: - Properties
 
     /// Delegate property in charge of announcing rendering and fetching events.

@@ -49,12 +49,12 @@ class PayPalMessageModalDataConfig: NSObject {
     /// Standard integration
     init(
         clientID: String,
+        environment: Environment,
         amount: Double? = nil,
         currency: String? = nil,
         placement: PayPalMessagePlacement? = nil,
         offerType: PayPalMessageOfferType? = nil,
-        modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig(),
-        environment: Environment = .live
+        modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
         self.clientID = clientID
         self.amount = amount
@@ -69,13 +69,13 @@ class PayPalMessageModalDataConfig: NSObject {
     init(
         clientID: String,
         merchantID: String,
+        environment: Environment,
         partnerAttributionID: String,
         amount: Double? = nil,
         currency: String? = nil,
         placement: PayPalMessagePlacement? = nil,
         offerType: PayPalMessageOfferType? = nil,
-        modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig(),
-        environment: Environment = .live
+        modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
         self.clientID = clientID
         self.merchantID = merchantID
