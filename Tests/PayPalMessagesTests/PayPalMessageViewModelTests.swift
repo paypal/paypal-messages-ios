@@ -6,7 +6,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
 
     // Message view passed into the view controller that gets passed back
     // as a refernce in the delegate functions
-    let messageView = PayPalMessageView(config: .init(data: .init(clientID: "testclientid")))
+    let messageView = PayPalMessageView(config: .init(data: .init(clientID: "testclientid", environment: .live)))
     let mockSender = LogSenderMock()
 
     override func setUp() {
@@ -169,7 +169,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
 
     func testSimpleLogoTypeUpdate() {
         let mockedRequest = PayPalMessageRequestMock(scenario: .success)
-        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "test"))
+        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -191,7 +191,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
 
     func testSimpleColorUpdate() {
         let mockedRequest = PayPalMessageRequestMock(scenario: .success)
-        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "test"))
+        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -213,7 +213,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
 
     func testSimpleAlignmentUpdate() {
         let mockedRequest = PayPalMessageRequestMock(scenario: .success)
-        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "testclientid"))
+        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -340,7 +340,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
         assert(mockedRequest, calledTimes: 2)
 
         // test a new config being set overrides the update in progress flag and triggers and update
-        let newConfig = PayPalMessageConfig(data: .init(clientID: "testclientid"))
+        let newConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
         viewModel.config = newConfig
 
         assert(mockedRequest, calledTimes: 3)
@@ -385,7 +385,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
         mockedRequest: PayPalMessageRequestMock = PayPalMessageRequestMock(scenario: .success),
         mockedMerchantProfile: MerchantProfileProviderMock
             = MerchantProfileProviderMock(.success),
-        mockedConfig: PayPalMessageConfig = PayPalMessageConfig(data: .init(clientID: "testclientid"))
+        mockedConfig: PayPalMessageConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
     ) -> PayPalMessageViewModel {
         let viewModel = PayPalMessageViewModel(
             config: mockedConfig,

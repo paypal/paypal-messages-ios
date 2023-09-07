@@ -19,6 +19,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         let config = PayPalMessageModalConfig(
             data: .init(
                 clientID: "testclientid",
+                environment: .live,
                 amount: 100.0,
                 currency: "USD",
                 placement: .home,
@@ -64,6 +65,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         viewModel.setConfig(.init(
             data: .init(
                 clientID: "testclientid",
+                environment: .live,
                 amount: 200.0,
                 offerType: .payLaterShortTerm
             )
@@ -111,7 +113,11 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     func testModalLoadSuccess() {
         let (viewModel, webView, _, _) = makePayPalMessageModalViewModel(
             config: .init(
-                data: .init(clientID: "testclientid", amount: 500.0)
+                data: .init(
+                    clientID: "testclientid",
+                    environment: .live,
+                    amount: 500.0
+                )
             )
         )
         var loadResult: Result<Void, PayPalMessageError>?
@@ -249,7 +255,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     private func makePayPalMessageModalViewModel(
-        config: PayPalMessageModalConfig = PayPalMessageModalConfig(data: .init(clientID: "testclientid"))
+        config: PayPalMessageModalConfig = PayPalMessageModalConfig(data: .init(clientID: "testclientid", environment: .live))
     ) -> ( // swiftlint:disable:this large_tuple
         PayPalMessageModalViewModel,
         PayPalMessageModalWebViewMock,
