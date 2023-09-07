@@ -1,6 +1,6 @@
 # PayPal iOS SDK Messages Module
 
-Welcome to the PayPal iOS SDK Messages Module. This package will allow you to integrate PayPal messages in your iOS app to promote offers such as Pay Later and PayPal Credit to your customers.
+Welcome to the PayPal iOS SDK Messages Module. This package facilitates rendering PayPal messages to promote offers such as Pay Later and PayPal Credit to customers.
 
 **The PayPalMessages package permits a deployment target of iOS 14.0 or higher**. It requires Xcode 14.2+ and Swift 5.7+.
 
