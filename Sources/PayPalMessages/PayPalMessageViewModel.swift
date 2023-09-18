@@ -261,6 +261,11 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             stateDelegate.onError(messageView, error: error)
         }
 
+        // Disable the tap gesture
+        if let messageView = messageView {
+            messageView.isUserInteractionEnabled = false
+        }
+
         delegate?.refreshContent()
     }
 
