@@ -172,6 +172,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     deinit {}
 
     private func updateConfig(_ config: PayPalMessageConfig) {
+        self.clientID = config.data.clientID
         self.amount = config.data.amount
         self.placement = config.data.placement
         self.offerType = config.data.offerType
