@@ -262,7 +262,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         }
 
         // Disable the tap gesture
-        if let messageView = messageView {
+        if let messageView {
             messageView.isUserInteractionEnabled = false
         }
 
@@ -286,6 +286,11 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             renderDuration: Int((renderStart?.timeIntervalSinceNow ?? 1 / 1000) * -1000),
             requestDuration: Int((messageResponse?.requestDuration ?? 1 / 1000) * -1000)
         ))
+
+        // Enable the tap gesture
+        if let messageView {
+            messageView.isUserInteractionEnabled = true
+        }
 
         modal?.setConfig(makeModalConfig())
 
