@@ -154,6 +154,9 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.stateDelegate = stateDelegate
         self.messageView = messageView
 
+        // Set messageView to be non-interactive by default
+        messageView?.isUserInteractionEnabled = false
+
         self.logger = Logger.createMessageLogger(
             environment: environment,
             clientID: clientID,
