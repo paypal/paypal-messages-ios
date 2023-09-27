@@ -86,9 +86,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     }
 
     /// Update the messageView's interactivity based on the boolean flag. Disabled by default.
-    var isMessageViewInteractive = false {
-        didSet { messageView?.isUserInteractionEnabled = isMessageViewInteractive }
-    }
+    var isMessageViewInteractive = false
 
     /// returns the parameters for the style and content the message's Attributed String according to the server response
     var messageParameters: PayPalMessageViewParameters? { makeViewParameters() }
