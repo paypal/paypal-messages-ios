@@ -36,7 +36,7 @@ jobs:
             - name: Install Dependencies
               run: |
                 bundle install
-                npm i -g @semantic-release/exec@6 @semantic-release/changelog@6 @semantic-release/git@10 conventional-changelog-conventionalcommits@7
+                npm i -g @semantic-release/exec@6 @semantic-release/changelog@6 @semantic-release/git@10 conventional-changelog-conventionalcommits@6
 
             - name: GitHub Release
               env:
