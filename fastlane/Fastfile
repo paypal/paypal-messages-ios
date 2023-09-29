@@ -3,7 +3,7 @@ default_platform(:ios)
 
 def setup_xcode
   sh "which xcodes > /dev/null || brew install xcodes"
-  xcodes(version: "14.2")
+  xcodes(version: "14.3")
 end
 
 platform :ios do
@@ -75,15 +75,26 @@ platform :ios do
   lane :release do |options|
     if options[:version] 
       # Update the hardcoded version string in the Swift code 
-      sh "BUILD_INFO_PATH=$(find .. -name 'BuildInfo.swift')"
-      sh "sed -i.bak -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\1 = \"#{options[:version]}\"/' $BUILD_INFO_PATH"
-      sh "rm $BUILD_INFO_PATH.bak"
+      build_info_path = sh "find .. -name 'BuildInfo.swift'"
+      sh "sed -i '' -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\\1 = \"#{options[:version]}\"/' #{build_info_path}"
 
       # Update the version in the podspec file
       version_bump_podspec(
-        path: "../PayPalMessages.podspec",
+        path: "PayPalMessages.podspec",
         version_number: options[:version]
       )
+
+      sh "rm -rf ../Carthage"
+
+      # Create Carthage xcframework
+      carthage(
+        command: "build",
+        no_skip_current: true,
+        use_xcframeworks: true
+      )
+
+      # Zip xcframework in prep to be included with the GitHub release
+      sh "cd .. && zip -r PayPalMessages.xcframework.zip Carthage"
     end
   end
 
@@ -96,6 +107,6 @@ platform :ios do
   end
 
   lane :publish do
-    pod_push(path: "PayPalMessages.podspec")
+    # pod_push(path: "PayPalMessages.podspec")
   end
 end

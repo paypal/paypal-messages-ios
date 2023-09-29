@@ -32,6 +32,7 @@ Pods
 
 # Carthage
 Carthage/
+*.xcframework.zip
 
 # SPM
 .swiftpm
