@@ -18,7 +18,7 @@ jobs:
     release:
         name: Release
         needs: [linting, tests, build]
-        runs-on: macos-latest
+        runs-on: macos-13
 
         permissions:
           contents: write

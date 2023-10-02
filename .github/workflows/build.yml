@@ -8,7 +8,7 @@ concurrency:
 jobs:
   cocoapods:
     name: CocoaPods
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
 
   # spm:
   #   name: Swift Package Manager
-  #   runs-on: macos-latest
+  #   runs-on: macos-13
   #   steps:
   #     - name: Check out repository
   #       uses: actions/checkout@v3
@@ -29,12 +29,12 @@ jobs:
   #     - name: Install Dependencies
   #       run: bundle install
   #
-  #     - name: Run pod lib lint
+  #     - name: Build SPM test app
   #       run: bundle exec fastlane build_spm
 
   carthage:
     name: Carthage
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -42,5 +42,5 @@ jobs:
       - name: Install Dependencies
         run: bundle install
 
-      - name: Run pod lib lint
+      - name: Build Carthage test app
         run: bundle exec fastlane build_carthage
