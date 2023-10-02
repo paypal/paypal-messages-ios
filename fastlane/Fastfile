@@ -3,7 +3,10 @@ default_platform(:ios)
 
 def setup_xcode
   sh "which xcodes > /dev/null || brew install xcodes"
-  xcodes(version: "14.3")
+  xcodes(
+    version: "14.3.1",
+    select_for_current_build_only: true
+  )
 end
 
 platform :ios do
