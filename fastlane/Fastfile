@@ -65,10 +65,56 @@ platform :ios do
     end
   end
 
-  lane :build do
+  desc "Build for Cocoapods"
+  lane :build_pod do
     setup_xcode
 
     pod_lib_lint
+  end
+
+  desc "Build for Swift Package Manager"
+  lane :build_spm do
+    setup_xcode
+
+    gym(
+      project: "TestApps/SPMTest/SPMTest.xcodeproj",
+      scheme: "SPMTest",
+      clean: true,
+      skip_codesigning: true,
+      skip_archive: false,
+      skip_package_ipa: true,
+      skip_package_dependencies_resolution: false
+    )
+  end
+
+  desc "Build for Carthage"
+  lane :build_carthage do
+    setup_xcode
+
+    Dir.chdir("..") do
+      # Point the Cartfile dependency to use from the latest commit
+      current_dir = sh("pwd").strip
+      current_commit = sh("git rev-parse HEAD").strip
+      sh "echo 'git \"file://#{current_dir}\" \"#{current_commit}\"' > TestApps/CarthageTest/Cartfile"
+    end
+
+    # Add built dependencies to <project_root>/Carthage/Build
+    carthage(
+      command: "update",
+      use_xcframeworks: true,
+      project_directory: "TestApps/CarthageTest"
+    )
+    
+    # Build the test app
+    gym(
+      project: "TestApps/CarthageTest/CarthageTest.xcodeproj",
+      scheme: "CarthageTest",
+      clean: true,
+      skip_codesigning: true,
+      skip_archive: false,
+      skip_package_ipa: true,
+      skip_package_dependencies_resolution: true
+    )
   end
 
   desc "Update version number in various files"
@@ -106,6 +152,7 @@ platform :ios do
     )
   end
 
+  desc "Publish podspec to Trunk"
   lane :publish do
     # pod_push(path: "PayPalMessages.podspec")
   end
