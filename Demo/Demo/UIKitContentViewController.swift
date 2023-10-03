@@ -110,18 +110,7 @@ class UIKitContentViewController: UIViewController {
     }()
 
     lazy var stackView: UIStackView = {
-        let paypalMessageContainer = UIView()
-
-        paypalMessageContainer.addSubview(paypalMessage)
-
         paypalMessage.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            paypalMessage.leadingAnchor.constraint(equalTo: paypalMessageContainer.leadingAnchor),
-            paypalMessage.trailingAnchor.constraint(equalTo: paypalMessageContainer.trailingAnchor),
-            paypalMessage.topAnchor.constraint(equalTo: paypalMessageContainer.topAnchor),
-            paypalMessage.bottomAnchor.constraint(equalTo: paypalMessageContainer.bottomAnchor, constant: 20)
-        ])
-
 
         return getStackView(
             subviews: [
@@ -174,7 +163,7 @@ class UIKitContentViewController: UIViewController {
                     axis: .horizontal
                 ),
                 getSeparator(),
-                paypalMessageContainer
+                paypalMessage
             ],
             padding: 12
         )

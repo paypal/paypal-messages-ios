@@ -305,7 +305,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         var accessibilityLabel = sanitizedMainContent
 
         if !sanitizedMainContent.contains("PayPal") {
-            accessibilityLabel = "PayPal, " + accessibilityLabel
+            accessibilityLabel = "PayPal - " + accessibilityLabel
         }
 
         accessibilityLabel += " \(response.defaultDisclaimer)"
