@@ -268,6 +268,11 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         // Disable the tap gesture
         isMessageViewInteractive = false
 
+        // Update accessibility properties
+        self.messageView?.accessibilityLabel = ""
+        self.messageView?.accessibilityTraits = .none
+        self.messageView?.isAccessibilityElement = false
+
         delegate?.refreshContent()
     }
 
@@ -291,6 +296,21 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
         // Enable the tap gesture
         isMessageViewInteractive = true
+
+        // Creates a new sanitized string for use as the accessibilityLabel
+        let sanitizedMainContent = response.defaultMainContent
+            .replacingOccurrences(of: "%paypal_logo%", with: "PayPal")
+            .replacingOccurrences(of: "/mo", with: " per month")
+
+        var accessibilityLabel = sanitizedMainContent
+
+        if !sanitizedMainContent.contains("PayPal") {
+            accessibilityLabel = "PayPal, " + accessibilityLabel
+        }
+
+        accessibilityLabel += " \(response.defaultDisclaimer)"
+
+        self.messageView?.accessibilityLabel = accessibilityLabel
 
         modal?.setConfig(makeModalConfig())
 

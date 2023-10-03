@@ -254,9 +254,9 @@ extension PayPalMessageView {
     }
 
     private func configAccessibility() {
-        accessibilityTraits = .link
+        accessibilityTraits = .button
         isAccessibilityElement = true
-        accessibilityLabel = Constants.accessibilityLabel
+        accessibilityLabel = viewModel.messageView?.accessibilityLabel
     }
 }
 
@@ -265,7 +265,6 @@ extension PayPalMessageView {
 extension PayPalMessageView {
 
     private enum Constants {
-        static let accessibilityLabel: String = "PayPalMessageView"
         static let highlightedAnimationDuration: CGFloat = 1.0
         static let highlightedAlpha: CGFloat = 0.75
         static let regularAlpha: CGFloat = 1.0

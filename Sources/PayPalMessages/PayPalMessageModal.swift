@@ -165,6 +165,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     // MARK: - Config Functions
 
     private func configViews() {
+        view.accessibilityLabel = "PayPal Learn More Modal"
         // FIXME: Prevent this click from applying to the core modal body
         view.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(self.hide))
@@ -258,6 +259,8 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         }
 
         closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.isAccessibilityElement = true
+        closeButton.accessibilityLabel = "PayPal Learn More Modal Close"
 
         view.addSubview(closeButton)
 
