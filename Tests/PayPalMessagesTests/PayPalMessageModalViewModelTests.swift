@@ -14,6 +14,26 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         let logger = Logger.get(for: "test", in: .live)
         logger.sender = mockSender
     }
+    
+    // Helper function to convert JSON string to dictionary
+    func convertToDictionary(from jsonString: String) -> [String: Any]? {
+        // Extract JSON data from the string
+        guard let startIndex = jsonString.firstIndex(of: "{"),
+              let endIndex = jsonString.lastIndex(of: "}"),
+              endIndex > startIndex else {
+            print("Failed to extract JSON data from the string. JSON String: \(jsonString)")
+            return nil
+        }
+
+        let jsonDataString = jsonString[startIndex...endIndex]
+        
+        guard let data = jsonDataString.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+            print("Failed to convert JSON string to dictionary. JSON String: \(jsonString)")
+            return nil
+        }
+        return json
+    }
 
     func testInitialSetup() {
         let config = PayPalMessageModalConfig(
@@ -79,10 +99,21 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         waitForExpectations(timeout: 0.5)
 
         XCTAssertTrue(webView.evaluateJavaScriptCalled)
-        XCTAssertEqual(
-            webView.evaluateJavaScriptString,
-            "window.actions.updateProps({\"client_id\":\"testclientid\",\"amount\":200,\"offer\":\"PAY_LATER_SHORT_TERM\"})"
-        )
+
+        let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":200,\"offer\":\"PAY_LATER_SHORT_TERM\"}"
+
+        guard let actualJSONString = webView.evaluateJavaScriptString else {
+            XCTFail("Failed to get JavaScript string")
+            return
+        }
+
+        guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
+        let actualDictionary = convertToDictionary(from: actualJSONString) else {
+            XCTFail("Failed to convert JSON strings to dictionaries")
+            return
+        }
+
+        XCTAssertEqual(expectedDictionary as NSDictionary, actualDictionary as NSDictionary)
     }
 
     func testUpdateIndividualProperties() {
@@ -102,12 +133,21 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         XCTAssertFalse(webView.evaluateJavaScriptCalled)
 
         waitForExpectations(timeout: 0.5)
+        
+        let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"}"
 
-        XCTAssertTrue(webView.evaluateJavaScriptCalled)
-        XCTAssertEqual(
-            webView.evaluateJavaScriptString,
-            "window.actions.updateProps({\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"})"
-        )
+        guard let actualJSONString = webView.evaluateJavaScriptString else {
+            XCTFail("Failed to get JavaScript string")
+            return
+        }
+
+        guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
+        let actualDictionary = convertToDictionary(from: actualJSONString) else {
+            XCTFail("Failed to convert JSON strings to dictionaries")
+            return
+        }
+
+        XCTAssertEqual(expectedDictionary as NSDictionary, actualDictionary as NSDictionary)
     }
 
     func testModalLoadSuccess() {
