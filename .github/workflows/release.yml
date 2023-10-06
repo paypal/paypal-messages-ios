@@ -7,13 +7,13 @@ on:
 
 jobs:
     linting:
-        uses: paypal/paypal-messages-ios/.github/workflows/linting.yml@${{ github.sha }}
+        uses: ./.github/workflows/linting.yml
 
     tests:
-        uses: paypal/paypal-messages-ios/.github/workflows/tests.yml@${{ github.sha }}
+        uses: ./.github/workflows/tests.yml
 
     build:
-        uses: paypal/paypal-messages-ios/.github/workflows/build.yml@${{ github.sha }}
+        uses: ./.github/workflows/build.yml
 
     release:
         name: Release
