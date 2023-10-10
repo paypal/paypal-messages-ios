@@ -299,7 +299,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
         // Creates a new sanitized string for use as the accessibilityLabel
         let sanitizedMainContent = response.defaultMainContent
-            .replacingOccurrences(of: "%paypal_logo%", with: "PayPal")
+            .replacingOccurrences(of: "%paypal_logo%", with: response.offerType == PayPalMessageResponseOfferType.payPalCreditNoInterest ? "PayPal Credit" : "PayPal")
             .replacingOccurrences(of: "/mo", with: " per month")
 
         var accessibilityLabel = sanitizedMainContent
