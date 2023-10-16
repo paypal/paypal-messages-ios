@@ -44,7 +44,7 @@
             "@semantic-release/exec",
             {
                 "prepareCmd": "bundle exec fastlane release version:${nextRelease.version}",
-                "successCmd": "bundle exec fastlane sync"
+                "successCmd": "bundle exec fastlane sync channel:${nextRelease.channel}"
             }
         ],
         [

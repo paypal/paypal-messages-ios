@@ -155,11 +155,15 @@ platform :ios do
   end
 
   desc "Sync develop with main branch"
-  lane :sync do
-    push_to_git_remote(
-      local_branch: "main",
-      remote_branch: "develop"
-    )
+  lane :sync do |options|
+    # channel will be 'develop' when doing a prerelease which doesn't
+    # need to sync main back to develop then
+    if options[:channel].nil? || options[:channel].empty?
+      push_to_git_remote(
+        local_branch: "main",
+        remote_branch: "develop"
+      )
+    end
   end
 
   desc "Publish podspec to Trunk"
