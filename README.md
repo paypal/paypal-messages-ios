@@ -2,12 +2,12 @@
 
 Welcome to the PayPal iOS SDK Messages Module. This package facilitates rendering PayPal messages to promote offers such as Pay Later and PayPal Credit to customers. **It is recommended to integrate this package using the [PayPal iOS SDK](https://github.com/paypal/paypal-ios)**.
 
-**The PayPalMessages package permits a deployment target of iOS 14.0 or higher**. It requires Xcode 14.2+ and Swift 5.7+.
+**The PayPalMessages package permits a deployment target of iOS 14.0 or higher**. It requires Xcode 14.3+ and Swift 5.8+.
 
 ## Support 
 
 ### Languages
-This SDK supports Swift 5.7+. This SDK is written in Swift.
+This SDK supports Swift 5.8+. This SDK is written in Swift.
 
 ### Package Managers
 
@@ -31,7 +31,7 @@ In order to display PayPal messages within your iOS application, a Client ID is 
 3. Update the placeholder `clientID` in the default message configuration found in `Demo/DefaultMessageConfig` to your sandbox client ID.
 4. Select the `Demo` scheme, and then run.
 
-Xcode 14.2+ is required to run the demo app.
+Xcode 14.3+ is required to run the demo app.
 
 ## Testing 
 
