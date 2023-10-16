@@ -79,6 +79,13 @@ platform :ios do
   lane :build_spm do
     setup_xcode
 
+    Dir.chdir("..") do
+      current_commit = sh("git rev-parse HEAD").strip
+      # Point to current commit instead of `main` branch
+      sh "sed -i '' -E 's/kind = branch/kind = revision/' TestApps/SPMTest/SPMTest.xcodeproj/project.pbxproj"
+      sh "sed -i '' -E 's/branch = .*/revision = #{current_commit};/' TestApps/SPMTest/SPMTest.xcodeproj/project.pbxproj"
+    end
+
     gym(
       project: "TestApps/SPMTest/SPMTest.xcodeproj",
       scheme: "SPMTest",

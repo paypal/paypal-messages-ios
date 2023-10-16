@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct CarthageTestApp: App {
+struct SPMTestApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
