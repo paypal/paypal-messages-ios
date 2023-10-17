@@ -11,9 +11,10 @@ This SDK supports Swift 5.8+. This SDK is written in Swift.
 
 ### Package Managers
 
-This SDK supports:
+This SDK module supports:
 - CocoaPods
 - Swift Package Manager
+- Carthage
 
 ### UI Frameworks
 
