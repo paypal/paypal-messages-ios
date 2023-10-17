@@ -261,7 +261,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         var encodableDict: [String: AnyCodable] = [:]
         for (key, value) in eventArgs[0] {
-            encodableDict[key] = value as? AnyCodable
+            encodableDict[key] = AnyCodable(value)
         }
         logger.addEvent(.dynamic(data: encodableDict))
 
