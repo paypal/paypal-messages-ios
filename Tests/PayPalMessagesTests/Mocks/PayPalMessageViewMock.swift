@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 @testable import PayPalMessages
 
 class PayPalMessageViewMock: PayPalMessageViewModelDelegate {
@@ -6,7 +7,7 @@ class PayPalMessageViewMock: PayPalMessageViewModelDelegate {
     weak var viewModel: PayPalMessageViewModel?
     var refreshContentCalled = false
 
-    func refreshContent() {
+    func refreshContent(label: String, traits: UIAccessibilityTraits, accessibilityElement: Bool) {
         refreshContentCalled = true
     }
 }
