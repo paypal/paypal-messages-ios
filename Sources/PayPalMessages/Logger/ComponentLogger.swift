@@ -70,7 +70,7 @@ class ComponentLogger: Encodable {
         case type = "type"
         case instanceId = "instance_id"
         // Component Events
-        case events = "events"
+        case events = "component_events"
     }
 
     func encode(to encoder: Encoder) throws {

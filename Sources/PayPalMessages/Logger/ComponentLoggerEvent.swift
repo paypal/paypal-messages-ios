@@ -10,8 +10,8 @@ enum ComponentLoggerEvent: Encodable {
         case eventType = "event_type"
         case renderDuration = "render_duration"
         case requestDuration = "request_duration"
-        case linkName = "link_name"
-        case linkSrc = "link_src"
+        case linkName = "page_view_link_name"
+        case linkSrc = "page_view_link_source"
         case errorName = "error_name"
         case errorDescription = "error_description"
     }

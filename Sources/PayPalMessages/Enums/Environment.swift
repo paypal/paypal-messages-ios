@@ -60,7 +60,7 @@ public enum Environment: Equatable {
         case message = "/credit-presentment/native/message"
         case modal = "/credit-presentment/lander/modal"
         case merchantProfile = "/credit-presentment/merchant-profile"
-        case log = "/credit-presentment/glog"
+        case log = "/v1/credit/upstream-messaging-events"
     }
 
     func url(_ path: PayPalMessagePath, _ queryParams: [String: String?]? = nil) -> URL? {

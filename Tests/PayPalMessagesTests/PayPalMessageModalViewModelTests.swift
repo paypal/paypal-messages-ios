@@ -240,8 +240,8 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
                     "name": "onClick",
                     "args": [
                         {
-                            "link_name": "Apply Now Link",
-                            "link_src": "Apply Now Src"
+                            "page_view_link_name": "Apply Now Link",
+                            "page_view_link_source": "Apply Now Src"
                         }
                     ]
                 }

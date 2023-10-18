@@ -273,8 +273,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             }
 
         case "onClick":
-            if let src = eventArgs[0]["link_src"] as? String,
-               let linkName = eventArgs[0]["link_name"] as? String,
+            if let src = eventArgs[0]["page_view_link_source"] as? String,
+               let linkName = eventArgs[0]["page_view_link_name"] as? String,
                let modal {
                 eventDelegate?.onClick(modal, data: .init(linkName: linkName, linkSrc: src))
             }
