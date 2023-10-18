@@ -2,7 +2,7 @@ import UIKit
 
 protocol PayPalMessageViewModelDelegate: AnyObject {
     /// Requests the delegate to perform a content refresh.
-    func refreshContent()
+    func refreshContent(label: String, traits: UIAccessibilityTraits, accessibilityElement: Bool)
 }
 
 // swiftlint:disable:next type_body_length
@@ -87,6 +87,13 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
     /// Update the messageView's interactivity based on the boolean flag. Disabled by default.
     var isMessageViewInteractive = false
+
+    /// Accessibility Properties
+    var messageAccessibilityLabel: String = ""
+
+    var messageAccessibilityTraits: UIAccessibilityTraits = .none
+
+    var messageIsAccessibilityElement = false
 
     /// returns the parameters for the style and content the message's Attributed String according to the server response
     var messageParameters: PayPalMessageViewParameters? { makeViewParameters() }
@@ -218,7 +225,11 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
                 self.fetchMessageContent()
                 self.fetchMessageContentPending = false
             } else {
-                self.delegate?.refreshContent()
+                self.delegate?.refreshContent(
+                    label: self.messageAccessibilityLabel,
+                    traits: self.messageAccessibilityTraits,
+                    accessibilityElement: self.messageIsAccessibilityElement
+                )
             }
         }
 
@@ -269,11 +280,15 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         isMessageViewInteractive = false
 
         // Update accessibility properties
-        self.messageView?.accessibilityLabel = ""
-        self.messageView?.accessibilityTraits = .none
-        self.messageView?.isAccessibilityElement = false
+        messageAccessibilityLabel = ""
+        messageAccessibilityTraits = .none
+        messageIsAccessibilityElement = false
 
-        delegate?.refreshContent()
+        delegate?.refreshContent(
+            label: messageAccessibilityLabel,
+            traits: messageAccessibilityTraits,
+            accessibilityElement: messageIsAccessibilityElement
+        )
     }
 
     private func onMessageRequestReceived(response: MessageResponse) {
@@ -283,8 +298,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         if let stateDelegate, let messageView {
             stateDelegate.onSuccess(messageView)
         }
-
-        delegate?.refreshContent()
 
         // How to get renderDuration?
         // Is this the correct way to get requestDuration?
@@ -299,7 +312,10 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
         // Creates a new sanitized string for use as the accessibilityLabel
         let sanitizedMainContent = response.defaultMainContent
-            .replacingOccurrences(of: "%paypal_logo%", with: response.offerType == PayPalMessageResponseOfferType.payPalCreditNoInterest ? "PayPal Credit" : "PayPal")
+            .replacingOccurrences(
+                of: "%paypal_logo%",
+                with: response.offerType == PayPalMessageResponseOfferType.payPalCreditNoInterest ? "PayPal Credit" : "PayPal"
+            )
             .replacingOccurrences(of: "/mo", with: " per month")
 
         var accessibilityLabel = sanitizedMainContent
@@ -310,7 +326,15 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
         accessibilityLabel += " \(response.defaultDisclaimer)"
 
-        self.messageView?.accessibilityLabel = accessibilityLabel
+        messageAccessibilityLabel = accessibilityLabel
+        messageAccessibilityTraits = .button
+        messageIsAccessibilityElement = true
+
+        delegate?.refreshContent(
+            label: messageAccessibilityLabel,
+            traits: messageAccessibilityTraits,
+            accessibilityElement: messageIsAccessibilityElement
+        )
 
         modal?.setConfig(makeModalConfig())
 
