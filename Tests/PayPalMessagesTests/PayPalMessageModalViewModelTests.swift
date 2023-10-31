@@ -108,7 +108,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
-              let actualDictionary = convertToDictionary(from: actualJSONString) else {
+            let actualDictionary = convertToDictionary(from: actualJSONString) else {
             XCTFail("Failed to convert JSON strings to dictionaries")
             return
         }
@@ -148,7 +148,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
-              let actualDictionary = convertToDictionary(from: actualJSONString) else {
+            let actualDictionary = convertToDictionary(from: actualJSONString) else {
             XCTFail("Failed to convert JSON strings to dictionaries")
             return
         }
