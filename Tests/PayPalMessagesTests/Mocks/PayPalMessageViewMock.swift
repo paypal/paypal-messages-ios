@@ -7,7 +7,7 @@ class PayPalMessageViewMock: PayPalMessageViewModelDelegate {
     weak var viewModel: PayPalMessageViewModel?
     var refreshContentCalled = false
 
-    func refreshContent(label: String, traits: UIAccessibilityTraits, accessibilityElement: Bool) {
+    func refreshContent() {
         refreshContentCalled = true
     }
 }
