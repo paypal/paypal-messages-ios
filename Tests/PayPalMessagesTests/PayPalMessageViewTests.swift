@@ -21,21 +21,6 @@ enum Constants {
     static let fontSize: CGFloat = 14.0
 }
 
-func showModalMock() {
-    let config = PayPalMessageModalConfig(
-        data: .init(
-            clientID: "Test123",
-            environment: .sandbox,
-            amount: 100.0,
-            currency: "USD",
-            offerType: .payLaterLongTerm
-        )
-    )
-    let modal = PayPalMessageModal(config: config)
-
-    modal.show()
-}
-
 @available(iOS 13.0, *)
 class PayPalMessageViewTests: XCTestCase {
 
@@ -60,12 +45,7 @@ class PayPalMessageViewTests: XCTestCase {
             config: config
         )
 
-        // Configure accessibility properties
-        messageView.accessibilityTraits = .link
-        messageView.isAccessibilityElement = true
-        messageView.accessibilityLabel = Constants.accessibilityLabel
-
-        // Assert accessibility properties are correctly configured
+        // Assert accessibility properties are correctly initialized
         XCTAssertEqual(messageView.accessibilityTraits, .link)
         XCTAssertTrue(messageView.isAccessibilityElement)
         XCTAssertEqual(messageView.accessibilityLabel, Constants.accessibilityLabel)

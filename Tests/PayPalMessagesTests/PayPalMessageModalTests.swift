@@ -15,79 +15,79 @@ class PayPalMessageModalTests: XCTestCase {
 
     var modalViewController: PayPalMessageModal!
 
-    override func setUpWithError() throws {
-        // Create an instance of PayPalMessageModal for testing
+    override func setUp() {
+        super.setUp()
         modalViewController = PayPalMessageModal(config: config)
         modalViewController.loadViewIfNeeded()
     }
 
-    override func tearDownWithError() throws {
-        // Clean up after each test
+    override func tearDown() {
         modalViewController = nil
+        super.tearDown()
     }
 
-    func testShowWithConfig() {
-        let presentingViewController = UIViewController()
+    func testInitialPropertyValues() {
+        let modalViewController = PayPalMessageModal(config: config)
 
-        // Getting the all scenes
-        let scenes = UIApplication.shared.connectedScenes
-        // Getting windowScene from scenes
-        let windowScene = scenes.first as? UIWindowScene
-        // Getting window from windowScene
-        let window = windowScene?.windows.first
-        window?.rootViewController = presentingViewController
-
-        presentingViewController.loadViewIfNeeded()
-        modalViewController.loadViewIfNeeded()
-
-        // Create an expectation to track the modal presentation
-        let presentationExpectation = XCTestExpectation(description: "Modal presentation")
-
-        modalViewController.show(config: config) // Replace with your mock configuration
-
-        // Add a brief delay for animations to complete
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { // Increase the delay if needed
-            // Verify that the modal view controller is presented modally
-            XCTAssertTrue(self.modalViewController.modalPresentationStyle == .formSheet)
-
-            // Fulfill the presentation expectation
-            presentationExpectation.fulfill()
-        }
-
-        // Wait for the presentation expectation with an appropriate timeout
-        wait(for: [presentationExpectation], timeout: 5.0)
-    }
-
-
-    func testSupportedInterfaceOrientations() {
-        let orientations = modalViewController.supportedInterfaceOrientations
-
-        XCTAssertEqual(orientations, .portrait)
-    }
-
-    func testPreferredInterfaceOrientationForPresentation() {
-        let orientation = modalViewController.preferredInterfaceOrientationForPresentation
-
-        XCTAssertEqual(orientation, .portrait)
-    }
-
-    func testShouldAutorotate() {
+        let supportedOrientations = modalViewController.supportedInterfaceOrientations
+        let preferredOrientation = modalViewController.preferredInterfaceOrientationForPresentation
         let shouldAutoRotate = modalViewController.shouldAutorotate
 
+        XCTAssertEqual(supportedOrientations, .portrait)
+        XCTAssertEqual(preferredOrientation, .portrait)
         XCTAssertFalse(shouldAutoRotate)
     }
+    
+    func testViewDidLoad() {
+        let stateDelegateMock = PayPalMessageModalStateDelegateMock()
+        modalViewController.stateDelegate = stateDelegateMock
 
-    func testModalDismissal() {
-        // Present the modal
-        modalViewController.show()
+        modalViewController.viewDidLoad()
 
-        // Dismiss the modal
-        modalViewController.hide()
-
-        // Ensure that the modal is dismissed
-        XCTAssertNil(modalViewController.presentingViewController)
+        XCTAssertTrue(stateDelegateMock.onLoadingCalled)
     }
+    
+    func testViewOnLoadingDelegate() {
+        let stateDelegateMock = PayPalMessageModalStateDelegateMock()
+        modalViewController.stateDelegate = stateDelegateMock
 
+        modalViewController.viewDidLoad()
+
+        XCTAssertTrue(stateDelegateMock.onLoadingCalled)
+    }
+    
+    func testViewWillAppearCallsOnShowDelegate() {
+        let eventDelegateMock = PayPalMessageModalEventDelegateMock()
+        modalViewController.eventDelegate = eventDelegateMock
+
+        modalViewController.viewWillAppear(false)
+
+        XCTAssertTrue(eventDelegateMock.onShowCalled)
+    }
+    
+    func testModalDismissalCallsOnCloseDelegate() {
+        let eventDelegateMock = PayPalMessageModalEventDelegateMock()
+        modalViewController.eventDelegate = eventDelegateMock
+
+        modalViewController.viewDidDisappear(false)
+
+        XCTAssertTrue(eventDelegateMock.onCloseCalled)
+    }
+    
+    func testModalPresentationAndDismissal() {
+        let eventDelegateMock = PayPalMessageModalEventDelegateMock()
+        modalViewController.eventDelegate = eventDelegateMock
+
+        modalViewController.show()
+        modalViewController.viewWillAppear(false)
+
+        XCTAssertTrue(eventDelegateMock.onShowCalled)
+
+        modalViewController.hide()
+        modalViewController.viewDidDisappear(false)
+
+        XCTAssertTrue(eventDelegateMock.onCloseCalled)
+    }
 
     func testIntegrationInitializer() {
         let clientID = "Client123"
@@ -139,38 +139,4 @@ class PayPalMessageModalTests: XCTestCase {
         XCTAssertEqual(modalDataConfig.modalCloseButton.colorType, closeButtonColorType)
         XCTAssertEqual(modalDataConfig.environment, environment)
     }
-}
-
-func testSetGlobalAnalytics() {
-    let integrationName = "MyIntegration"
-    let integrationVersion = "1.0"
-    let deviceID = "Device123"
-    let sessionID = "Session456"
-
-    PayPalMessageModalConfig.setGlobalAnalytics(
-        integrationName: integrationName,
-        integrationVersion: integrationVersion,
-        deviceID: deviceID,
-        sessionID: sessionID
-    )
-
-    XCTAssertEqual(Logger.integrationName, integrationName)
-    XCTAssertEqual(Logger.integrationVersion, integrationVersion)
-    XCTAssertEqual(Logger.deviceID, deviceID)
-    XCTAssertEqual(Logger.sessionID, sessionID)
-}
-
-func testSetGlobalAnalyticsWithDefaults() {
-    let integrationName = "MyIntegration"
-    let integrationVersion = "1.0"
-
-    PayPalMessageConfig.setGlobalAnalytics(
-        integrationName: integrationName,
-        integrationVersion: integrationVersion
-    )
-
-    XCTAssertEqual(Logger.integrationName, integrationName)
-    XCTAssertEqual(Logger.integrationVersion, integrationVersion)
-    XCTAssertNil(Logger.deviceID)
-    XCTAssertNil(Logger.sessionID)
 }

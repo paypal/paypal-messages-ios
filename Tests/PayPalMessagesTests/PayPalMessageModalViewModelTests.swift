@@ -14,7 +14,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         let logger = Logger.get(for: "test", in: .live)
         logger.sender = mockSender
     }
-    
+
     // Helper function to convert JSON string to dictionary
     func convertToDictionary(from jsonString: String) -> [String: Any]? {
         // Extract JSON data from the string
@@ -26,7 +26,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         let jsonDataString = jsonString[startIndex...endIndex]
-        
+
         guard let data = jsonDataString.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
             print("Failed to convert JSON string to dictionary. JSON String: \(jsonString)")
@@ -108,11 +108,17 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
-        let actualDictionary = convertToDictionary(from: actualJSONString) else {
+              let actualDictionary = convertToDictionary(from: actualJSONString) else {
             XCTFail("Failed to convert JSON strings to dictionaries")
             return
         }
 
+        // Check if the actualJSONString matches the desired pattern
+        let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
+
+        XCTAssertTrue(!matches.isEmpty)
         XCTAssertEqual(expectedDictionary as NSDictionary, actualDictionary as NSDictionary)
     }
 
@@ -133,7 +139,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         XCTAssertFalse(webView.evaluateJavaScriptCalled)
 
         waitForExpectations(timeout: 0.5)
-        
+
         let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"}"
 
         guard let actualJSONString = webView.evaluateJavaScriptString else {
@@ -142,11 +148,17 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
-        let actualDictionary = convertToDictionary(from: actualJSONString) else {
+              let actualDictionary = convertToDictionary(from: actualJSONString) else {
             XCTFail("Failed to convert JSON strings to dictionaries")
             return
         }
 
+        // Check if the actualJSONString matches the desired pattern
+        let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
+
+        XCTAssertTrue(!matches.isEmpty)
         XCTAssertEqual(expectedDictionary as NSDictionary, actualDictionary as NSDictionary)
     }
 

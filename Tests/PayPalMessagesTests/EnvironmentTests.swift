@@ -11,7 +11,7 @@ class EnvironmentTests: XCTestCase {
         XCTAssertEqual(Environment.sandbox.rawValue, "sandbox")
         XCTAssertEqual(Environment.live.rawValue, "production")
     }
-    
+
     // Test environment setting
     func testEnvironmentSetting() {
         XCTAssertTrue(Environment.live.isProduction)
