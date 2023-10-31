@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 @testable import PayPalMessages
 
 class PayPalMessageViewMock: PayPalMessageViewModelDelegate {
