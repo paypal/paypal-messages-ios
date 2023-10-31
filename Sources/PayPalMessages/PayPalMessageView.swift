@@ -160,7 +160,7 @@ public final class PayPalMessageView: UIControl {
 
     override public func awakeFromNib() {
         super.awakeFromNib()
-        refreshContent(label: accessibilityLabel ?? "", traits: accessibilityTraits, accessibilityElement: isAccessibilityElement)
+        refreshContent()
     }
 
     override public var intrinsicContentSize: CGSize {
@@ -235,16 +235,16 @@ public final class PayPalMessageView: UIControl {
 extension PayPalMessageView: PayPalMessageViewModelDelegate {
 
     /// Recreates the message content from the existing data. **Does not triggers a networking event.**
-    func refreshContent(label: String, traits: UIAccessibilityTraits, accessibilityElement: Bool) {
+    func refreshContent() {
         let params = viewModel.messageParameters
         messageLabel.attributedText = PayPalMessageAttributedStringBuilder().makeMessageString(params)
         // Force recalculation for layout
         invalidateIntrinsicContentSize()
 
         // Update accessibility properties
-        self.accessibilityLabel = label
-        self.accessibilityTraits = traits
-        self.isAccessibilityElement = accessibilityElement
+        self.accessibilityLabel = params?.accessibilityLabel ?? ""
+        self.accessibilityTraits = params?.accessibilityTraits ?? .none
+        self.isAccessibilityElement = params?.isAccessibilityElement ?? false
     }
 }
 
@@ -255,12 +255,12 @@ extension PayPalMessageView {
     /// Called when the accessibility or orientation traits have changed. Reloads the content accordingly.
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        refreshContent(label: accessibilityLabel ?? "", traits: accessibilityTraits, accessibilityElement: isAccessibilityElement)
+        refreshContent()
     }
 
     private func configAccessibility() {
-        accessibilityTraits = .button
-        isAccessibilityElement = true
+        accessibilityTraits = .none
+        isAccessibilityElement = false
     }
 }
 
