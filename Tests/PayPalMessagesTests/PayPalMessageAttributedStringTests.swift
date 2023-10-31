@@ -31,7 +31,10 @@ final class PayPalMessageAttributedStringTests: XCTestCase {
             linkDescription: testLinkDescription,
             linkColor: .blue,
             linkUnderlineColor: .blue,
-            textAlignment: .left
+            textAlignment: .left,
+            accessibilityLabel: "Pay in several installments with PayPal. Learn More",
+            accessibilityTraits: .button,
+            isAccessibilityElement: true
         )
     }
 
