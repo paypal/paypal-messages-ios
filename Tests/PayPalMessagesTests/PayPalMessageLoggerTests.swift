@@ -130,7 +130,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")
         }
-        
+
         let expectedPayload: [String: Any] = [
             "specversion": "1.0",
             "id": "123456789",
@@ -213,7 +213,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")
         }
-        
+
         let expectedPayload: [String: Any] = [
             "specversion": "1.0",
             "id": "123456789",
@@ -295,8 +295,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")
         }
-        
-        
+
         let expectedPayload: [String: Any] = [
             "specversion": "1.0",
             "id": "123456789",
@@ -361,7 +360,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")
         }
-        
+
         let expectedPayload: [String: Any] = [
             "specversion": "1.0",
             "id": "123456789",
