@@ -53,6 +53,14 @@ final class PayPalMessageLoggerTests: XCTestCase {
         }
 
         let expectedPayload: [String: Any] = [
+            "specversion": "1.0",
+            "id": "123456789",
+            "type": "com.paypal.credit.upstream-presentment.v1",
+            "source": "urn:paypal:event-src:v1:ios:messages",
+            "datacontenttype": "application/json",
+            "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
+            "time": "2023-11-01T11:12:05.791-0400",
+            "data": [
             "lib_version": "1.0.0",
             "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
@@ -87,6 +95,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 ]
             ]
         ]
+    ]
 
         assert(payload: data, equals: expectedPayload)
     }
@@ -121,8 +130,16 @@ final class PayPalMessageLoggerTests: XCTestCase {
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")
         }
-
+        
         let expectedPayload: [String: Any] = [
+            "specversion": "1.0",
+            "id": "123456789",
+            "type": "com.paypal.credit.upstream-presentment.v1",
+            "source": "urn:paypal:event-src:v1:ios:messages",
+            "datacontenttype": "application/json",
+            "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
+            "time": "2023-11-01T11:12:05.791-0400",
+            "data": [
             "lib_version": "1.0.0",
             "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
@@ -152,7 +169,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 ]
             ]
         ]
-
+    ]
+        
         assert(payload: data, equals: expectedPayload)
     }
 
@@ -195,8 +213,16 @@ final class PayPalMessageLoggerTests: XCTestCase {
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")
         }
-
+        
         let expectedPayload: [String: Any] = [
+            "specversion": "1.0",
+            "id": "123456789",
+            "type": "com.paypal.credit.upstream-presentment.v1",
+            "source": "urn:paypal:event-src:v1:ios:messages",
+            "datacontenttype": "application/json",
+            "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
+            "time": "2023-11-01T11:12:05.791-0400",
+            "data": [
             "lib_version": "1.0.0",
             "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
@@ -237,6 +263,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 ]
             ]
         ]
+    ]
 
         assert(payload: data, equals: expectedPayload)
     }
@@ -268,8 +295,17 @@ final class PayPalMessageLoggerTests: XCTestCase {
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")
         }
-
+        
+        
         let expectedPayload: [String: Any] = [
+            "specversion": "1.0",
+            "id": "123456789",
+            "type": "com.paypal.credit.upstream-presentment.v1",
+            "source": "urn:paypal:event-src:v1:ios:messages",
+            "datacontenttype": "application/json",
+            "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
+            "time": "2023-11-01T11:12:05.791-0400",
+            "data": [
             "lib_version": "1.0.0",
             "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
@@ -296,6 +332,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 ]
             ]
         ]
+    ]
 
         assert(payload: data, equals: expectedPayload)
     }
@@ -324,8 +361,16 @@ final class PayPalMessageLoggerTests: XCTestCase {
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")
         }
-
+        
         let expectedPayload: [String: Any] = [
+            "specversion": "1.0",
+            "id": "123456789",
+            "type": "com.paypal.credit.upstream-presentment.v1",
+            "source": "urn:paypal:event-src:v1:ios:messages",
+            "datacontenttype": "application/json",
+            "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
+            "time": "2023-11-01T11:12:05.791-0400",
+            "data": [
             "lib_version": "1.0.0",
             "integration_name": "Test_SDK",
             "integration_type": "NATIVE_IOS",
@@ -352,6 +397,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 ]
             ]
         ]
+    ]
 
         assert(payload: data, equals: expectedPayload)
 
@@ -366,8 +412,16 @@ final class PayPalMessageLoggerTests: XCTestCase {
 
     private func assert(payload: [String: Any], equals expectedPayload: [String: Any]) {
         var data = payload
+        var expected = expectedPayload
+        print("test payload", data)
+        
+        // Extract logger data from CloudEvent
+        guard var loggerData = data["data"] as? [String: Any] else {
+            return XCTFail("missing logger data within CloudEvent")
+        }
 
-        guard var components = data["components"] as? [[String: Any]] else {
+        // Extract components from logger data
+        guard var components = loggerData["components"] as? [[String: Any]] else {
             return XCTFail("missing components")
         }
 
@@ -381,9 +435,27 @@ final class PayPalMessageLoggerTests: XCTestCase {
             components[index] = value
         }
 
-        data["components"] = components
+        // Update the modified components back into loggerData
+        loggerData["components"] = components
 
-        let isEqual = NSDictionary(dictionary: data).isEqual(to: expectedPayload)
+        // Update the modified loggerData back into the CloudEvent data
+        data["data"] = loggerData
+        
+        // Ensure that the id exists and then remove it since it generates a unique value for each test run
+        guard data["id"] is String else {
+            return XCTFail("invalid id")
+        }
+        data.removeValue(forKey: "id")
+        expected.removeValue(forKey: "id")
+
+        // Ensure that the time exists and then remove it since it generates a unique value for each test run
+        guard data["time"] is String else {
+            return XCTFail("invalid time")
+        }
+        data.removeValue(forKey: "time")
+        expected.removeValue(forKey: "time")
+
+        let isEqual = NSDictionary(dictionary: data).isEqual(to: expected)
 
         if !isEqual,
            let payloadData = try? JSONSerialization.data(
@@ -391,7 +463,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             options: .prettyPrinted
            ),
            let expectedData = try? JSONSerialization.data(
-            withJSONObject: expectedPayload,
+            withJSONObject: expected,
             options: .prettyPrinted
            ) {
             let payloadString = String(decoding: payloadData, as: UTF8.self)

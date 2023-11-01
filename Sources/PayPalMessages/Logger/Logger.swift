@@ -1,5 +1,26 @@
 import Foundation
 
+struct CloudEvent: Encodable {
+
+    let specversion: String = "1.0"
+    let id: String
+    let type: String = "com.paypal.credit.upstream-presentment.v1"
+    let source: String = "urn:paypal:event-src:v1:ios:messages"
+    let datacontenttype: String = "application/json"
+    // swiftlint:disable:next line_length
+    let dataschema: String = "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json"
+    let time: String
+    let data: Logger
+
+    init(data: Logger) {
+        self.id = UUID().uuidString
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        self.time = dateFormatter.string(from: Date())
+        self.data = data
+    }
+}
+
 class Logger: Encodable {
 
     // Integration Details
@@ -172,10 +193,11 @@ class Logger: Encodable {
 
     func flushEvents() {
         guard hasEvents() else { return }
-        guard let data = try? JSONEncoder().encode(self) else { return }
 
-        sender.send(data, to: environment)
+        let cloudEvent = CloudEvent(data: self)
+        guard let cloudEventData = try? JSONEncoder().encode(cloudEvent) else { return }
 
+        sender.send(cloudEventData, to: environment)
         clearEvents()
     }
 }
