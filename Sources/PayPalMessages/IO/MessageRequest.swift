@@ -18,6 +18,7 @@ struct MessageRequestParameters {
     let ignoreCache: Bool
     let devTouchpoint: Bool
     let stageTag: String?
+    let instanceID: String
 }
 
 protocol MessageRequestable {
@@ -51,6 +52,7 @@ class MessageRequest: MessageRequestable {
             "stage_tag": parameters.stageTag,
             "ignore_cache": parameters.ignoreCache.description,
             "dev_touchpoint": parameters.devTouchpoint.description,
+            "instance_id": parameters.instanceID,
             "integration_version": Logger.integrationVersion,
             "device_id": Logger.deviceID,
             "session_id": Logger.sessionID

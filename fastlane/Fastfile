@@ -35,7 +35,7 @@ platform :ios do
         derived_data_path: "~/Library/Developer/Xcode/DerivedData",
         output_directory: "fastlane/coverage",
         markdown_report: true,
-        minimum_coverage_percentage: 60.0 # TODO: Make this more strict
+        minimum_coverage_percentage: 80.0
       )
     ensure
       if options[:summary]

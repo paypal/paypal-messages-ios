@@ -191,7 +191,8 @@ class LogSender: LogSendable {
         let headers: [HTTPHeader: String] = [
             .acceptLanguage: "en_US",
             .requestedBy: "native-checkout-sdk",
-            .accept: "application/json"
+            .accept: "application/json",
+            .contentType: "application/json"
         ]
 
         log(.debug, "log_payload", with: data, for: environment)
