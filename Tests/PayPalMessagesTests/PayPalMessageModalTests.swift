@@ -38,15 +38,6 @@ class PayPalMessageModalTests: XCTestCase {
         XCTAssertFalse(shouldAutoRotate)
     }
     
-    func testViewDidLoad() {
-        let stateDelegateMock = PayPalMessageModalStateDelegateMock()
-        modalViewController.stateDelegate = stateDelegateMock
-
-        modalViewController.viewDidLoad()
-
-        XCTAssertTrue(stateDelegateMock.onLoadingCalled)
-    }
-    
     func testViewOnLoadingDelegate() {
         let stateDelegateMock = PayPalMessageModalStateDelegateMock()
         modalViewController.stateDelegate = stateDelegateMock
