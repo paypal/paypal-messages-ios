@@ -18,13 +18,11 @@ platform :ios do
     scan(
       workspace: "PayPalMessages.xcworkspace",
       scheme: "PayPalMessagesTests",
-      devices: ["iPhone 14"],
+      devices: ["iPhone 14 (16.4)"], # default iOS 17 simulator runs much slower on GitHub Actions
       derived_data_path: "~/Library/Developer/Xcode/DerivedData",
       skip_build: true,
       result_bundle: true,
-      code_coverage: true,
-      parallel_testing: false,
-      disable_concurrent_testing: true
+      code_coverage: true
     )
 
     # Ensure the code coverage directory is empty before creating new coverage
