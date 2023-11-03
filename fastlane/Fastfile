@@ -22,7 +22,9 @@ platform :ios do
       derived_data_path: "~/Library/Developer/Xcode/DerivedData",
       skip_build: true,
       result_bundle: true,
-      code_coverage: true
+      code_coverage: true,
+      parallel_testing: false,
+      disable_concurrent_testing: true
     )
 
     # Ensure the code coverage directory is empty before creating new coverage
