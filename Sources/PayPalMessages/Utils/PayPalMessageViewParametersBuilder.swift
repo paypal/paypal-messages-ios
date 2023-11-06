@@ -5,7 +5,7 @@ struct PayPalMessageViewParametersBuilder {
     // swiftlint:disable:next function_parameter_count
     func makeParameters(
         message: String,
-        offerType: String,
+        offerType: PayPalMessageResponseOfferType,
         linkDescription: String,
         logoPlaceholder: String,
         logoType: PayPalMessageLogoType,
@@ -28,22 +28,22 @@ struct PayPalMessageViewParametersBuilder {
         // Creates a new sanitized string for use as the accessibilityLabel
         let sanitizedMainContent = message
             .replacingOccurrences(
-                of: "%paypal_logo%",
-                with: offerType == PayPalMessageResponseOfferType.payPalCreditNoInterest.rawValue ? "PayPal Credit" : "PayPal"
+                of: logoPlaceholder,
+                with: offerType == .payPalCreditNoInterest ? "PayPal Credit" : "PayPal"
             )
             .replacingOccurrences(of: "/mo", with: " per month")
 
         var accessibilityLabel = sanitizedMainContent
 
         if !sanitizedMainContent.contains("PayPal Credit") && !sanitizedMainContent.contains("PayPal") {
-            if offerType == PayPalMessageResponseOfferType.payPalCreditNoInterest.rawValue {
+            if offerType == .payPalCreditNoInterest {
                 accessibilityLabel = "PayPal Credit - " + accessibilityLabel
             } else {
                 accessibilityLabel = "PayPal - " + accessibilityLabel
             }
         }
 
-        accessibilityLabel += " \(linkDescription)"
+        accessibilityLabel = accessibilityLabel + " " + linkDescription
 
         return PayPalMessageViewParameters(
             message: message,

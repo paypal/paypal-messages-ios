@@ -188,7 +188,6 @@ public final class PayPalMessageView: UIControl {
         addSubview(containerView)
 
         configConstraints()
-        configAccessibility()
     }
 
     private func configConstraints() {
@@ -256,11 +255,6 @@ extension PayPalMessageView {
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         refreshContent()
-    }
-
-    private func configAccessibility() {
-        accessibilityTraits = .none
-        isAccessibilityElement = false
     }
 }
 
