@@ -313,7 +313,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             merchantProfileHash: merchantProfileHash,
             ignoreCache: ignoreCache,
             devTouchpoint: devTouchpoint,
-            stageTag: stageTag
+            stageTag: stageTag,
+            instanceID: logger.instanceId
         )
     }
 

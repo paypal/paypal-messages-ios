@@ -15,6 +15,26 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         logger.sender = mockSender
     }
 
+    // Helper function to convert JSON string to dictionary
+    func convertToDictionary(from jsonString: String) -> [String: Any]? {
+        // Extract JSON data from the string
+        guard let startIndex = jsonString.firstIndex(of: "{"),
+              let endIndex = jsonString.lastIndex(of: "}"),
+              endIndex > startIndex else {
+            print("Failed to extract JSON data from the string. JSON String: \(jsonString)")
+            return nil
+        }
+
+        let jsonDataString = jsonString[startIndex...endIndex]
+
+        guard let data = jsonDataString.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+            print("Failed to convert JSON string to dictionary. JSON String: \(jsonString)")
+            return nil
+        }
+        return json
+    }
+
     func testInitialSetup() {
         let config = PayPalMessageModalConfig(
             data: .init(
@@ -79,10 +99,27 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         waitForExpectations(timeout: 0.5)
 
         XCTAssertTrue(webView.evaluateJavaScriptCalled)
-        XCTAssertEqual(
-            webView.evaluateJavaScriptString,
-            "window.actions.updateProps({\"client_id\":\"testclientid\",\"amount\":200,\"offer\":\"PAY_LATER_SHORT_TERM\"})"
-        )
+
+        let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":200,\"offer\":\"PAY_LATER_SHORT_TERM\"}"
+
+        guard let actualJSONString = webView.evaluateJavaScriptString else {
+            XCTFail("Failed to get JavaScript string")
+            return
+        }
+
+        guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
+            let actualDictionary = convertToDictionary(from: actualJSONString) else {
+            XCTFail("Failed to convert JSON strings to dictionaries")
+            return
+        }
+
+        // Check if the actualJSONString matches the desired pattern
+        let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
+
+        XCTAssertTrue(!matches.isEmpty)
+        XCTAssertEqual(expectedDictionary as NSDictionary, actualDictionary as NSDictionary)
     }
 
     func testUpdateIndividualProperties() {
@@ -103,11 +140,26 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         waitForExpectations(timeout: 0.5)
 
-        XCTAssertTrue(webView.evaluateJavaScriptCalled)
-        XCTAssertEqual(
-            webView.evaluateJavaScriptString,
-            "window.actions.updateProps({\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"})"
-        )
+        let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"}"
+
+        guard let actualJSONString = webView.evaluateJavaScriptString else {
+            XCTFail("Failed to get JavaScript string")
+            return
+        }
+
+        guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
+            let actualDictionary = convertToDictionary(from: actualJSONString) else {
+            XCTFail("Failed to convert JSON strings to dictionaries")
+            return
+        }
+
+        // Check if the actualJSONString matches the desired pattern
+        let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
+
+        XCTAssertTrue(!matches.isEmpty)
+        XCTAssertEqual(expectedDictionary as NSDictionary, actualDictionary as NSDictionary)
     }
 
     func testModalLoadSuccess() {

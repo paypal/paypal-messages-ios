@@ -261,7 +261,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         var encodableDict: [String: AnyCodable] = [:]
         for (key, value) in eventArgs[0] {
-            encodableDict[key] = value as? AnyCodable
+            encodableDict[key] = AnyCodable(value)
         }
         logger.addEvent(.dynamic(data: encodableDict))
 
@@ -291,17 +291,22 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
-        guard let serverTrust = challenge.protectionSpace.serverTrust else {
-            return completionHandler(.useCredential, nil)
-        }
         switch environment {
-        case .local, .stage:
-            // Allow webview to connect to webpage using invalid local HTTPS certs
-            let exceptions = SecTrustCopyExceptions(serverTrust)
-            SecTrustSetExceptions(serverTrust, exceptions)
-        default: break
+        case .live, .sandbox:
+            completionHandler(.performDefaultHandling, nil)
+        case .stage, .local:
+            guard let serverTrust = challenge.protectionSpace.serverTrust else {
+                return completionHandler(.performDefaultHandling, nil)
+            }
+            // Credential override methods warn when run on the main thread
+            DispatchQueue.global(qos: .background).async {
+                // Allow webview to connect to webpage using self-signed HTTPS certs
+                let exceptions = SecTrustCopyExceptions(serverTrust)
+                SecTrustSetExceptions(serverTrust, exceptions)
+
+                completionHandler(.useCredential, URLCredential(trust: serverTrust))
+            }
         }
-        completionHandler(.useCredential, URLCredential(trust: serverTrust))
     }
 
     func webView(
