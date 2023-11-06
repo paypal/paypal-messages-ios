@@ -5,7 +5,7 @@ class PayPalMessageModalStateDelegateMock: PayPalMessageModalStateDelegate {
 
     var onErrorCalled = false
     var onLoadingCalled = false
-    var onSuccussCalled = false
+    var onSuccessCalled = false
 
     func onError(_ modal: PayPalMessageModal, error: PayPalMessageError) {
         onErrorCalled = true
@@ -16,7 +16,7 @@ class PayPalMessageModalStateDelegateMock: PayPalMessageModalStateDelegate {
     }
 
     func onSuccess(_ modal: PayPalMessageModal) {
-        onSuccussCalled = true
+        onSuccessCalled = true
     }
 }
 
@@ -40,11 +40,11 @@ class PayPalMessageModalEventDelegateMock: PayPalMessageModalEventDelegate {
     }
 
     func onShow(_ modal: PayPalMessageModal) {
-        onShowCalled = false
+        onShowCalled = true
     }
 
     func onClose(_ modal: PayPalMessageModal) {
-        onCloseCalled = false
+        onCloseCalled = true
     }
 }
 
