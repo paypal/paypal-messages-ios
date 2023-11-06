@@ -412,7 +412,6 @@ final class PayPalMessageLoggerTests: XCTestCase {
     private func assert(payload: [String: Any], equals expectedPayload: [String: Any]) {
         var data = payload
         var expected = expectedPayload
-        print("test payload", data)
         
         // Extract logger data from CloudEvent
         guard var loggerData = data["data"] as? [String: Any] else {

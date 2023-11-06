@@ -1,6 +1,6 @@
 import Foundation
 
-struct CloudEvent: Encodable {
+struct CloudEvent<T: Encodable>: Encodable {
 
     let specversion: String = "1.0"
     let id: String
@@ -10,9 +10,9 @@ struct CloudEvent: Encodable {
     // swiftlint:disable:next line_length
     let dataschema: String = "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json"
     let time: String
-    let data: Logger
+    let data: T
 
-    init(data: Logger) {
+    init(data: T) {
         self.id = UUID().uuidString
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
