@@ -35,7 +35,7 @@ struct PayPalMessageViewParametersBuilder {
 
         var accessibilityLabel = sanitizedMainContent
 
-        if !sanitizedMainContent.contains("PayPal Credit") && !sanitizedMainContent.contains("PayPal") {
+        if !sanitizedMainContent.contains("PayPal") {
             if offerType == .payPalCreditNoInterest {
                 accessibilityLabel = "PayPal Credit - " + accessibilityLabel
             } else {
