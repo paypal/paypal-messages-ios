@@ -54,6 +54,21 @@ public enum Environment: Equatable {
             return URL(string: "https://www.paypal.com")!
         }
     }
+
+    // swiftlint:disable force_unwrapping
+    private var loggerBaseURL: URL {
+        switch self {
+        case .stage:
+            return URL(string: "https://api.msmaster.qa.paypal.com")!
+        case .sandbox:
+            return URL(string: "https://api.sandbox.paypal.com")!
+        case .live:
+            return URL(string: "https://api.paypal.com")!
+        default:
+            return baseURL
+        }
+    }
+
     // swiftlint:enable force_unwrapping
 
     enum PayPalMessagePath: String {
@@ -71,9 +86,16 @@ public enum Environment: Equatable {
             queryItems = queryParams.map { URLQueryItem(name: $0.key, value: $0.value) }
         }
 
-        parts.scheme = baseURL.scheme
-        parts.host = baseURL.host
-        parts.port = baseURL.port
+        let basePath: URL
+        if path == .log {
+            basePath = loggerBaseURL
+        } else {
+            basePath = baseURL
+        }
+
+        parts.scheme = basePath.scheme
+        parts.host = basePath.host
+        parts.port = basePath.port
         parts.path = path.rawValue
         parts.queryItems = queryItems
 

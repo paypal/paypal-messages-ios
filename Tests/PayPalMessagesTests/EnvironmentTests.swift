@@ -32,6 +32,6 @@ class EnvironmentTests: XCTestCase {
         XCTAssertEqual(sandboxURL?.absoluteString, "https://www.sandbox.paypal.com/credit-presentment/merchant-profile")
 
         let liveURL = Environment.live.url(.log)
-        XCTAssertEqual(liveURL?.absoluteString, "https://www.paypal.com/v1/credit/upstream-messaging-events")
+        XCTAssertEqual(liveURL?.absoluteString, "https://www.api.paypal.com/v1/credit/upstream-messaging-events")
     }
 }
