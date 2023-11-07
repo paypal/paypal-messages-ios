@@ -214,7 +214,7 @@ class LogSender: LogSendable {
             .acceptLanguage: "en_US",
             .requestedBy: "native-checkout-sdk",
             .accept: "application/json",
-            .contentType: "application/json"
+            .contentType: "application/cloudevents+json"
         ]
 
         log(.debug, "log_payload", with: data, for: environment)
