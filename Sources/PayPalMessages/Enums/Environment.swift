@@ -59,11 +59,11 @@ public enum Environment: Equatable {
     private var loggerBaseURL: URL {
         switch self {
         case .stage:
-            return URL(string: "https://api.msmaster.qa.paypal.com")!
+            return URL(string: "https://www.api.msmaster.qa.paypal.com")!
         case .sandbox:
-            return URL(string: "https://api.sandbox.paypal.com")!
+            return URL(string: "https://www.api.sandbox.paypal.com")!
         case .live:
-            return URL(string: "https://api.paypal.com")!
+            return URL(string: "https://www.api.paypal.com")!
         default:
             return baseURL
         }
