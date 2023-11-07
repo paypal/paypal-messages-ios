@@ -245,7 +245,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
               let bodyData = bodyString.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
               let eventName = json["name"] as? String,
-              let eventArgs = json["args"] as? [[String: Any]] else {
+              var eventArgs = json["args"] as? [[String: Any]] else {
             log(.error, "Unable to parse modal event body")
             return
         }
@@ -254,9 +254,12 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         guard !eventArgs.isEmpty else { return }
 
-        let shared = eventArgs[0]["__shared__"] as? [String: Any] ?? [:]
-        for (key, value) in shared {
-            logger.dynamicData[key] = AnyCodable(value)
+        // If __shared__ exists, remove it from the individual event and include it as
+        // part of the component level logger dynamic data
+        if let shared = eventArgs[0].removeValue(forKey: "__shared__") as? [String: Any] {
+            for (key, value) in shared {
+                logger.dynamicData[key] = AnyCodable(value)
+            }
         }
 
         var encodableDict: [String: AnyCodable] = [:]
