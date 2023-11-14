@@ -41,7 +41,6 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
                 clientID: "testclientid",
                 environment: .live,
                 amount: 100.0,
-                currency: "USD",
                 placement: .home,
                 offerType: .payLaterLongTerm
             )
@@ -58,7 +57,6 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.clientID, "testclientid")
         XCTAssertEqual(viewModel.amount, 100.0)
-        XCTAssertEqual(viewModel.currency, "USD")
         XCTAssertEqual(viewModel.placement, .home)
         XCTAssertEqual(viewModel.offerType, .payLaterLongTerm)
         XCTAssertEqual(viewModel.buyerCountry, "US")
@@ -108,7 +106,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
-            let actualDictionary = convertToDictionary(from: actualJSONString) else {
+              let actualDictionary = convertToDictionary(from: actualJSONString) else {
             XCTFail("Failed to convert JSON strings to dictionaries")
             return
         }
@@ -148,7 +146,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
-            let actualDictionary = convertToDictionary(from: actualJSONString) else {
+              let actualDictionary = convertToDictionary(from: actualJSONString) else {
             XCTFail("Failed to convert JSON strings to dictionaries")
             return
         }

@@ -25,9 +25,6 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     @Proxy(\.viewModel.amount)
     var amount: Double?
 
-    @Proxy(\.viewModel.currency)
-    var currency: String?
-
     @Proxy(\.viewModel.buyerCountry)
     var buyerCountry: String?
 

@@ -61,41 +61,41 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
-            "lib_version": "1.0.0",
-            "integration_name": "Test_SDK",
-            "integration_type": "NATIVE_IOS",
-            "client_id": "testclientid",
-            "integration_version": "0.1.0",
-            "device_id": "987654321",
-            "session_id": "123456789",
-            "components": [
-                [
-                    "amount": 50,
-                    "offer_type": "PAY_LATER_LONG_TERM",
-                    "placement": "product",
-                    "type": "message",
-                    "number_key": 50.5,
-                    "string_key": "hello",
-                    "boolean_key": true,
-                    "style_logo_type": "inline",
-                    "style_color": "black",
-                    "style_text_align": "left",
-                    "component_events": [
-                        [
-                            "event_type": "message_rendered",
-                            "render_duration": 10,
-                            "request_duration": 15
-                        ],
-                        [
-                            "event_type": "message_clicked",
-                            "page_view_link_name": "linkName",
-                            "page_view_link_source": "linkSrc"
+                "lib_version": "1.0.0",
+                "integration_name": "Test_SDK",
+                "integration_type": "NATIVE_IOS",
+                "client_id": "testclientid",
+                "integration_version": "0.1.0",
+                "device_id": "987654321",
+                "session_id": "123456789",
+                "components": [
+                    [
+                        "amount": 50,
+                        "offer_type": "PAY_LATER_LONG_TERM",
+                        "placement": "product",
+                        "type": "message",
+                        "number_key": 50.5,
+                        "string_key": "hello",
+                        "boolean_key": true,
+                        "style_logo_type": "inline",
+                        "style_color": "black",
+                        "style_text_align": "left",
+                        "component_events": [
+                            [
+                                "event_type": "message_rendered",
+                                "render_duration": 10,
+                                "request_duration": 15
+                            ],
+                            [
+                                "event_type": "message_clicked",
+                                "page_view_link_name": "linkName",
+                                "page_view_link_source": "linkSrc"
+                            ]
                         ]
                     ]
                 ]
             ]
         ]
-    ]
 
         assert(payload: data, equals: expectedPayload)
     }
@@ -140,37 +140,37 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
-            "lib_version": "1.0.0",
-            "integration_name": "Test_SDK",
-            "integration_type": "NATIVE_IOS",
-            "client_id": "testclientid",
-            "integration_version": "0.1.0",
-            "device_id": "987654321",
-            "session_id": "123456789",
-            "components": [
-                [
-                    "amount": 50,
-                    "offer_type": "PAY_LATER_LONG_TERM",
-                    "placement": "product",
-                    "type": "modal",
-                    "number_key": 50.5,
-                    "string_key": "hello",
-                    "boolean_key": true,
-                    "component_events": [
-                        [
-                            "event_type": "modal_click",
-                            "some_key": "test"
-                        ],
-                        [
-                            "event_type": "modal_open",
-                            "other_key": 100
+                "lib_version": "1.0.0",
+                "integration_name": "Test_SDK",
+                "integration_type": "NATIVE_IOS",
+                "client_id": "testclientid",
+                "integration_version": "0.1.0",
+                "device_id": "987654321",
+                "session_id": "123456789",
+                "components": [
+                    [
+                        "amount": 50,
+                        "offer_type": "PAY_LATER_LONG_TERM",
+                        "placement": "product",
+                        "type": "modal",
+                        "number_key": 50.5,
+                        "string_key": "hello",
+                        "boolean_key": true,
+                        "component_events": [
+                            [
+                                "event_type": "modal_click",
+                                "some_key": "test"
+                            ],
+                            [
+                                "event_type": "modal_open",
+                                "other_key": 100
+                            ]
                         ]
                     ]
                 ]
             ]
         ]
-    ]
-        
+
         assert(payload: data, equals: expectedPayload)
     }
 
@@ -223,47 +223,47 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
-            "lib_version": "1.0.0",
-            "integration_name": "Test_SDK",
-            "integration_type": "NATIVE_IOS",
-            "client_id": "testclientid",
-            "integration_version": "0.1.0",
-            "device_id": "987654321",
-            "session_id": "123456789",
-            "components": [
-                [
-                    "amount": 50,
-                    "offer_type": "PAY_LATER_LONG_TERM",
-                    "placement": "product",
-                    "type": "message",
-                    "string_key": "hello",
-                    "style_logo_type": "inline",
-                    "style_color": "black",
-                    "style_text_align": "left",
-                    "component_events": [
-                        [
-                            "event_type": "message_rendered",
-                            "render_duration": 10,
-                            "request_duration": 15
+                "lib_version": "1.0.0",
+                "integration_name": "Test_SDK",
+                "integration_type": "NATIVE_IOS",
+                "client_id": "testclientid",
+                "integration_version": "0.1.0",
+                "device_id": "987654321",
+                "session_id": "123456789",
+                "components": [
+                    [
+                        "amount": 50,
+                        "offer_type": "PAY_LATER_LONG_TERM",
+                        "placement": "product",
+                        "type": "message",
+                        "string_key": "hello",
+                        "style_logo_type": "inline",
+                        "style_color": "black",
+                        "style_text_align": "left",
+                        "component_events": [
+                            [
+                                "event_type": "message_rendered",
+                                "render_duration": 10,
+                                "request_duration": 15
+                            ]
                         ]
-                    ]
-                ],
-                [
-                    "amount": 50,
-                    "offer_type": "PAY_LATER_LONG_TERM",
-                    "placement": "product",
-                    "type": "modal",
-                    "string_key": "world",
-                    "component_events": [
-                        [
-                            "event_type": "modal_click",
-                            "some_key": "test"
+                    ],
+                    [
+                        "amount": 50,
+                        "offer_type": "PAY_LATER_LONG_TERM",
+                        "placement": "product",
+                        "type": "modal",
+                        "string_key": "world",
+                        "component_events": [
+                            [
+                                "event_type": "modal_click",
+                                "some_key": "test"
+                            ]
                         ]
                     ]
                 ]
             ]
         ]
-    ]
 
         assert(payload: data, equals: expectedPayload)
     }
@@ -305,33 +305,33 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
-            "lib_version": "1.0.0",
-            "integration_name": "Test_SDK",
-            "integration_type": "NATIVE_IOS",
-            "client_id": "testclientid",
-            "integration_version": "0.1.0",
-            "device_id": "987654321",
-            "session_id": "123456789",
-            "components": [
-                [
-                    "amount": 50,
-                    "offer_type": "PAY_LATER_LONG_TERM",
-                    "placement": "product",
-                    "type": "message",
-                    "style_logo_type": "inline",
-                    "style_color": "black",
-                    "style_text_align": "left",
-                    "component_events": [
-                        [
-                            "event_type": "message_rendered",
-                            "render_duration": 10,
-                            "request_duration": 15
+                "lib_version": "1.0.0",
+                "integration_name": "Test_SDK",
+                "integration_type": "NATIVE_IOS",
+                "client_id": "testclientid",
+                "integration_version": "0.1.0",
+                "device_id": "987654321",
+                "session_id": "123456789",
+                "components": [
+                    [
+                        "amount": 50,
+                        "offer_type": "PAY_LATER_LONG_TERM",
+                        "placement": "product",
+                        "type": "message",
+                        "style_logo_type": "inline",
+                        "style_color": "black",
+                        "style_text_align": "left",
+                        "component_events": [
+                            [
+                                "event_type": "message_rendered",
+                                "render_duration": 10,
+                                "request_duration": 15
+                            ]
                         ]
                     ]
                 ]
             ]
         ]
-    ]
 
         assert(payload: data, equals: expectedPayload)
     }
@@ -370,33 +370,33 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
-            "lib_version": "1.0.0",
-            "integration_name": "Test_SDK",
-            "integration_type": "NATIVE_IOS",
-            "client_id": "testclientid",
-            "integration_version": "0.1.0",
-            "device_id": "987654321",
-            "session_id": "123456789",
-            "components": [
-                [
-                    "amount": 50,
-                    "offer_type": "PAY_LATER_LONG_TERM",
-                    "placement": "product",
-                    "type": "message",
-                    "style_logo_type": "inline",
-                    "style_color": "black",
-                    "style_text_align": "left",
-                    "component_events": [
-                        [
-                            "event_type": "message_clicked",
-                            "page_view_link_name": "linkName",
-                            "page_view_link_source": "linkSrc"
+                "lib_version": "1.0.0",
+                "integration_name": "Test_SDK",
+                "integration_type": "NATIVE_IOS",
+                "client_id": "testclientid",
+                "integration_version": "0.1.0",
+                "device_id": "987654321",
+                "session_id": "123456789",
+                "components": [
+                    [
+                        "amount": 50,
+                        "offer_type": "PAY_LATER_LONG_TERM",
+                        "placement": "product",
+                        "type": "message",
+                        "style_logo_type": "inline",
+                        "style_color": "black",
+                        "style_text_align": "left",
+                        "component_events": [
+                            [
+                                "event_type": "message_clicked",
+                                "page_view_link_name": "linkName",
+                                "page_view_link_source": "linkSrc"
+                            ]
                         ]
                     ]
                 ]
             ]
         ]
-    ]
 
         assert(payload: data, equals: expectedPayload)
 
@@ -412,7 +412,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
     private func assert(payload: [String: Any], equals expectedPayload: [String: Any]) {
         var data = payload
         var expected = expectedPayload
-        
+
         // Extract logger data from CloudEvent
         guard var loggerData = data["data"] as? [String: Any] else {
             return XCTFail("missing logger data within CloudEvent")
@@ -438,7 +438,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
 
         // Update the modified loggerData back into the CloudEvent data
         data["data"] = loggerData
-        
+
         // Ensure that the id exists and then remove it since it generates a unique value for each test run
         guard data["id"] is String else {
             return XCTFail("invalid id")

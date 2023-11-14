@@ -36,7 +36,6 @@ class PayPalMessageModalDataConfig: NSObject {
     var partnerAttributionID: String?
     var environment: Environment
     var amount: Double?
-    var currency: String?
     var buyerCountry: String?
     var offerType: PayPalMessageOfferType?
     var placement: PayPalMessagePlacement?
@@ -51,14 +50,12 @@ class PayPalMessageModalDataConfig: NSObject {
         clientID: String,
         environment: Environment,
         amount: Double? = nil,
-        currency: String? = nil,
         placement: PayPalMessagePlacement? = nil,
         offerType: PayPalMessageOfferType? = nil,
         modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
         self.clientID = clientID
         self.amount = amount
-        self.currency = currency
         self.placement = placement
         self.offerType = offerType
         self.modalCloseButton = modalCloseButton
@@ -72,7 +69,6 @@ class PayPalMessageModalDataConfig: NSObject {
         environment: Environment,
         partnerAttributionID: String,
         amount: Double? = nil,
-        currency: String? = nil,
         placement: PayPalMessagePlacement? = nil,
         offerType: PayPalMessageOfferType? = nil,
         modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
@@ -81,7 +77,6 @@ class PayPalMessageModalDataConfig: NSObject {
         self.merchantID = merchantID
         self.partnerAttributionID = partnerAttributionID
         self.amount = amount
-        self.currency = currency
         self.placement = placement
         self.offerType = offerType
         self.modalCloseButton = modalCloseButton
@@ -122,7 +117,6 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         case merchantID = "merchant_id"
         case partnerAttributionID = "partner_attribution_id"
         case amount
-        case currency
         case buyerCountry
         case offerType = "offer"
         case channel
@@ -139,7 +133,6 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         try container.encodeIfPresent(data.merchantID, forKey: .merchantID)
         try container.encodeIfPresent(data.partnerAttributionID, forKey: .partnerAttributionID)
         try container.encodeIfPresent(data.amount, forKey: .amount)
-        try container.encodeIfPresent(data.currency, forKey: .currency)
         try container.encodeIfPresent(data.buyerCountry, forKey: .buyerCountry)
         try container.encodeIfPresent(data.offerType?.rawValue, forKey: .offerType)
         try container.encodeIfPresent(data.channel, forKey: .channel)
