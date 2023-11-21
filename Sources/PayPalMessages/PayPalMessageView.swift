@@ -59,14 +59,6 @@ public final class PayPalMessageView: UIControl {
     @Proxy(\.viewModel.ignoreCache)
     public var ignoreCache: Bool
 
-    /// Read-write property that holds the development stage tag
-    @Proxy(\.viewModel.stageTag)
-    public var stageTag: String?
-
-    /// Read-write property that holds the development content status
-    @Proxy(\.viewModel.devTouchpoint)
-    public var devTouchpoint: Bool
-
     /// Private property that holds the message configuration.
     /// We are using set/get methods for accessing to discourage attempting to edit parts of the config to make changes
     @Proxy(\.viewModel.config)

@@ -48,9 +48,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         )
         config.data.buyerCountry = "US"
         config.data.channel = "TEST"
-        config.data.devTouchpoint = true
         config.data.ignoreCache = true
-        config.data.stageTag = "test"
 
         let (viewModel, webView, stateDelegate, eventDelegate) = makePayPalMessageModalViewModel(
             config: config
@@ -63,8 +61,8 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.offerType, .payLaterLongTerm)
         XCTAssertEqual(viewModel.buyerCountry, "US")
         XCTAssertEqual(viewModel.channel, "TEST")
-        XCTAssertEqual(viewModel.stageTag, "test")
-        XCTAssertTrue(viewModel.devTouchpoint ?? false)
+        XCTAssertEqual(viewModel.stageTag, nil)
+        XCTAssertEqual(viewModel.devTouchpoint, false)
         XCTAssertTrue(viewModel.ignoreCache ?? false)
         XCTAssertEqual(viewModel.environment, .live)
 

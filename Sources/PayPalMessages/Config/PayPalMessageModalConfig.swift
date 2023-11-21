@@ -42,8 +42,6 @@ class PayPalMessageModalDataConfig: NSObject {
     var placement: PayPalMessagePlacement?
     var channel: String?
     var ignoreCache: Bool? // swiftlint:disable:this discouraged_optional_boolean
-    var devTouchpoint: Bool? // swiftlint:disable:this discouraged_optional_boolean
-    var stageTag: String?
     var modalCloseButton: ModalCloseButtonConfig
 
     /// Standard integration
@@ -128,8 +126,6 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         case channel
         case placement
         case ignoreCache
-        case devTouchpoint
-        case stageTag
     }
 
     func encode(to encoder: Encoder) throws {
@@ -145,7 +141,5 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         try container.encodeIfPresent(data.channel, forKey: .channel)
         try container.encodeIfPresent(data.placement?.rawValue, forKey: .placement)
         try container.encodeIfPresent(data.ignoreCache, forKey: .ignoreCache)
-        try container.encodeIfPresent(data.devTouchpoint, forKey: .devTouchpoint)
-        try container.encodeIfPresent(data.stageTag, forKey: .stageTag)
     }
 }

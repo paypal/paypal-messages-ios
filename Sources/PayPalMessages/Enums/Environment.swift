@@ -1,8 +1,8 @@
 import Foundation
 
 public enum Environment: Equatable {
-    case local(port: String = "8443")
-    case stage(host: String)
+    case local(port: String = "8443", devTouchpoint: Bool = false, stageTag: String? = nil)
+    case stage(host: String, devTouchpoint: Bool = false, stageTag: String? = nil)
     case sandbox
     case live
 
@@ -44,9 +44,9 @@ public enum Environment: Equatable {
     // swiftlint:disable force_unwrapping
     private var baseURL: URL {
         switch self {
-        case .local(let port):
+        case .local(let port, _, _):
             return URL(string: "https://localhost.paypal.com:\(port)")!
-        case .stage(let host):
+        case .stage(let host, _, _):
             return URL(string: "https://www.\(host)")!
         case .sandbox:
             return URL(string: "https://www.sandbox.paypal.com")!
@@ -58,7 +58,7 @@ public enum Environment: Equatable {
     // swiftlint:disable force_unwrapping
     private var loggerBaseURL: URL {
         switch self {
-        case .stage(let host):
+        case .stage(let host, _, _):
             return URL(string: "https://api.\(host)")!
         case .sandbox:
             return URL(string: "https://api.sandbox.paypal.com")!
@@ -76,6 +76,24 @@ public enum Environment: Equatable {
         case modal = "/credit-presentment/lander/modal"
         case merchantProfile = "/credit-presentment/merchant-profile"
         case log = "/v1/credit/upstream-messaging-events"
+    }
+
+    public var devTouchpoint: Bool {
+        switch self {
+        case .local(_, let devTouchpoint, _), .stage(_, let devTouchpoint, _):
+            return devTouchpoint
+        default:
+            return false
+        }
+    }
+
+    public var stageTag: String? {
+        switch self {
+        case .local(_, _, let stageTag), .stage(_, _, let stageTag):
+            return stageTag
+        default:
+            return nil
+        }
     }
 
     func url(_ path: PayPalMessagePath, _ queryParams: [String: String?]? = nil) -> URL? {

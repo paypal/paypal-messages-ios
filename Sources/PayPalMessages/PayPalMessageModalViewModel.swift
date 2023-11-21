@@ -52,13 +52,11 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         didSet { queueUpdate(from: oldValue, to: ignoreCache) }
     }
     // Development content
-    var devTouchpoint: Bool? { // swiftlint:disable:this discouraged_optional_boolean
-        didSet { queueUpdate(from: oldValue, to: devTouchpoint) }
-    }
+    var devTouchpoint: Bool? // swiftlint:disable:this discouraged_optional_boolean
+
     // Custom development stage modal bundle
-    var stageTag: String? {
-        didSet { queueUpdate(from: oldValue, to: stageTag) }
-    }
+    var stageTag: String?
+
     // Standalone modal
     var integrationIdentifier: String?
 
@@ -131,8 +129,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         channel = config.data.channel
         placement = config.data.placement
         ignoreCache = config.data.ignoreCache
-        devTouchpoint = config.data.devTouchpoint
-        stageTag = config.data.stageTag
+        devTouchpoint = environment.devTouchpoint
+        stageTag = environment.stageTag
 
         self.webView = webView
         self.stateDelegate = stateDelegate
@@ -172,8 +170,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         channel = config.data.channel
         placement = config.data.placement
         ignoreCache = config.data.ignoreCache
-        devTouchpoint = config.data.devTouchpoint
-        stageTag = config.data.stageTag
     }
 
     func makeConfig() -> PayPalMessageModalConfig {
@@ -190,8 +186,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         config.data.partnerAttributionID = partnerAttributionID
         config.data.buyerCountry = buyerCountry
         config.data.channel = channel
-        config.data.stageTag = stageTag
-        config.data.devTouchpoint = devTouchpoint
         config.data.ignoreCache = ignoreCache
 
         return config
