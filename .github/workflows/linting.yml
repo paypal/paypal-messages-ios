@@ -1,5 +1,5 @@
 name: Linting
-on: [pull_request, workflow_dispatch]
+on: [pull_request, workflow_dispatch, workflow_run]
 
 concurrency:
   group: lint-${{ github.event.number }}
