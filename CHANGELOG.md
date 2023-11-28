@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0-prerelease.2](https://github.com/paypal/paypal-messages-ios/compare/v1.0.0-prerelease.1...v1.0.0-prerelease.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* explicit assets included with git release commit ([a058498](https://github.com/paypal/paypal-messages-ios/commit/a058498797e99717ffb549a9a25f3e5b63d5e7d8))
+
 ## 1.0.0-prerelease.1 (2023-11-22)
 
 
