@@ -24,6 +24,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
         logger.sender = mockSender
     }
 
+    // swiftlint:disable:next function_body_length
     func testMessageLoggerEvents() {
         let messageLogger = Logger.createMessageLogger(
             environment: .live,
@@ -58,6 +59,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "type": "com.paypal.credit.upstream-presentment.v1",
             "source": "urn:paypal:event-src:v1:ios:messages",
             "datacontenttype": "application/json",
+            // swiftlint:disable:next line_length
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
@@ -100,6 +102,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
         assert(payload: data, equals: expectedPayload)
     }
 
+    // swiftlint:disable:next function_body_length
     func testModalLoggerEvents() {
         let modalLogger = Logger.createModalLogger(
             environment: .live,
@@ -137,6 +140,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "type": "com.paypal.credit.upstream-presentment.v1",
             "source": "urn:paypal:event-src:v1:ios:messages",
             "datacontenttype": "application/json",
+            // swiftlint:disable:next line_length
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
@@ -220,6 +224,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "type": "com.paypal.credit.upstream-presentment.v1",
             "source": "urn:paypal:event-src:v1:ios:messages",
             "datacontenttype": "application/json",
+            // swiftlint:disable:next line_length
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
@@ -302,6 +307,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "type": "com.paypal.credit.upstream-presentment.v1",
             "source": "urn:paypal:event-src:v1:ios:messages",
             "datacontenttype": "application/json",
+            // swiftlint:disable:next line_length
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [
@@ -367,6 +373,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "type": "com.paypal.credit.upstream-presentment.v1",
             "source": "urn:paypal:event-src:v1:ios:messages",
             "datacontenttype": "application/json",
+            // swiftlint:disable:next line_length
             "dataschema": "ppaas:events.credit.FinancingPresentmentAsyncAPISpecification/v1/schema/json/credit_upstream_presentment_event.json",
             "time": "2023-11-01T11:12:05.791-0400",
             "data": [

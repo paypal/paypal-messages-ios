@@ -2,6 +2,7 @@
 import WebKit
 import XCTest
 
+// swiftlint:disable:next type_body_length
 final class PayPalMessageModalViewModelTests: XCTestCase {
 
     let navigation = WKNavigation()
@@ -113,7 +114,14 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         // Check if the actualJSONString matches the desired pattern
         let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
-        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let regex: NSRegularExpression?
+        do {
+            regex = try NSRegularExpression(pattern: pattern, options: [])
+        } catch {
+            XCTFail("Failed to create NSRegularExpression: \(error)")
+            return
+        }
+        guard let regex = regex else { return }
         let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
 
         XCTAssertTrue(!matches.isEmpty)
@@ -153,7 +161,14 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         // Check if the actualJSONString matches the desired pattern
         let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
-        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let regex: NSRegularExpression?
+        do {
+            regex = try NSRegularExpression(pattern: pattern, options: [])
+        } catch {
+            XCTFail("Failed to create NSRegularExpression: \(error)")
+            return
+        }
+        guard let regex = regex else { return }
         let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
 
         XCTAssertTrue(!matches.isEmpty)
