@@ -25,9 +25,6 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     @Proxy(\.viewModel.amount)
     var amount: Double?
 
-    @Proxy(\.viewModel.currency)
-    var currency: String?
-
     @Proxy(\.viewModel.buyerCountry)
     var buyerCountry: String?
 
@@ -258,6 +255,8 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         }
 
         closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.isAccessibilityElement = true
+        closeButton.accessibilityLabel = "PayPal Learn More Modal Close"
 
         view.addSubview(closeButton)
 

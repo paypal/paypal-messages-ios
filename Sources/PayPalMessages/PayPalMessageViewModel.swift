@@ -320,6 +320,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         return parameterBuilder
             .makeParameters(
                 message: response.defaultMainContent,
+                offerType: response.offerType,
                 linkDescription: response.defaultDisclaimer,
                 logoPlaceholder: response.logoPlaceholder,
                 logoType: logoType,
@@ -378,7 +379,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
                 clientID: clientID,
                 environment: environment,
                 amount: amount,
-                // currency: currency, TODO: Implement?
                 placement: placement,
                 offerType: offerType,
                 modalCloseButton: modalCloseButton

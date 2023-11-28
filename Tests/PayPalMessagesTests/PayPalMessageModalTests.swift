@@ -8,7 +8,6 @@ class PayPalMessageModalTests: XCTestCase {
             clientID: "Test123",
             environment: .sandbox,
             amount: 100.0,
-            currency: "USD",
             offerType: .payLaterLongTerm
         )
     )
@@ -37,7 +36,7 @@ class PayPalMessageModalTests: XCTestCase {
         XCTAssertEqual(preferredOrientation, .portrait)
         XCTAssertFalse(shouldAutoRotate)
     }
-    
+
     func testViewOnLoadingDelegate() {
         let stateDelegateMock = PayPalMessageModalStateDelegateMock()
         modalViewController.stateDelegate = stateDelegateMock
@@ -46,7 +45,7 @@ class PayPalMessageModalTests: XCTestCase {
 
         XCTAssertTrue(stateDelegateMock.onLoadingCalled)
     }
-    
+
     func testViewWillAppearCallsOnShowDelegate() {
         let eventDelegateMock = PayPalMessageModalEventDelegateMock()
         modalViewController.eventDelegate = eventDelegateMock
@@ -55,7 +54,7 @@ class PayPalMessageModalTests: XCTestCase {
 
         XCTAssertTrue(eventDelegateMock.onShowCalled)
     }
-    
+
     func testModalDismissalCallsOnCloseDelegate() {
         let eventDelegateMock = PayPalMessageModalEventDelegateMock()
         modalViewController.eventDelegate = eventDelegateMock
@@ -64,7 +63,7 @@ class PayPalMessageModalTests: XCTestCase {
 
         XCTAssertTrue(eventDelegateMock.onCloseCalled)
     }
-    
+
     func testModalPresentationAndDismissal() {
         let eventDelegateMock = PayPalMessageModalEventDelegateMock()
         modalViewController.eventDelegate = eventDelegateMock
@@ -85,7 +84,6 @@ class PayPalMessageModalTests: XCTestCase {
         let merchantID = "Merchant456"
         let partnerAttributionID = "Partner789"
         let amount = 100.0
-        let currency = "USD"
         let placement = PayPalMessagePlacement.home
         let offerType = PayPalMessageOfferType.payLaterShortTerm
         let closeButtonWidth = 30
@@ -102,7 +100,6 @@ class PayPalMessageModalTests: XCTestCase {
             environment: environment,
             partnerAttributionID: partnerAttributionID,
             amount: amount,
-            currency: currency,
             placement: placement,
             offerType: offerType,
             modalCloseButton: ModalCloseButtonConfig(
@@ -119,7 +116,6 @@ class PayPalMessageModalTests: XCTestCase {
         XCTAssertEqual(modalDataConfig.merchantID, merchantID)
         XCTAssertEqual(modalDataConfig.partnerAttributionID, partnerAttributionID)
         XCTAssertEqual(modalDataConfig.amount, amount)
-        XCTAssertEqual(modalDataConfig.currency, currency)
         XCTAssertEqual(modalDataConfig.placement, placement)
         XCTAssertEqual(modalDataConfig.offerType, offerType)
         XCTAssertEqual(modalDataConfig.modalCloseButton.width, closeButtonWidth)

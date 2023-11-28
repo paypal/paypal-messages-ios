@@ -30,9 +30,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     var amount: Double? {
         didSet { queueUpdate(from: oldValue, to: amount) }
     }
-    var currency: String? {
-        didSet { queueUpdate(from: oldValue, to: currency) }
-    }
     var buyerCountry: String? {
         didSet { queueUpdate(from: oldValue, to: buyerCountry) }
     }
@@ -69,7 +66,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             "merchant_id": merchantID,
             "partner_attribution_id": partnerAttributionID,
             "amount": amount?.description,
-            "currency": currency,
             "buyer_country": buyerCountry,
             "offer": offerType?.rawValue,
             "channel": channel,
@@ -123,7 +119,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         merchantID = config.data.merchantID
         partnerAttributionID = config.data.partnerAttributionID
         amount = config.data.amount
-        currency = config.data.currency
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
         channel = config.data.channel
@@ -164,7 +159,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         merchantID = config.data.merchantID
         partnerAttributionID = config.data.partnerAttributionID
         amount = config.data.amount
-        currency = config.data.currency
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
         channel = config.data.channel
@@ -177,7 +171,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             clientID: self.clientID,
             environment: self.environment,
             amount: self.amount,
-            currency: self.currency,
             placement: self.placement,
             offerType: self.offerType
         ))

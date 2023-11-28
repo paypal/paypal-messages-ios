@@ -15,4 +15,8 @@ struct PayPalMessageViewParameters {
     let linkUnderlineColor: UIColor
 
     let textAlignment: NSTextAlignment
+
+    let accessibilityLabel: String
+    let accessibilityTraits: UIAccessibilityTraits
+    let isAccessibilityElement: Bool
 }

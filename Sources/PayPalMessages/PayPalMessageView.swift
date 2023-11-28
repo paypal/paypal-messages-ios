@@ -180,7 +180,6 @@ public final class PayPalMessageView: UIControl {
         addSubview(containerView)
 
         configConstraints()
-        configAccessibility()
     }
 
     private func configConstraints() {
@@ -232,6 +231,11 @@ extension PayPalMessageView: PayPalMessageViewModelDelegate {
         messageLabel.attributedText = PayPalMessageAttributedStringBuilder().makeMessageString(params)
         // Force recalculation for layout
         invalidateIntrinsicContentSize()
+
+        // Update accessibility properties
+        self.accessibilityLabel = params?.accessibilityLabel ?? ""
+        self.accessibilityTraits = params?.accessibilityTraits ?? .none
+        self.isAccessibilityElement = params?.isAccessibilityElement ?? false
     }
 }
 
@@ -244,12 +248,6 @@ extension PayPalMessageView {
         super.traitCollectionDidChange(previousTraitCollection)
         refreshContent()
     }
-
-    private func configAccessibility() {
-        accessibilityTraits = .link
-        isAccessibilityElement = true
-        accessibilityLabel = Constants.accessibilityLabel
-    }
 }
 
 // MARK: - Constants
@@ -257,7 +255,6 @@ extension PayPalMessageView {
 extension PayPalMessageView {
 
     private enum Constants {
-        static let accessibilityLabel: String = "PayPalMessageView"
         static let highlightedAnimationDuration: CGFloat = 1.0
         static let highlightedAlpha: CGFloat = 0.75
         static let regularAlpha: CGFloat = 1.0
