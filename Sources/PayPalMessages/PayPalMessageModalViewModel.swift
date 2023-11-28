@@ -48,12 +48,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     var ignoreCache: Bool? { // swiftlint:disable:this discouraged_optional_boolean
         didSet { queueUpdate(from: oldValue, to: ignoreCache) }
     }
-    // Development content
-    var devTouchpoint: Bool? // swiftlint:disable:this discouraged_optional_boolean
-
-    // Custom development stage modal bundle
-    var stageTag: String?
-
     // Standalone modal
     var integrationIdentifier: String?
 
@@ -74,8 +68,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             "integration_identifier": integrationIdentifier,
             // Dev options
             "ignore_cache": ignoreCache?.description,
-            "dev_touchpoint": devTouchpoint?.description,
-            "stage_tag": stageTag,
             "integration_version": Logger.integrationVersion,
             "device_id": Logger.deviceID,
             "session_id": Logger.sessionID,
@@ -124,8 +116,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         channel = config.data.channel
         placement = config.data.placement
         ignoreCache = config.data.ignoreCache
-        devTouchpoint = environment.devTouchpoint
-        stageTag = environment.stageTag
 
         self.webView = webView
         self.stateDelegate = stateDelegate
@@ -284,7 +274,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         switch environment {
         case .live, .sandbox:
             completionHandler(.performDefaultHandling, nil)
-        case .stage, .local:
+        case .stage:
             guard let serverTrust = challenge.protectionSpace.serverTrust else {
                 return completionHandler(.performDefaultHandling, nil)
             }

@@ -153,7 +153,7 @@ struct SwiftUIContentView: View {
                     padding: .init(top: 0, leading: 16, bottom: 0, trailing: 0)
                 )
                 .onChange(of: ignoreCache) { _ in
-                        debounceConfigUpdate()
+                    debounceConfigUpdate()
                 }
             }
 

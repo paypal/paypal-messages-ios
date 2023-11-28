@@ -43,14 +43,6 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     @Proxy(\.viewModel.ignoreCache)
     var ignoreCache: Bool?
 
-    // Development content
-    @Proxy(\.viewModel.devTouchpoint)
-    var devTouchpoint: Bool?
-
-    // Custom development stage modal bundle
-    @Proxy(\.viewModel.stageTag)
-    var stageTag: String?
-
     // Standalone modal
     @Proxy(\.viewModel.integrationIdentifier)
     var integrationIdentifier: String?

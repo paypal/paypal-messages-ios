@@ -1,7 +1,6 @@
 import Foundation
 
 public enum Environment: Equatable {
-    case local(port: String = "8443", devTouchpoint: Bool = false, stageTag: String? = nil)
     case stage(host: String, devTouchpoint: Bool = false, stageTag: String? = nil)
     case sandbox
     case live
@@ -14,8 +13,6 @@ public enum Environment: Equatable {
             return "sandbox"
         case .stage:
             return "stage"
-        case .local:
-            return "local"
         }
     }
 
@@ -23,7 +20,7 @@ public enum Environment: Equatable {
         switch self {
         case .live, .sandbox:
             return true
-        case .stage, .local:
+        case .stage:
             return false
         }
     }
@@ -32,7 +29,7 @@ public enum Environment: Equatable {
         switch self {
         case .live, .sandbox:
             return URLSession.shared
-        case .stage, .local:
+        case .stage:
             return URLSession(
                 configuration: .default,
                 delegate: DevelopmentSession(),
@@ -44,8 +41,6 @@ public enum Environment: Equatable {
     // swiftlint:disable force_unwrapping
     private var baseURL: URL {
         switch self {
-        case .local(let port, _, _):
-            return URL(string: "https://localhost.paypal.com:\(port)")!
         case .stage(let host, _, _):
             return URL(string: "https://www.\(host)")!
         case .sandbox:
@@ -64,8 +59,6 @@ public enum Environment: Equatable {
             return URL(string: "https://api.sandbox.paypal.com")!
         case .live:
             return URL(string: "https://api.paypal.com")!
-        default:
-            return baseURL
         }
     }
 
@@ -78,18 +71,18 @@ public enum Environment: Equatable {
         case log = "/v1/credit/upstream-messaging-events"
     }
 
-    public var devTouchpoint: Bool {
+    private var devTouchpoint: Bool {
         switch self {
-        case .local(_, let devTouchpoint, _), .stage(_, let devTouchpoint, _):
+        case .stage(_, let devTouchpoint, _):
             return devTouchpoint
         default:
             return false
         }
     }
 
-    public var stageTag: String? {
+    private var stageTag: String? {
         switch self {
-        case .local(_, _, let stageTag), .stage(_, _, let stageTag):
+        case .stage(_, _, let stageTag):
             return stageTag
         default:
             return nil
@@ -98,24 +91,33 @@ public enum Environment: Equatable {
 
     func url(_ path: PayPalMessagePath, _ queryParams: [String: String?]? = nil) -> URL? {
         var parts = URLComponents()
-        var queryItems: [URLQueryItem]?
-
-        if let queryParams, !queryParams.isEmpty {
-            queryItems = queryParams.map { URLQueryItem(name: $0.key, value: $0.value) }
-        }
+        var queryItems = queryParams?.compactMap { key, value in
+            value != nil ? URLQueryItem(name: key, value: value) : nil
+        } ?? []
 
         let basePath: URL
         if path == .log {
             basePath = loggerBaseURL
         } else {
             basePath = baseURL
+
+            // Append dev_touchpoint and stage_tag query parameters only for .stage case
+            if case .stage(_, let devTouchpoint, let stageTag) = self {
+                queryItems.append(URLQueryItem(name: "dev_touchpoint", value: "\(devTouchpoint)"))
+                if let stageTag = stageTag, !stageTag.isEmpty {
+                    queryItems.append(URLQueryItem(name: "stage_tag", value: stageTag))
+                }
+            }
         }
 
         parts.scheme = basePath.scheme
         parts.host = basePath.host
-        parts.port = basePath.port
         parts.path = path.rawValue
-        parts.queryItems = queryItems
+
+        if !queryItems.isEmpty {
+            parts.queryItems = queryItems
+        }
+
 
         return parts.url
     }

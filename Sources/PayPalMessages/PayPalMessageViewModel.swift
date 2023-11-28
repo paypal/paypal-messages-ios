@@ -77,10 +77,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         didSet { queueUpdate(from: oldValue, to: ignoreCache) }
     }
 
-    var stageTag: String?
-
-    var devTouchpoint: Bool
-
     /// Update the messageView's interactivity based on the boolean flag. Disabled by default.
     var isMessageViewInteractive = false
 
@@ -142,8 +138,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.logoType = config.style.logoType
         self.alignment = config.style.textAlignment
         self.ignoreCache = config.data.ignoreCache
-        self.stageTag = environment.stageTag
-        self.devTouchpoint = environment.devTouchpoint
 
         self.requester = requester
         self.parameterBuilder = parameterBuilder
@@ -306,8 +300,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             offerType: offerType,
             merchantProfileHash: merchantProfileHash,
             ignoreCache: ignoreCache,
-            devTouchpoint: devTouchpoint,
-            stageTag: stageTag,
             instanceID: logger.instanceId
         )
     }

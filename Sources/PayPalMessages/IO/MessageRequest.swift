@@ -16,8 +16,6 @@ struct MessageRequestParameters {
     let offerType: PayPalMessageOfferType?
     let merchantProfileHash: String?
     let ignoreCache: Bool
-    let devTouchpoint: Bool
-    let stageTag: String?
     let instanceID: String
 }
 
@@ -49,9 +47,7 @@ class MessageRequest: MessageRequestable {
             "amount": parameters.amount?.description,
             "offer": parameters.offerType?.rawValue,
             "merchant_config": parameters.merchantProfileHash,
-            "stage_tag": parameters.stageTag,
             "ignore_cache": parameters.ignoreCache.description,
-            "dev_touchpoint": parameters.devTouchpoint.description,
             "instance_id": parameters.instanceID,
             "integration_version": Logger.integrationVersion,
             "device_id": Logger.deviceID,

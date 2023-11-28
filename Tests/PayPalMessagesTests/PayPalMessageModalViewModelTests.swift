@@ -59,8 +59,6 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.offerType, .payLaterLongTerm)
         XCTAssertEqual(viewModel.buyerCountry, "US")
         XCTAssertEqual(viewModel.channel, "TEST")
-        XCTAssertEqual(viewModel.stageTag, nil)
-        XCTAssertEqual(viewModel.devTouchpoint, false)
         XCTAssertTrue(viewModel.ignoreCache ?? false)
         XCTAssertEqual(viewModel.environment, .live)
 
