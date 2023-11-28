@@ -37,11 +37,14 @@ platform :ios do
         markdown_report: true,
         minimum_coverage_percentage: 80.0
       )
+    rescue => e
+      error = e # Store the exception
     ensure
       if options[:summary]
         # Add coverage report to GitHub Actions summary page
         sh "cat ./coverage/report.md > #{options[:summary]}"
       end
+      raise error if error # Re-raise the exception if it exists
     end
   end
 
@@ -60,11 +63,12 @@ platform :ios do
         reporter: "markdown",
         output_file: "fastlane/swiftlint/report.md"
       )
-    rescue # only need the summary if there are lint issues
+     rescue => e # only need the summary if there are lint issues
       if options[:summary]
         # Add SwiftLint report to GitHub Actions summary page
         sh "cat ./swiftlint/report.md > #{options[:summary]}"
       end
+      raise e # Re-raise the exception
     end
   end
 
