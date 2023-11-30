@@ -144,7 +144,6 @@ struct SwiftUIContentView: View {
 
             HStack {
                 // Ignore Cache
-                // test
                 ReusableToggle(isOn: $ignoreCache, label: "ignoreCache")
 
                 ReusableTextView(
