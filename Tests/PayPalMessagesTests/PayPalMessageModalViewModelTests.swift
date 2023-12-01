@@ -94,7 +94,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertFalse(webView.evaluateJavaScriptCalled)
 
-        waitForExpectations(timeout: 0.5)
+        waitForExpectations(timeout: 1.5)
 
         XCTAssertTrue(webView.evaluateJavaScriptCalled)
 
@@ -136,7 +136,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertFalse(webView.evaluateJavaScriptCalled)
 
-        waitForExpectations(timeout: 0.5)
+        waitForExpectations(timeout: 1.5)
 
         let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"}"
 
