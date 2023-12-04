@@ -21,7 +21,7 @@ class EnvironmentTests: XCTestCase {
     // Test URL construction
     func testURLConstruction() {
         let stageURL = Environment.stage(host: "testhost").url(.modal, ["param": "value"])
-        XCTAssertEqual(stageURL?.absoluteString, "https://www.testhost/credit-presentment/lander/modal?param=value&dev_touchpoint=false")
+        XCTAssertEqual(stageURL?.absoluteString, "https://www.testhost/credit-presentment/lander/modal?param=value")
 
         let sandboxURL = Environment.sandbox.url(.merchantProfile)
         XCTAssertEqual(sandboxURL?.absoluteString, "https://www.sandbox.paypal.com/credit-presentment/merchant-profile")
