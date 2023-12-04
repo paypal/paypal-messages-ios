@@ -103,8 +103,10 @@ public enum Environment: Equatable {
 
             // Append dev_touchpoint and stage_tag query parameters only for .stage case
             if case .stage(_, let devTouchpoint, let stageTag) = self {
-                queryItems.append(URLQueryItem(name: "dev_touchpoint", value: "\(devTouchpoint)"))
-                if let stageTag = stageTag, !stageTag.isEmpty {
+                if devTouchpoint {
+                    queryItems.append(URLQueryItem(name: "dev_touchpoint", value: "\(devTouchpoint)"))
+                }
+                if let stageTag, !stageTag.isEmpty {
                     queryItems.append(URLQueryItem(name: "stage_tag", value: stageTag))
                 }
             }
