@@ -114,14 +114,10 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         // Check if the actualJSONString matches the desired pattern
         let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
-        let regex: NSRegularExpression?
-        do {
-            regex = try NSRegularExpression(pattern: pattern, options: [])
-        } catch {
-            XCTFail("Failed to create NSRegularExpression: \(error)")
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            XCTFail("Failed to create NSRegularExpression")
             return
         }
-        guard let regex = regex else { return }
         let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
 
         XCTAssertTrue(!matches.isEmpty)
@@ -161,14 +157,10 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         // Check if the actualJSONString matches the desired pattern
         let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
-        let regex: NSRegularExpression?
-        do {
-            regex = try NSRegularExpression(pattern: pattern, options: [])
-        } catch {
-            XCTFail("Failed to create NSRegularExpression: \(error)")
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            XCTFail("Failed to create NSRegularExpression")
             return
         }
-        guard let regex = regex else { return }
         let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
 
         XCTAssertTrue(!matches.isEmpty)
