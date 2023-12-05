@@ -71,24 +71,6 @@ public enum Environment: Equatable {
         case log = "/v1/credit/upstream-messaging-events"
     }
 
-    private var devTouchpoint: Bool {
-        switch self {
-        case .stage(_, let devTouchpoint, _):
-            return devTouchpoint
-        default:
-            return false
-        }
-    }
-
-    private var stageTag: String? {
-        switch self {
-        case .stage(_, _, let stageTag):
-            return stageTag
-        default:
-            return nil
-        }
-    }
-
     func url(_ path: PayPalMessagePath, _ queryParams: [String: String?]? = nil) -> URL? {
         var parts = URLComponents()
         var queryItems = queryParams?.compactMap { key, value in
