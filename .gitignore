@@ -31,8 +31,9 @@ Archives
 Pods
 
 # Carthage
-Carthage/
-*.xcframework.zip
+Carthage/*
+!Carthage/PayPalMessages.json
+*.zip
 
 # SPM
 .swiftpm

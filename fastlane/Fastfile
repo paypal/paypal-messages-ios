@@ -1,3 +1,5 @@
+require 'json'
+
 skip_docs
 default_platform(:ios)
 
@@ -7,6 +9,28 @@ def setup_xcode
     version: "14.3.1",
     select_for_current_build_only: true
   )
+end
+
+# Updates the Carthage JSON file with the specified version
+def version_bump_carthage(path:, version_number:)
+  Dir.chdir("..") do
+    framework_url = "https://github.com/paypal/paypal-messages-ios/releases/download/#{version_number}/PayPalMessages.framework.zip"
+    xcframework_url = "https://github.com/paypal/paypal-messages-ios/releases/download/#{version_number}/PayPalMessages.xcframework.zip"
+
+    parsed_data = JSON.parse(File.read(path)) 
+    parsed_data[version_number] = "#{framework_url}?alt=#{xcframework_url}"
+    json_string = JSON.pretty_generate(parsed_data)
+
+    File.open(path, 'w') { |file| file.puts(json_string) }
+  end
+end
+
+def version_bump_spm(checksum_file:, version_number:)
+  Dir.chdir("..") do
+    sh "sed -i '' -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\\1 = \"#{version_number}\"/' Package.swift"
+    checksum = sh("shasum -a 256 #{checksum_file} | cut -d ' ' -f 1").strip!
+    sh "sed -i '' -E 's/checksum: *\"[0-9a-z]+\"/checksum: \"#{checksum}\"/' Package.swift"
+  end
 end
 
 platform :ios do
@@ -140,7 +164,13 @@ platform :ios do
         version_number: options[:version]
       )
 
-      sh "rm -rf ../Carthage"
+      version_bump_carthage(
+        path: "Carthage/PayPalMessages.json",
+        version_number: options[:version]
+      )
+
+      sh "rm -rf ../Carthage/Archives"
+      sh "rm -rf ../Carthage/Build"
 
       # Create Carthage xcframework
       carthage(
@@ -150,7 +180,46 @@ platform :ios do
       )
 
       # Zip xcframework in prep to be included with the GitHub release
-      sh "cd .. && zip -r PayPalMessages.xcframework.zip Carthage"
+      sh "cd ../Carthage/Build && zip -r ../../PayPalMessages.xcframework.zip PayPalMessages.xcframework"
+
+      # For the older universal framework asset the device and simulator must be built separately due to conflicting architectures.
+      # Both the device and simulator include amd64 architecture which is incompatible with `lipo`, so arm64 is excluded from the
+      # simulator so that the binaries can be combined
+      xcodebuild(
+        archive: true,
+        workspace: "PayPalMessages.xcworkspace",
+        scheme: "PayPalMessages",
+        configuration: "Release",
+        sdk: "iphoneos",
+        archive_path: "./Carthage/Archives/Device.xcarchive"
+      )
+
+      # Set global env that will be used in the next xcodebuild command
+      ENV["EXCLUDED_ARCHS"] = "arm64"
+
+      xcodebuild(
+        archive: true,
+        workspace: "PayPalMessages.xcworkspace",
+        scheme: "PayPalMessages",
+        configuration: "Release",
+        sdk: "iphonesimulator",
+        archive_path: "./Carthage/Archives/Simulator-NoArm64.xcarchive"
+      )
+
+      # Combine device and simulator builds into single universal framework
+      Dir.chdir("../Carthage/Archives") do
+        sh "cp -R Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework ."
+        sh "cp -R Simulator-NoArm64.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/Modules/PayPalMessages.swiftmodule/ PayPalMessages.framework/Modules/PayPalMessages.swiftmodule"
+
+        sh "lipo Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/PayPalMessages Simulator-NoArm64.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/PayPalMessages -create -output PayPalMessages.framework/PayPalMessages"
+
+        sh "zip -r ../../PayPalMessages.framework.zip PayPalMessages.framework"
+      end
+
+      version_bump_spm(
+        version_number: options[:version],
+        checksum_file: "PayPalMessages.xcframework.zip"
+      )
     end
   end
 
@@ -168,6 +237,6 @@ platform :ios do
 
   desc "Publish podspec to Trunk"
   lane :publish do
-    # pod_push(path: "PayPalMessages.podspec")
+    pod_push(path: "PayPalMessages.podspec")
   end
 end
