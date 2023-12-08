@@ -169,7 +169,12 @@ platform :ios do
         version_number: options[:version]
       )
 
-      sh "rm -rf build"
+      sh "rm -rf ../build"
+
+      ENV["CODE_SIGN_IDENTITY"] = ""
+      ENV["CODE_SIGNING_REQUIRED"] = "NO"
+      ENV["CODE_SIGN_ENTITLEMENTS"] = ""
+      ENV["CODE_SIGNING_ALLOWED"] = "NO"
 
       xcodebuild(
         archive: true,
