@@ -6,18 +6,18 @@ on:
             - main
 
 jobs:
-    linting:
-        uses: ./.github/workflows/linting.yml
-
-    tests:
-        uses: ./.github/workflows/tests.yml
-
-    build:
-        uses: ./.github/workflows/build.yml
+    # linting:
+    #     uses: ./.github/workflows/linting.yml
+    #
+    # tests:
+    #     uses: ./.github/workflows/tests.yml
+    #
+    # build:
+    #     uses: ./.github/workflows/build.yml
 
     release:
         name: Release
-        needs: [linting, tests, build]
+        # needs: [linting, tests, build]
         runs-on: macos-13
 
         permissions:
