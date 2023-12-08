@@ -205,7 +205,7 @@ platform :ios do
       xcodebuild(
         archive: true,
         clean: true,
-        project: "PayPalMessages.xcodeproject",
+        project: "PayPalMessages.xcodeproj",
         scheme: "PayPalMessages",
         configuration: "Release",
         sdk: "iphonesimulator",
