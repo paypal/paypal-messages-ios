@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0-prerelease.4](https://github.com/paypal/paypal-messages-ios/compare/1.0.0-prerelease.3...1.0.0-prerelease.4) (2023-12-08)
+
+
+### Bug Fixes
+
+* disable code signing ([8b51a79](https://github.com/paypal/paypal-messages-ios/commit/8b51a798615f880421a77ee9df6037c46aa90506))
+* inlcude Carthage json file and swift package checksum ([6a2aeae](https://github.com/paypal/paypal-messages-ios/commit/6a2aeae16c634ec0ff4a6ab3ead8323d27bf50ef))
+* manually build and assemble xcframework ([c1699f3](https://github.com/paypal/paypal-messages-ios/commit/c1699f3c69da9b582782a78afcd9c1da35a8c8ff))
+
+
+### Continuous Integration
+
+* temporarily disable release prereq jobs ([53d5ed7](https://github.com/paypal/paypal-messages-ios/commit/53d5ed7f366e01ed76c05c9b0ef2f4ff7e5d3d51))
+
 ## [1.0.0-prerelease.3](https://github.com/paypal/paypal-messages-ios/compare/v1.0.0-prerelease.2...1.0.0-prerelease.3) (2023-11-29)
 
 

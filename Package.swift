@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let version = "1.0.0-prerelease.3"
+let version = "1.0.0-prerelease.4"
 
 let package = Package(
     name: "PayPalMessages",
@@ -30,6 +30,6 @@ let package = Package(
         .binaryTarget(
             name: "PayPalMessagesBinary",
             url: "https://github.com/paypal/paypal-messages-ios/releases/download/\(version)/PayPalMessages.xcframework.zip",
-            checksum: "a70eecc03aad9cb295298a2699ac7c09ea86b4e9c5b1e6ed227a60546033f4c6")
+            checksum: "3fc2ae81ef40e13ff42b6d760f41a3cb420f81fb4073f79c3d9c87e8f6e4f596")
     ]
 )
