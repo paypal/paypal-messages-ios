@@ -177,7 +177,7 @@ platform :ios do
       ENV["CODE_SIGNING_ALLOWED"] = "NO"
 
 
-      sh "cd .. && set -o pipefail && xcodebuild archive -verbose -workspace \"PayPalMessages.xcworkspace\" -scheme \"PayPalMessages\" -configuration \"Release\" -sdk \"iphoneos\" -archivePath \"./build/Archives/Device.xcarchive\" | tee '/Users/runner/Library/Logs/fastlane/xcbuild/2023-12-08/8127/xcodebuild.log' | xcpretty --color --simple"
+      sh "cd .. && set -o pipefail && xcodebuild archive -verbose -workspace \"PayPalMessages.xcworkspace\" -scheme \"PayPalMessages\" -configuration \"Release\" -sdk \"iphoneos\" -archivePath \"./build/Archives/Device.xcarchive\" CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS=\"\" CODE_SIGNING_ALLOWED=NO | tee '/Users/runner/Library/Logs/fastlane/xcbuild/2023-12-08/8127/xcodebuild.log' | xcpretty --color --simple"
 
       # xcodebuild(
       #   archive: true,
