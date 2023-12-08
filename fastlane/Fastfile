@@ -176,14 +176,17 @@ platform :ios do
       ENV["CODE_SIGN_ENTITLEMENTS"] = ""
       ENV["CODE_SIGNING_ALLOWED"] = "NO"
 
-      xcodebuild(
-        archive: true,
-        workspace: "PayPalMessages.xcworkspace",
-        scheme: "PayPalMessages",
-        configuration: "Release",
-        sdk: "iphoneos",
-        archive_path: "./build/Archives/Device.xcarchive"
-      )
+
+      sh "cd .. && set -o pipefail && xcodebuild archive -verbose -workspace \"PayPalMessages.xcworkspace\" -scheme \"PayPalMessages\" -configuration \"Release\" -sdk \"iphoneos\" -archivePath \"./build/Archives/Device.xcarchive\" | tee '/Users/runner/Library/Logs/fastlane/xcbuild/2023-12-08/8127/xcodebuild.log' | xcpretty --color --simple"
+
+      # xcodebuild(
+      #   archive: true,
+      #   workspace: "PayPalMessages.xcworkspace",
+      #   scheme: "PayPalMessages",
+      #   configuration: "Release",
+      #   sdk: "iphoneos",
+      #   archive_path: "./build/Archives/Device.xcarchive"
+      # )
 
       xcodebuild(
         archive: true,
