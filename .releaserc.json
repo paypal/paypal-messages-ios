@@ -58,7 +58,7 @@
         [
             "@semantic-release/github",
             {
-                "assets": "PayPalMessages.xcframework.zip"
+                "assets": ["build/PayPalMessages.framework.zip", "build/PayPalMessages.xcframework.zip"]
             }
         ]
     ]
