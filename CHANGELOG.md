@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0-prerelease.5](https://github.com/paypal/paypal-messages-ios/compare/1.0.0-prerelease.4...1.0.0-prerelease.5) (2023-12-13)
+
+
+### Bug Fixes
+
+* use xcframework in Package.swift ([7ab6e37](https://github.com/paypal/paypal-messages-ios/commit/7ab6e372017b1cd870b913ba41754afc2ad5fb51))
+
 ## [1.0.0-prerelease.4](https://github.com/paypal/paypal-messages-ios/compare/1.0.0-prerelease.3...1.0.0-prerelease.4) (2023-12-08)
 
 
