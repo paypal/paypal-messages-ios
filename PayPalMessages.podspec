@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name            = "PayPalMessages"
-  s.version         = "1.0.0-prerelease.5"
+  s.version         = "1.0.0-prerelease.6"
   s.summary         = "The PayPal iOS SDK Messages Module: Promote offers to your customers such as Pay Later and PayPal Credit."
   s.homepage        = "https://developer.paypal.com"
   s.license         = "MIT"

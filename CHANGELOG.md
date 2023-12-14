@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0-prerelease.6](https://github.com/paypal/paypal-messages-ios/compare/1.0.0-prerelease.5...1.0.0-prerelease.6) (2023-12-14)
+
+
+### Bug Fixes
+
+* undo excluded archs from the project file ([367a390](https://github.com/paypal/paypal-messages-ios/commit/367a3904a64a22e9ace233db43619389bcd22666))
+
 ## [1.0.0-prerelease.5](https://github.com/paypal/paypal-messages-ios/compare/1.0.0-prerelease.4...1.0.0-prerelease.5) (2023-12-13)
 
 
