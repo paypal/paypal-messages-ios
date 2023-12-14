@@ -31,8 +31,8 @@ Archives
 Pods
 
 # Carthage
-Carthage/
-*.xcframework.zip
+Carthage/*
+!Carthage/PayPalMessages.json
 
 # SPM
 .swiftpm
@@ -45,3 +45,5 @@ SampleApps/SPMTest/SPMTest.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Pa
 /fastlane/test_output
 /fastlane/swiftlint
 
+# Node
+node_modules/
