@@ -103,7 +103,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private let requester: MessageRequestable
 
     /// helper class to build the parameters for the PayPalMessageView
-    private let parameterBuilder: PayPalMessageViewParametersBuilder = PayPalMessageViewParametersBuilder()
+    private let parameterBuilder = PayPalMessageViewParametersBuilder()
 
     /// obtains the Merchant Hash and requests it if necessary
     private let merchantProfileProvider: MerchantProfileHashGetable
