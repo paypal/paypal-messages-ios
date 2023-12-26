@@ -221,7 +221,11 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             stateDelegate.onLoading(messageView)
         }
 
-        merchantProfileProvider.getMerchantProfileHash(environment: environment, clientID: clientID) { [weak self] profileHash in
+        merchantProfileProvider.getMerchantProfileHash(
+            environment: environment,
+            clientID: clientID,
+            merchantID: merchantID
+        ) { [weak self] profileHash in
             guard let self else { return }
 
             let parameters = self.makeRequestParameters(merchantProfileHash: profileHash)

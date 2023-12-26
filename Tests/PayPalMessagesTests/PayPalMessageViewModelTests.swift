@@ -372,7 +372,6 @@ final class PayPalMessageViewModelTests: XCTestCase {
 
     private func assert(_ mockRequest: PayPalMessageRequestMock, calledTimes count: Int) {
         let predicate = NSPredicate { _, _ in
-            print(mockRequest.requestsPerformed, count)
             return mockRequest.requestsPerformed == count
         }
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: mockRequest)

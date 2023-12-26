@@ -7,12 +7,11 @@ extension UserDefaults {
     }
 
     // holds the data for a merchant profile, of type PayPalMessageMerchantData
-    static var merchantProfileData: Data? {
-        get {
-            standard.data(forKey: Key.merchantProfileData.rawValue)
-        }
-        set {
-            standard.set(newValue, forKey: Key.merchantProfileData.rawValue)
-        }
+    static func getMerchantProfileData(forClientID clientID: String, merchantID: String?) -> Data? {
+        return standard.data(forKey: "\(Key.merchantProfileData.rawValue).\(clientID).\(merchantID ?? "default")")
+    }
+
+    static func setMerchantProfileData(_ value: Data?, forClientID clientID: String, merchantID: String?) {
+        standard.set(value, forKey: "\(Key.merchantProfileData.rawValue).\(clientID).\(merchantID ?? "default")")
     }
 }
