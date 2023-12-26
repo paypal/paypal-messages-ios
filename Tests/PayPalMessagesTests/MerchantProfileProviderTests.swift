@@ -5,14 +5,18 @@ import XCTest
 final class MerchantProfileProviderTests: XCTestCase {
 
     let clientID = "testclientid"
+    let clientID2 = "testclientid2"
     let merchantID = "testmerchantid"
+    let merchantID2 = "testmerchantid2"
 
     override func setUp() {
         super.setUp()
 
-        UserDefaults.standard.removeObject(
-            forKey: "\(UserDefaults.Key.merchantProfileData.rawValue).\(clientID).\(merchantID)"
-        )
+        // Clear out merchant profile cache
+        let dictionary = UserDefaults.standard.dictionaryRepresentation()
+        for key in dictionary.keys {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 
     // MARK: - Tests
@@ -47,6 +51,34 @@ final class MerchantProfileProviderTests: XCTestCase {
             provider.getMerchantProfileHash(environment: .live, clientID: self.clientID, merchantID: self.merchantID) { secondHash in
                 XCTAssertEqual(firstHash, secondHash)
                 XCTAssertEqual(requestMock.requestsPerformed, 1)
+            }
+        }
+    }
+    
+    func testCacheMissWhenDifferentMerchant() {
+        let requestMock = MerchantProfileRequestMock(scenario: .success)
+        let provider = MerchantProfileProvider(merchantProfileRequest: requestMock)
+
+
+        provider.getMerchantProfileHash(environment: .live, clientID: clientID, merchantID: nil) { hash in
+            let firstHash = hash
+            XCTAssertNotNil(hash)
+            XCTAssertEqual(requestMock.requestsPerformed, 1)
+
+            provider.getMerchantProfileHash(environment: .live, clientID: self.clientID2, merchantID: nil) { secondHash in
+                XCTAssertNotEqual(firstHash, secondHash)
+                XCTAssertEqual(requestMock.requestsPerformed, 2)
+                
+                provider.getMerchantProfileHash(environment: .live, clientID: self.clientID, merchantID: self.merchantID) { hash in
+                    let firstHash = hash
+                    XCTAssertNotNil(hash)
+                    XCTAssertEqual(requestMock.requestsPerformed, 3)
+
+                    provider.getMerchantProfileHash(environment: .live, clientID: self.clientID, merchantID: self.merchantID2) { secondHash in
+                        XCTAssertNotEqual(firstHash, secondHash)
+                        XCTAssertEqual(requestMock.requestsPerformed, 4)
+                    }
+                }
             }
         }
     }
