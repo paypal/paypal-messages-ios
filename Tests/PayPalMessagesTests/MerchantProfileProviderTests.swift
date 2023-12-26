@@ -54,7 +54,7 @@ final class MerchantProfileProviderTests: XCTestCase {
             }
         }
     }
-    
+
     func testCacheMissWhenDifferentMerchant() {
         let requestMock = MerchantProfileRequestMock(scenario: .success)
         let provider = MerchantProfileProvider(merchantProfileRequest: requestMock)
@@ -68,13 +68,17 @@ final class MerchantProfileProviderTests: XCTestCase {
             provider.getMerchantProfileHash(environment: .live, clientID: self.clientID2, merchantID: nil) { secondHash in
                 XCTAssertNotEqual(firstHash, secondHash)
                 XCTAssertEqual(requestMock.requestsPerformed, 2)
-                
+
                 provider.getMerchantProfileHash(environment: .live, clientID: self.clientID, merchantID: self.merchantID) { hash in
                     let firstHash = hash
                     XCTAssertNotNil(hash)
                     XCTAssertEqual(requestMock.requestsPerformed, 3)
 
-                    provider.getMerchantProfileHash(environment: .live, clientID: self.clientID, merchantID: self.merchantID2) { secondHash in
+                    provider.getMerchantProfileHash(
+                        environment: .live,
+                        clientID: self.clientID,
+                        merchantID: self.merchantID2
+                    ) { secondHash in
                         XCTAssertNotEqual(firstHash, secondHash)
                         XCTAssertEqual(requestMock.requestsPerformed, 4)
                     }
