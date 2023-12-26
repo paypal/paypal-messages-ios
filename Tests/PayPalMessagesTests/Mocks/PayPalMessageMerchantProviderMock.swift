@@ -10,7 +10,7 @@ class MerchantProfileProviderMock: MerchantProfileHashGetable {
 
     var scenario: Scenarios
 
-    init(_ scenario: Scenarios) {
+    init(scenario: Scenarios) {
         self.scenario = scenario
     }
 
