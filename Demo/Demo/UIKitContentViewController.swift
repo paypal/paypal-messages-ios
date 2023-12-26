@@ -362,4 +362,3 @@ extension UIKitContentViewController: PayPalMessageViewEventDelegate {
         statusTextView.text = "Applied"
     }
 }
-// swiftlint:disable:this file_length

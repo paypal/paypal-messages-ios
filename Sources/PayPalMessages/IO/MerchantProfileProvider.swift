@@ -62,7 +62,11 @@ class MerchantProfileProvider: MerchantProfileHashGetable {
         merchantID: String?,
         onCompletion: @escaping (MerchantProfileData?) -> Void
     ) {
-        merchantProfileRequest.fetchMerchantProfile(environment: environment, clientID: clientID, merchantID: merchantID) { [weak self] result in
+        merchantProfileRequest.fetchMerchantProfile(
+            environment: environment,
+            clientID: clientID,
+            merchantID: merchantID
+        ) { [weak self] result in
             switch result {
             case .success(let merchantProfileData):
                 log(.debug, "Merchant Request Hash succeeded with \(merchantProfileData.hash)")
