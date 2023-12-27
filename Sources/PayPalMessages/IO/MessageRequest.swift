@@ -49,11 +49,11 @@ class MessageRequest: MessageRequestable {
             "merchant_config": parameters.merchantProfileHash,
             "ignore_cache": parameters.ignoreCache.description,
             "instance_id": parameters.instanceID,
-            "lib_version": BuildInfo.version,
+            "version": BuildInfo.version,
             "integration_type": BuildInfo.integrationType,
-            "integration_version": Logger.integrationVersion,
-            "device_id": Logger.deviceID,
-            "session_id": Logger.sessionID
+            "integration_version": AnalyticsLogger.integrationVersion,
+            "device_id": AnalyticsLogger.deviceID,
+            "session_id": AnalyticsLogger.sessionID
         ].filter {
             guard let value = $0.value else { return false }
 

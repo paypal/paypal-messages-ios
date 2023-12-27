@@ -46,13 +46,13 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     var ignoreCache: Bool? { // swiftlint:disable:this discouraged_optional_boolean
         didSet { queueUpdate(from: oldValue, to: ignoreCache) }
     }
-    
+
 
     // Standalone modal
     var integrationIdentifier: String?
 
     var merchantProfileHash: String?
-    
+
 
     // MARK: - Computed Private Properties
 
@@ -67,13 +67,13 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             "offer": offerType?.rawValue,
             "channel": channel,
             "placement": placement?.rawValue,
-            "lib_version": BuildInfo.version,
+            "version": BuildInfo.version,
             "integration_type": BuildInfo.integrationType,
             "integration_identifier": integrationIdentifier,
             "ignore_cache": ignoreCache?.description,
-            "integration_version": Logger.integrationVersion,
-            "device_id": Logger.deviceID,
-            "session_id": Logger.sessionID,
+            "integration_version": AnalyticsLogger.integrationVersion,
+            "device_id": AnalyticsLogger.deviceID,
+            "session_id": AnalyticsLogger.sessionID,
             "features": "native-modal"
         ].filter {
             guard let value = $0.value else { return false }
@@ -89,7 +89,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     typealias LoadCompletionHandler = (Result<Void, PayPalMessageError>) -> Void
 
     // MARK: - Private Properties
-    
+
     /// modal view controller passed into logger and delegate functions
     private let modal: PayPalMessageModal
 
@@ -101,7 +101,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     /// Completion callback called after webview has loaded and is ready to be viewed
     private var loadCompletionHandler: LoadCompletionHandler?
 
-    let logger: Logger
+    let logger: AnalyticsLogger
 
     // MARK: - Initializers
 
@@ -128,7 +128,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         self.eventDelegate = eventDelegate
         self.modal = modal
 
-        self.logger = Logger(.modal(modal))
+        self.logger = AnalyticsLogger(.modal(modal))
 
         super.init()
 

@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C60F156A2B3C851100E16902 /* AnalyticsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60F15692B3C851100E16902 /* AnalyticsLogger.swift */; };
 		C61D84472B33348C00F372EF /* CloudEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61D84462B33348C00F372EF /* CloudEvent.swift */; };
 		C635F4362A9645B10096F9FF /* PayPalMessages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C635F42E2A9645B10096F9FF /* PayPalMessages.framework */; };
 		C635F4C12A964A020096F9FF /* PayPalMessageModalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F48E2A964A020096F9FF /* PayPalMessageModalViewModel.swift */; };
-		C635F4C22A964A020096F9FF /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4902A964A020096F9FF /* Logger.swift */; };
-		C635F4C32A964A020096F9FF /* LoggerEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4912A964A020096F9FF /* LoggerEvent.swift */; };
-		C635F4C42A964A020096F9FF /* LoggerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4922A964A020096F9FF /* LoggerService.swift */; };
+		C635F4C32A964A020096F9FF /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4912A964A020096F9FF /* AnalyticsEvent.swift */; };
+		C635F4C42A964A020096F9FF /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4922A964A020096F9FF /* AnalyticsService.swift */; };
 		C635F4C52A964A020096F9FF /* AnyStringKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4932A964A020096F9FF /* AnyStringKey.swift */; };
 		C635F4C62A964A020096F9FF /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4942A964A020096F9FF /* AnyCodable.swift */; };
 		C635F4C72A964A020096F9FF /* PayPalMessageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4962A964A020096F9FF /* PayPalMessageConfig.swift */; };
@@ -85,13 +85,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C60F15692B3C851100E16902 /* AnalyticsLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsLogger.swift; sourceTree = "<group>"; };
 		C61D84462B33348C00F372EF /* CloudEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudEvent.swift; sourceTree = "<group>"; };
 		C635F42E2A9645B10096F9FF /* PayPalMessages.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PayPalMessages.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C635F4352A9645B10096F9FF /* PayPalMessagesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PayPalMessagesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C635F48E2A964A020096F9FF /* PayPalMessageModalViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageModalViewModel.swift; sourceTree = "<group>"; };
-		C635F4902A964A020096F9FF /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		C635F4912A964A020096F9FF /* LoggerEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerEvent.swift; sourceTree = "<group>"; };
-		C635F4922A964A020096F9FF /* LoggerService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerService.swift; sourceTree = "<group>"; };
+		C635F4912A964A020096F9FF /* AnalyticsEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
+		C635F4922A964A020096F9FF /* AnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		C635F4932A964A020096F9FF /* AnyStringKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyStringKey.swift; sourceTree = "<group>"; };
 		C635F4942A964A020096F9FF /* AnyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		C635F4962A964A020096F9FF /* PayPalMessageConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageConfig.swift; sourceTree = "<group>"; };
@@ -211,7 +211,7 @@
 				C635F4BB2A964A020096F9FF /* Delegates */,
 				C635F49A2A964A020096F9FF /* Enums */,
 				C635F4B32A964A020096F9FF /* Extensions */,
-				C635F48F2A964A020096F9FF /* Logger */,
+				C635F48F2A964A020096F9FF /* Analytics */,
 				C635F4A52A964A020096F9FF /* IO */,
 				C635F4AC2A964A020096F9FF /* Utils */,
 				C635F4BE2A964A020096F9FF /* Views */,
@@ -224,17 +224,17 @@
 			path = PayPalMessages;
 			sourceTree = "<group>";
 		};
-		C635F48F2A964A020096F9FF /* Logger */ = {
+		C635F48F2A964A020096F9FF /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				C635F4902A964A020096F9FF /* Logger.swift */,
-				C635F4912A964A020096F9FF /* LoggerEvent.swift */,
-				C635F4922A964A020096F9FF /* LoggerService.swift */,
+				C60F15692B3C851100E16902 /* AnalyticsLogger.swift */,
+				C635F4912A964A020096F9FF /* AnalyticsEvent.swift */,
+				C635F4922A964A020096F9FF /* AnalyticsService.swift */,
 				C635F4932A964A020096F9FF /* AnyStringKey.swift */,
 				C635F4942A964A020096F9FF /* AnyCodable.swift */,
 				C61D84462B33348C00F372EF /* CloudEvent.swift */,
 			);
-			path = Logger;
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		C635F4952A964A020096F9FF /* Config */ = {
@@ -270,7 +270,6 @@
 				C635F4AA2A964A020096F9FF /* MessageResponse.swift */,
 				C635F4A72A964A020096F9FF /* MerchantProfileProvider.swift */,
 				C635F4A82A964A020096F9FF /* MerchantProfileRequest.swift */,
-				C635F4A92A964A020096F9FF /* MerchantProfileData.swift */,
 			);
 			path = IO;
 			sourceTree = "<group>";
@@ -280,6 +279,7 @@
 			children = (
 				C635F4AD2A964A020096F9FF /* PayPalMessageViewParameters.swift */,
 				C635F4AE2A964A020096F9FF /* Log.swift */,
+				C635F4A92A964A020096F9FF /* MerchantProfileData.swift */,
 				C635F4AF2A964A020096F9FF /* Proxy.swift */,
 				C635F4B02A964A020096F9FF /* PayPalMessageAttributedStringBuilder.swift */,
 				C635F4B12A964A020096F9FF /* PayPalMessageViewParametersBuilder.swift */,
@@ -490,11 +490,11 @@
 				C635F4CB2A964A020096F9FF /* PayPalMessageOfferType.swift in Sources */,
 				C635F4E72A964A020096F9FF /* CGFloat.swift in Sources */,
 				C635F4D52A964A020096F9FF /* MessageRequest.swift in Sources */,
+				C60F156A2B3C851100E16902 /* AnalyticsLogger.swift in Sources */,
 				C635F4E82A964A020096F9FF /* PayPalMessageModalDelegates.swift in Sources */,
 				C635F4C12A964A020096F9FF /* PayPalMessageModalViewModel.swift in Sources */,
 				C635F4D32A964A020096F9FF /* HTTPHeaders.swift in Sources */,
-				C635F4C22A964A020096F9FF /* Logger.swift in Sources */,
-				C635F4C32A964A020096F9FF /* LoggerEvent.swift in Sources */,
+				C635F4C32A964A020096F9FF /* AnalyticsEvent.swift in Sources */,
 				C635F4CA2A964A020096F9FF /* PayPalMessageViewModel.swift in Sources */,
 				C635F4E02A964A020096F9FF /* Fetch.swift in Sources */,
 				C635F4EA2A964A020096F9FF /* CloseButton.swift in Sources */,
@@ -504,7 +504,7 @@
 				C635F4D42A964A020096F9FF /* PayPalMessageLogoType.swift in Sources */,
 				C635F4DE2A964A020096F9FF /* PayPalMessageAttributedStringBuilder.swift in Sources */,
 				C635F4E42A964A020096F9FF /* UserDefaults.swift in Sources */,
-				C635F4C42A964A020096F9FF /* LoggerService.swift in Sources */,
+				C635F4C42A964A020096F9FF /* AnalyticsService.swift in Sources */,
 				C635F4C62A964A020096F9FF /* AnyCodable.swift in Sources */,
 				C635F4D02A964A020096F9FF /* PayPalMessagePlacement.swift in Sources */,
 				C635F4E92A964A020096F9FF /* PayPalMessageDelegates.swift in Sources */,

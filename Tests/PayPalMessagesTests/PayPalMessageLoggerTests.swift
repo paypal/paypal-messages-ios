@@ -47,13 +47,12 @@ final class PayPalMessageLoggerTests: XCTestCase {
         )
 
         // Inject mock sender to intercept log requests
-        LoggerService.shared.sender = mockSender
-        LoggerService.shared.loggers = []
+        AnalyticsService.shared.sender = mockSender
+        AnalyticsService.shared.loggers = []
     }
 
-    // swiftlint:disable:next function_body_length
     func testMessageLoggerEvents() {
-        let messageLogger = Logger(.message(message))
+        let messageLogger = AnalyticsLogger(.message(message))
 
         messageLogger.dynamicData = [
             "string_key": "hello",
@@ -64,7 +63,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
         messageLogger.addEvent(.messageClick(linkName: "linkName", linkSrc: "linkSrc"))
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         guard let data = mockSender.calls.last,
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -120,9 +119,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
         assert(payload: data, equals: expectedPayload)
     }
 
-    // swiftlint:disable:next function_body_length
     func testModalLoggerEvents() {
-        let modalLogger = Logger(.modal(modal))
+        let modalLogger = AnalyticsLogger(.modal(modal))
 
         modalLogger.dynamicData = [
             "string_key": "hello",
@@ -139,7 +137,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "other_key": 100
         ]))
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         guard let data = mockSender.calls.last,
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -192,8 +190,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
 
     // swiftlint:disable:next function_body_length
     func testMultipleComponentEvents() {
-        let messageLogger = Logger(.message(message))
-        let modalLogger = Logger(.modal(modal))
+        let messageLogger = AnalyticsLogger(.message(message))
+        let modalLogger = AnalyticsLogger(.modal(modal))
 
         messageLogger.dynamicData = [
             "string_key": "hello"
@@ -208,7 +206,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             "some_key": "test"
         ]))
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         guard let data = mockSender.calls.last,
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -271,12 +269,12 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testFiltersComponentsWithNoEvents() {
-        let messageLogger = Logger(.message(message))
-        _ = Logger(.modal(modal))
+        let messageLogger = AnalyticsLogger(.message(message))
+        _ = AnalyticsLogger(.modal(modal))
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         guard let data = mockSender.calls.last,
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -325,15 +323,15 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testClearsEventsAfterFlush() {
-        let messageLogger = Logger(.message(message))
+        let messageLogger = AnalyticsLogger(.message(message))
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         messageLogger.addEvent(.messageClick(linkName: "linkName", linkSrc: "linkSrc"))
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         guard let data = mockSender.calls.last,
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -382,24 +380,24 @@ final class PayPalMessageLoggerTests: XCTestCase {
 
         mockSender.reset()
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         XCTAssertNil(mockSender.calls.last)
     }
 
     func testUpdatesWhenMessagePropertiesChange() {
-        let messageLogger = Logger(.message(message))
+        let messageLogger = AnalyticsLogger(.message(message))
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         message.amount = 100.0
         message.clientID = "testloggerclientid2"
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         guard let data = mockSender.calls.last,
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -448,8 +446,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testSendsSeparatePayloadsForDifferentClientIDs() {
-        let messageLogger = Logger(.message(message))
-        let modalLogger = Logger(.modal(modal))
+        let messageLogger = AnalyticsLogger(.message(message))
+        let modalLogger = AnalyticsLogger(.modal(modal))
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
         modalLogger.addEvent(.dynamic(data: [
@@ -460,7 +458,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
         message.clientID = "testloggerclientid2"
         modal.clientID = "testloggerclientid3"
 
-        LoggerService.shared.flushEvents()
+        AnalyticsService.shared.flushEvents()
 
         XCTAssert(mockSender.calls.count == 2)
 

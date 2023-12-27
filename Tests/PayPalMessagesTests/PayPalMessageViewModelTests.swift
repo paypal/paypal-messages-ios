@@ -10,7 +10,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
         super.setUp()
 
         // Inject mock sender to intercept log requests
-        LoggerService.shared.sender = mockSender
+        AnalyticsService.shared.sender = mockSender
     }
 
     // MARK: - Test Initial Config Values
@@ -98,7 +98,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
         let newAmount = Double.random(in: 0...1000)
         viewModel.amount = newAmount
         XCTAssertEqual(viewModel.amount, newAmount)
-        
+
         // verify a request has been performed
         assert(mockedRequest, calledTimes: 2)
     }

@@ -1,6 +1,6 @@
 import Foundation
 
-class Logger: Encodable {
+class AnalyticsLogger: Encodable {
 
     // Global Details
     static var deviceID: String?
@@ -57,7 +57,7 @@ class Logger: Encodable {
     var dynamicData: [String: AnyCodable] = [:]
 
     // Events tied to the component
-    var events: [LoggerEvent] = []
+    var events: [AnalyticsEvent] = []
 
     enum Component {
         case message(_ component: PayPalMessageView)
@@ -68,7 +68,7 @@ class Logger: Encodable {
         self.instanceId = UUID().uuidString
         self.component = component
 
-        LoggerService.shared.addLogger(self)
+        AnalyticsService.shared.addLogger(self)
     }
 
     deinit {}
@@ -118,7 +118,7 @@ class Logger: Encodable {
         }
     }
 
-    func addEvent(_ event: LoggerEvent) {
+    func addEvent(_ event: AnalyticsEvent) {
         self.events.append(event)
     }
 

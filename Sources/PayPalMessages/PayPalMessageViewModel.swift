@@ -108,7 +108,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
     /// obtains the Merchant Hash and requests it if necessary
     private let merchantProfileProvider: MerchantProfileHashGetable
-    
+
     /// message view instance passed into the logger and delegate functions
     private let messageView: PayPalMessageView
 
@@ -118,7 +118,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     }()
 
     /// Tracking logger
-    private let logger: Logger
+    private let logger: AnalyticsLogger
 
     // MARK: - Inits and Setters
 
@@ -151,7 +151,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.stateDelegate = stateDelegate
         self.messageView = messageView
 
-        self.logger = Logger(.message(messageView))
+        self.logger = AnalyticsLogger(.message(messageView))
 
         queueMessageContentUpdate(fireImmediately: true)
     }

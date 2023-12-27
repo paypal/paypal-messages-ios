@@ -1,14 +1,14 @@
 import Foundation
 
-class LoggerService {
+class AnalyticsService {
 
-    static let shared = LoggerService()
+    static let shared = AnalyticsService()
 
     // Integration Details
     let timerInterval: Double = 5
     var timer: Timer?
     var sender: LogSendable = LogSender()
-    var loggers: [Logger] = []
+    var loggers: [AnalyticsLogger] = []
 
 
     private init() {
@@ -25,7 +25,7 @@ class LoggerService {
         flushEvents()
     }
 
-    func addLogger(_ logger: Logger) {
+    func addLogger(_ logger: AnalyticsLogger) {
         loggers.append(logger)
     }
 

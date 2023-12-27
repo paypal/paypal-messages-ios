@@ -12,7 +12,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         super.setUp()
 
         // Inject mock sender to intercept log requests
-        LoggerService.shared.sender = mockSender
+        AnalyticsService.shared.sender = mockSender
     }
 
     // Helper function to convert JSON string to dictionary
