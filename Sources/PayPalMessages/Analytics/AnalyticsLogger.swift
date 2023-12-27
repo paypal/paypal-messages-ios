@@ -15,41 +15,41 @@ class AnalyticsLogger: Encodable {
     var clientID: String {
         switch component {
         case .message(let message):
-            message.clientID
+            return message.clientID
         case .modal(let modal):
-            modal.clientID
+            return modal.clientID
         }
     }
     var merchantID: String? {
         switch component {
         case .message(let message):
-            message.merchantID
+            return message.merchantID
         case .modal(let modal):
-            modal.merchantID
+            return modal.merchantID
         }
     }
     var partnerAttributionID: String? {
         switch component {
         case .message(let message):
-            message.partnerAttributionID
+            return message.partnerAttributionID
         case .modal(let modal):
-            modal.partnerAttributionID
+            return modal.partnerAttributionID
         }
     }
     var environment: Environment {
         switch component {
         case .message(let message):
-            message.environment
+            return message.environment
         case .modal(let modal):
-            modal.environment
+            return modal.environment
         }
     }
     var merchantProfileHash: String? {
         switch component {
         case .message(let message):
-            message.merchantProfileHash
+            return message.merchantProfileHash
         case .modal(let modal):
-            modal.merchantProfileHash
+            return modal.merchantProfileHash
         }
     }
 
