@@ -12,8 +12,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         super.setUp()
 
         // Inject mock sender to intercept log requests
-        let logger = Logger.get(for: "test", in: .live)
-        logger.sender = mockSender
+        LoggerService.shared.sender = mockSender
     }
 
     // Helper function to convert JSON string to dictionary
@@ -327,9 +326,9 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,
-            eventDelegate: eventDelegate
+            eventDelegate: eventDelegate,
+            modal: modal
         )
-        viewModel.modal = modal
 
         return (
             viewModel,
