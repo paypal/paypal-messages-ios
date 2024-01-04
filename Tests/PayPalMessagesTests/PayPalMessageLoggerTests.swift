@@ -20,7 +20,9 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 color: .black,
                 textAlignment: .left
             )
-        )
+        ),
+        requester: PayPalMessageRequestMock(scenario: .success),
+        merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
     )
     let modal = PayPalMessageModal(
         config: .init(
@@ -52,7 +54,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testMessageLoggerEvents() {
-        let messageLogger = AnalyticsLogger(.message(message))
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
 
         messageLogger.dynamicData = [
             "string_key": "hello",
@@ -84,6 +86,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "integration_name": "Test_SDK",
                 "integration_type": "NATIVE_IOS",
                 "client_id": "testloggerclientid",
+                "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
                 "device_id": "987654321",
                 "session_id": "123456789",
@@ -120,7 +123,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testModalLoggerEvents() {
-        let modalLogger = AnalyticsLogger(.modal(modal))
+        let modalLogger = AnalyticsLogger(.modal(Weak(modal)))
 
         modalLogger.dynamicData = [
             "string_key": "hello",
@@ -190,8 +193,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
 
     // swiftlint:disable:next function_body_length
     func testMultipleComponentEvents() {
-        let messageLogger = AnalyticsLogger(.message(message))
-        let modalLogger = AnalyticsLogger(.modal(modal))
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
+        let modalLogger = AnalyticsLogger(.modal(Weak(modal)))
 
         messageLogger.dynamicData = [
             "string_key": "hello"
@@ -227,6 +230,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "integration_name": "Test_SDK",
                 "integration_type": "NATIVE_IOS",
                 "client_id": "testloggerclientid",
+                "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
                 "device_id": "987654321",
                 "session_id": "123456789",
@@ -269,8 +273,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testFiltersComponentsWithNoEvents() {
-        let messageLogger = AnalyticsLogger(.message(message))
-        _ = AnalyticsLogger(.modal(modal))
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
+        _ = AnalyticsLogger(.modal(Weak(modal)))
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
 
@@ -295,6 +299,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "integration_name": "Test_SDK",
                 "integration_type": "NATIVE_IOS",
                 "client_id": "testloggerclientid",
+                "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
                 "device_id": "987654321",
                 "session_id": "123456789",
@@ -323,7 +328,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testClearsEventsAfterFlush() {
-        let messageLogger = AnalyticsLogger(.message(message))
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
 
@@ -352,6 +357,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "integration_name": "Test_SDK",
                 "integration_type": "NATIVE_IOS",
                 "client_id": "testloggerclientid",
+                "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
                 "device_id": "987654321",
                 "session_id": "123456789",
@@ -386,7 +392,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testUpdatesWhenMessagePropertiesChange() {
-        let messageLogger = AnalyticsLogger(.message(message))
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
 
@@ -418,6 +424,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "integration_name": "Test_SDK",
                 "integration_type": "NATIVE_IOS",
                 "client_id": "testloggerclientid2",
+                "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
                 "device_id": "987654321",
                 "session_id": "123456789",
@@ -446,8 +453,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
     }
 
     func testSendsSeparatePayloadsForDifferentClientIDs() {
-        let messageLogger = AnalyticsLogger(.message(message))
-        let modalLogger = AnalyticsLogger(.modal(modal))
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
+        let modalLogger = AnalyticsLogger(.modal(Weak(modal)))
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
         modalLogger.addEvent(.dynamic(data: [

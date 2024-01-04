@@ -13,6 +13,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     weak var delegate: PayPalMessageViewModelDelegate?
     weak var stateDelegate: PayPalMessageViewStateDelegate?
     weak var eventDelegate: PayPalMessageViewEventDelegate?
+    weak var messageView: PayPalMessageView?
 
     /// This property is not being stored in the ViewModel, it will just update all related properties and compute itself on the getter.
     /// Changing its value will cause the message content being refetched *always*.
@@ -109,9 +110,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     /// obtains the Merchant Hash and requests it if necessary
     private let merchantProfileProvider: MerchantProfileHashGetable
 
-    /// message view instance passed into the logger and delegate functions
-    private let messageView: PayPalMessageView
-
     /// modal instance attached to the message
     private lazy var modal: PayPalMessageModal = {
         PayPalMessageModal(config: makeModalConfig(), eventDelegate: self)
@@ -151,7 +149,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.stateDelegate = stateDelegate
         self.messageView = messageView
 
-        self.logger = AnalyticsLogger(.message(messageView))
+        self.logger = AnalyticsLogger(.message(Weak(messageView)))
 
         queueMessageContentUpdate(fireImmediately: true)
     }
@@ -211,7 +209,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
     /// Refreshes the Message content only if there's a new amount or logo type set
     private func fetchMessageContent() {
-        if let stateDelegate {
+        if let stateDelegate, let messageView {
             stateDelegate.onLoading(messageView)
         }
 
@@ -250,7 +248,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             errorDescription: errorDescription
         ))
 
-        if let stateDelegate {
+        if let stateDelegate, let messageView {
             stateDelegate.onError(messageView, error: error)
         }
 
@@ -264,7 +262,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         messageResponse = response
         logger.dynamicData = response.trackingData
 
-        if let stateDelegate {
+        if let stateDelegate, let messageView {
             stateDelegate.onSuccess(messageView)
         }
 
@@ -392,7 +390,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             return
         }
 
-        if let eventDelegate {
+        if let eventDelegate, let messageView {
             eventDelegate.onClick(messageView)
         }
 
@@ -407,7 +405,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     // MARK: Modal Event Delegate Functions
 
     func onClick(_ modal: PayPalMessageModal, data: PayPalMessageModalClickData) {
-        if let eventDelegate, data.linkName.contains("Apply Now") {
+        if let eventDelegate, let messageView, data.linkName.contains("Apply Now") {
             eventDelegate.onApply(messageView)
         }
     }

@@ -11,7 +11,12 @@ class CloudEvent: Encodable {
     let id: String
     let time: String
 
-    var environment: Environment
+    let environment: Environment
+    let clientID: String
+    let merchantID: String?
+    let partnerAttributionID: String?
+    let merchantProfileHash: String?
+
     var loggers: [AnalyticsLogger]
 
     /// Creates CloudEvents for each set of client ID + merchant ID + partner attribution ID
@@ -23,30 +28,70 @@ class CloudEvent: Encodable {
                 continue
             }
 
-            let clientID = logger.clientID
-            let merchantID = logger.merchantID ?? "nil"
-            let partnerAttributionID = logger.partnerAttributionID ?? "nil"
+            let environment: Environment
+            let clientID: String
+            let merchantID: String?
+            let partnerAttributionID: String?
+            let merchantProfileHash: String?
 
-            let key = "\(clientID)_\(merchantID)_\(partnerAttributionID)"
+            switch logger.component {
+            case .message(let weakMessage):
+                guard let message = weakMessage.value else { continue }
+
+                environment = message.environment
+                clientID = message.clientID
+                merchantID = message.merchantID
+                partnerAttributionID = message.partnerAttributionID
+                merchantProfileHash = message.merchantProfileHash
+
+            case .modal(let weakModal):
+                guard let modal = weakModal.value else { continue }
+
+                environment = modal.environment
+                clientID = modal.clientID
+                merchantID = modal.merchantID
+                partnerAttributionID = modal.partnerAttributionID
+                merchantProfileHash = modal.merchantProfileHash
+            }
+
+            let key = "\(clientID)_\(merchantID ?? "nil")_\(partnerAttributionID ?? "nil")"
 
             if let cloudEvent = map[key] {
                 cloudEvent.loggers.append(logger)
             } else {
-                map[key] = CloudEvent(logger: logger)
+                map[key] = CloudEvent(
+                    logger: logger,
+                    environment: environment,
+                    clientID: clientID,
+                    merchantID: merchantID,
+                    partnerAttributionID: partnerAttributionID,
+                    merchantProfileHash: merchantProfileHash
+                )
             }
         }
 
         return Array(map.values)
     }
 
-    private init(logger: AnalyticsLogger) {
+    private init(
+        logger: AnalyticsLogger,
+        environment: Environment,
+        clientID: String,
+        merchantID: String?,
+        partnerAttributionID: String?,
+        merchantProfileHash: String?
+    ) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
         self.time = dateFormatter.string(from: Date())
         self.id = UUID().uuidString
-        self.environment = logger.environment
         self.loggers = [logger]
+        self.environment = environment
+        self.clientID = clientID
+        self.merchantID = merchantID
+        self.partnerAttributionID = partnerAttributionID
+        self.merchantProfileHash = merchantProfileHash
     }
 
 
@@ -71,14 +116,10 @@ class CloudEvent: Encodable {
         try dataContainer.encode(BuildInfo.integrationType, forKey: .integrationType)
         try dataContainer.encode(BuildInfo.version, forKey: .libVersion)
 
-        // The static create function is responsible for ensuring that all loggers on the current CloudEvent
-        // have the same top level details used here (e.g. clientID, merchantID, partnerAttributionID)
-        guard let logger = loggers.first else { return }
-
-        try dataContainer.encode(logger.clientID, forKey: .clientID)
-        try dataContainer.encodeIfPresent(logger.merchantID, forKey: .merchantID)
-        try dataContainer.encodeIfPresent(logger.partnerAttributionID, forKey: .partnerAttributionID)
-        try dataContainer.encodeIfPresent(logger.merchantProfileHash, forKey: .merchantProfileHash)
+        try dataContainer.encode(clientID, forKey: .clientID)
+        try dataContainer.encodeIfPresent(merchantID, forKey: .merchantID)
+        try dataContainer.encodeIfPresent(partnerAttributionID, forKey: .partnerAttributionID)
+        try dataContainer.encodeIfPresent(merchantProfileHash, forKey: .merchantProfileHash)
 
         try dataContainer.encodeIfPresent(loggers, forKey: .components)
     }

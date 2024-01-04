@@ -1,5 +1,14 @@
 import Foundation
 
+class Weak<T: AnyObject> {
+
+    weak var value: T?
+
+    init(_ value: T?) {
+        self.value = value
+    }
+}
+
 class AnalyticsLogger: Encodable {
 
     // Global Details
@@ -12,47 +21,6 @@ class AnalyticsLogger: Encodable {
 
     var instanceId: String
 
-    var clientID: String {
-        switch component {
-        case .message(let message):
-            return message.clientID
-        case .modal(let modal):
-            return modal.clientID
-        }
-    }
-    var merchantID: String? {
-        switch component {
-        case .message(let message):
-            return message.merchantID
-        case .modal(let modal):
-            return modal.merchantID
-        }
-    }
-    var partnerAttributionID: String? {
-        switch component {
-        case .message(let message):
-            return message.partnerAttributionID
-        case .modal(let modal):
-            return modal.partnerAttributionID
-        }
-    }
-    var environment: Environment {
-        switch component {
-        case .message(let message):
-            return message.environment
-        case .modal(let modal):
-            return modal.environment
-        }
-    }
-    var merchantProfileHash: String? {
-        switch component {
-        case .message(let message):
-            return message.merchantProfileHash
-        case .modal(let modal):
-            return modal.merchantProfileHash
-        }
-    }
-
     // Includes things like fdata, experience IDs, debug IDs, and the like
     var dynamicData: [String: AnyCodable] = [:]
 
@@ -60,8 +28,8 @@ class AnalyticsLogger: Encodable {
     var events: [AnalyticsEvent] = []
 
     enum Component {
-        case message(_ component: PayPalMessageView)
-        case modal(_ component: PayPalMessageModal)
+        case message(Weak<PayPalMessageView>)
+        case modal(Weak<PayPalMessageModal>)
     }
 
     init(_ component: Component) {
@@ -99,7 +67,9 @@ class AnalyticsLogger: Encodable {
         try dynamicData.encode(to: encoder)
 
         switch component {
-        case .message(let message):
+        case .message(let weakMessage):
+            guard let message = weakMessage.value else { return }
+
             try container.encode("message", forKey: .type)
             try container.encodeIfPresent(message.offerType?.rawValue, forKey: .offerType)
             try container.encodeIfPresent(message.amount, forKey: .amount)
@@ -109,7 +79,9 @@ class AnalyticsLogger: Encodable {
             try container.encodeIfPresent(message.color.rawValue, forKey: .styleColor)
             try container.encodeIfPresent(message.alignment.rawValue, forKey: .styleTextAlign)
 
-        case .modal(let modal):
+        case .modal(let weakModal):
+            guard let modal = weakModal.value else { return }
+
             try container.encode("modal", forKey: .type)
             try container.encodeIfPresent(modal.offerType?.rawValue, forKey: .offerType)
             try container.encodeIfPresent(modal.amount, forKey: .amount)

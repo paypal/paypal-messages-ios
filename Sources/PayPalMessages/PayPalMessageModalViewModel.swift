@@ -8,6 +8,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     weak var stateDelegate: PayPalMessageModalStateDelegate?
     /// Delegate property in charge of interaction-related events.
     weak var eventDelegate: PayPalMessageModalEventDelegate?
+    /// modal view controller passed into logger and delegate functions
+    weak var modal: PayPalMessageModal?
 
     var environment: Environment {
         didSet { queueUpdate(from: oldValue, to: environment) }
@@ -90,9 +92,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
     // MARK: - Private Properties
 
-    /// modal view controller passed into logger and delegate functions
-    private let modal: PayPalMessageModal
-
     /// Config update queue debounce time interval
     private let queueTimeInterval: TimeInterval = 0.01
     private let webView: WKWebView
@@ -128,7 +127,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         self.eventDelegate = eventDelegate
         self.modal = modal
 
-        self.logger = AnalyticsLogger(.modal(modal))
+        self.logger = AnalyticsLogger(.modal(Weak(modal)))
 
         super.init()
 
@@ -245,12 +244,13 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         switch eventName {
         case "onCalculate":
-            if let amount = eventArgs[0]["amount"] as? Double {
+            if let modal, let amount = eventArgs[0]["amount"] as? Double {
                 eventDelegate?.onCalculate(modal, data: .init(value: amount))
             }
 
         case "onClick":
-            if let src = eventArgs[0]["page_view_link_source"] as? String,
+            if let modal,
+               let src = eventArgs[0]["page_view_link_source"] as? String,
                let linkName = eventArgs[0]["page_view_link_name"] as? String {
                 eventDelegate?.onClick(modal, data: .init(linkName: linkName, linkSrc: src))
             }
