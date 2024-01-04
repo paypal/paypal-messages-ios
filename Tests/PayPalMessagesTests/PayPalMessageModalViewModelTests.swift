@@ -8,6 +8,8 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     let navigation = WKNavigation()
     let mockSender = LogSenderMock()
 
+    var modal: PayPalMessageModal?
+
     override func setUp() {
         super.setUp()
 
@@ -329,6 +331,9 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
             eventDelegate: eventDelegate,
             modal: modal
         )
+
+        // Create a strong reference so the modal does not get cleaned up immediatedly after getting passed into the view model
+        self.modal = modal
 
         return (
             viewModel,
