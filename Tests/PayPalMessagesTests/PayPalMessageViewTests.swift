@@ -13,16 +13,10 @@ let config = PayPalMessageConfig(
     )
 )
 
-enum Constants {
-    static let accessibilityLabel: String = "PayPalMessageView"
-    static let highlightedAnimationDuration: CGFloat = 1.0
-    static let highlightedAlpha: CGFloat = 0.75
-    static let regularAlpha: CGFloat = 1.0
-    static let fontSize: CGFloat = 14.0
-}
-
 @available(iOS 13.0, *)
 class PayPalMessageViewTests: XCTestCase {
+    var strongMessageView: PayPalMessageView?
+    weak var weakMessageView: PayPalMessageView?
 
     // MARK: - Test Initialization and Configuration
 
@@ -30,11 +24,35 @@ class PayPalMessageViewTests: XCTestCase {
         let config = config
 
         let messageView = PayPalMessageView(
-            config: config
+            config: config,
+            requester: PayPalMessageRequestMock(scenario: .success),
+            merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
         )
 
         // Assert that properties are correctly set
         XCTAssertEqual(messageView.clientID, config.data.clientID)
         XCTAssertEqual(messageView.color, config.style.color)
+    }
+
+    func testMessageViewNotStronglyReferencedInternally() {
+        let config = config
+
+        var messageView: PayPalMessageView? = PayPalMessageView(
+            config: config,
+            requester: PayPalMessageRequestMock(scenario: .success),
+            merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
+        )
+
+        strongMessageView = messageView
+        weakMessageView = messageView
+
+        messageView = nil
+
+        XCTAssertNotNil(strongMessageView)
+        XCTAssertNotNil(weakMessageView)
+
+        strongMessageView = nil
+
+        XCTAssertNil(weakMessageView)
     }
 }
