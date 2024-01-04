@@ -15,6 +15,7 @@ let config = PayPalMessageConfig(
 
 @available(iOS 13.0, *)
 class PayPalMessageViewTests: XCTestCase {
+
     var strongMessageView: PayPalMessageView?
     weak var weakMessageView: PayPalMessageView?
 
