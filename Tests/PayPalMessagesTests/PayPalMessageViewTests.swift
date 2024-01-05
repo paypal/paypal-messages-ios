@@ -24,10 +24,9 @@ class PayPalMessageViewTests: XCTestCase {
     func testInitialization() {
         let config = config
 
+        // TODO: This should mock the network requests our other tests, but that drops code coverage of files that do the fetching
         let messageView = PayPalMessageView(
-            config: config,
-            requester: PayPalMessageRequestMock(scenario: .success),
-            merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
+            config: config
         )
 
         // Assert that properties are correctly set
