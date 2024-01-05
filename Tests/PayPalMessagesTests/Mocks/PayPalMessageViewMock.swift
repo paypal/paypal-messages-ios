@@ -6,7 +6,7 @@ class PayPalMessageViewMock: PayPalMessageViewModelDelegate {
     weak var viewModel: PayPalMessageViewModel?
     var refreshContentCalled = false
 
-    func refreshContent() {
+    func refreshContent(messageParameters: PayPalMessageViewParameters?) {
         refreshContentCalled = true
     }
 }

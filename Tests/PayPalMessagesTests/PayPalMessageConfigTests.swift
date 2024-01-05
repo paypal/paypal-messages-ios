@@ -15,10 +15,10 @@ func testSetGlobalAnalytics() {
         sessionID: sessionID
     )
 
-    XCTAssertEqual(Logger.integrationName, integrationName)
-    XCTAssertEqual(Logger.integrationVersion, integrationVersion)
-    XCTAssertEqual(Logger.deviceID, deviceID)
-    XCTAssertEqual(Logger.sessionID, sessionID)
+    XCTAssertEqual(AnalyticsLogger.integrationName, integrationName)
+    XCTAssertEqual(AnalyticsLogger.integrationVersion, integrationVersion)
+    XCTAssertEqual(AnalyticsLogger.deviceID, deviceID)
+    XCTAssertEqual(AnalyticsLogger.sessionID, sessionID)
 }
 
 func testSetGlobalAnalyticsWithDefaults() {
@@ -30,10 +30,10 @@ func testSetGlobalAnalyticsWithDefaults() {
         integrationVersion: integrationVersion
     )
 
-    XCTAssertEqual(Logger.integrationName, integrationName)
-    XCTAssertEqual(Logger.integrationVersion, integrationVersion)
-    XCTAssertNil(Logger.deviceID)
-    XCTAssertNil(Logger.sessionID)
+    XCTAssertEqual(AnalyticsLogger.integrationName, integrationName)
+    XCTAssertEqual(AnalyticsLogger.integrationVersion, integrationVersion)
+    XCTAssertNil(AnalyticsLogger.deviceID)
+    XCTAssertNil(AnalyticsLogger.sessionID)
 }
 
 func testStandardIntegrationInitialization() {

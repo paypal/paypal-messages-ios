@@ -19,6 +19,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     @Proxy(\.viewModel.clientID)
     var clientID: String
 
+    @Proxy(\.viewModel.merchantID)
+    var merchantID: String?
+
+    @Proxy(\.viewModel.partnerAttributionID)
+    var partnerAttributionID: String?
+
     @Proxy(\.viewModel.environment)
     var environment: Environment
 
@@ -47,12 +53,17 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     @Proxy(\.viewModel.integrationIdentifier)
     var integrationIdentifier: String?
 
+    @Proxy(\.viewModel.merchantProfileHash)
+    var merchantProfileHash: String?
+
     // Modal close button
     var modalCloseButtonConfig: ModalCloseButtonConfig
 
     // MARK: - Private Properties
 
-    private let viewModel: PayPalMessageModalViewModel
+    // swiftlint:disable:next implicitly_unwrapped_optional
+    private var viewModel: PayPalMessageModalViewModel!
+
     /// Flag set when modal webview has successfully loaded the first time which will prevent
     /// reloading the webview after reopening the modal after an error state
     private var hasSuccessfullyLoaded = false
@@ -81,17 +92,17 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         stateDelegate: PayPalMessageModalStateDelegate? = nil,
         eventDelegate: PayPalMessageModalEventDelegate? = nil
     ) {
-        viewModel = PayPalMessageModalViewModel(
+        self.modalCloseButtonConfig = config.data.modalCloseButton
+
+        super.init(nibName: nil, bundle: nil)
+
+        self.viewModel = PayPalMessageModalViewModel(
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,
-            eventDelegate: eventDelegate
+            eventDelegate: eventDelegate,
+            modal: self
         )
-        modalCloseButtonConfig = config.data.modalCloseButton
-
-        super.init(nibName: nil, bundle: nil)
-        // Used to pass the modal reference into the delegate functions
-        viewModel.modal = self
 
         modalTransitionStyle = .coverVertical
         modalPresentationStyle = .formSheet

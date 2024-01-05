@@ -1,6 +1,6 @@
 import Foundation
 
-enum ComponentLoggerEvent: Encodable {
+enum AnalyticsEvent: Encodable {
     case messageRender(renderDuration: Int, requestDuration: Int)
     case messageClick(linkName: String, linkSrc: String)
     case messageError(errorName: String, errorDescription: String)

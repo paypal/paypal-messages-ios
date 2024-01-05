@@ -64,8 +64,11 @@ public final class PayPalMessageView: UIControl {
     @Proxy(\.viewModel.config)
     private var config: PayPalMessageConfig
 
-    /// Associated ViewModel that performs the update and fetch operations.
-    private let viewModel: PayPalMessageViewModel
+    @Proxy(\.viewModel.merchantProfileHash)
+    var merchantProfileHash: String?
+
+    // swiftlint:disable:next implicitly_unwrapped_optional
+    private var viewModel: PayPalMessageViewModel!
 
     // MARK: - Subviews
 
@@ -120,25 +123,20 @@ public final class PayPalMessageView: UIControl {
         requester: MessageRequestable,
         merchantProfileProvider: MerchantProfileHashGetable
     ) {
-        self.viewModel = PayPalMessageViewModel(
+        super.init(frame: .zero)
+
+        viewModel = PayPalMessageViewModel(
             config: config,
             requester: requester,
             merchantProfileProvider: merchantProfileProvider,
+            stateDelegate: stateDelegate,
             eventDelegate: eventDelegate,
-            stateDelegate: stateDelegate
+            delegate: self,
+            messageView: self
         )
-
-        super.init(frame: .zero)
-        
-        viewModel.delegate = self
-        viewModel.messageView = self
 
         configViews()
         configTouchTarget()
-
-        // Manually fetch the content instead of immediately as part of the view model constructor
-        // so that the delegates and message instance can be passed in before any callbacks fire
-        self.viewModel.queueMessageContentUpdate(fireImmediately: true)
     }
 
     @available(*, unavailable)
@@ -173,7 +171,7 @@ public final class PayPalMessageView: UIControl {
 
     override public func awakeFromNib() {
         super.awakeFromNib()
-        refreshContent()
+        refreshContent(messageParameters: viewModel.messageParameters)
     }
 
     override public var intrinsicContentSize: CGSize {
@@ -240,16 +238,15 @@ public final class PayPalMessageView: UIControl {
 extension PayPalMessageView: PayPalMessageViewModelDelegate {
 
     /// Recreates the message content from the existing data. **Does not triggers a networking event.**
-    func refreshContent() {
-        let params = viewModel.messageParameters
-        messageLabel.attributedText = PayPalMessageAttributedStringBuilder().makeMessageString(params)
+    func refreshContent(messageParameters: PayPalMessageViewParameters?) {
+        messageLabel.attributedText = PayPalMessageAttributedStringBuilder().makeMessageString(messageParameters)
         // Force recalculation for layout
         invalidateIntrinsicContentSize()
 
         // Update accessibility properties
-        self.accessibilityLabel = params?.accessibilityLabel ?? ""
-        self.accessibilityTraits = params?.accessibilityTraits ?? .none
-        self.isAccessibilityElement = params?.isAccessibilityElement ?? false
+        self.accessibilityLabel = messageParameters?.accessibilityLabel ?? ""
+        self.accessibilityTraits = messageParameters?.accessibilityTraits ?? .none
+        self.isAccessibilityElement = messageParameters?.isAccessibilityElement ?? false
     }
 }
 
@@ -260,7 +257,7 @@ extension PayPalMessageView {
     /// Called when the accessibility or orientation traits have changed. Reloads the content accordingly.
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        refreshContent()
+        refreshContent(messageParameters: viewModel.messageParameters)
     }
 }
 

@@ -3,9 +3,13 @@ import Foundation
 
 class LogSenderMock: LogSendable {
 
-    var data: Data?
+    var calls: [Data] = []
 
     func send(_ data: Data, to environement: Environment) {
-        self.data = data
+        self.calls.append(data)
+    }
+
+    func reset() {
+        self.calls = []
     }
 }
