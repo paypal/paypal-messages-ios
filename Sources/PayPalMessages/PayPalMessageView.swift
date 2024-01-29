@@ -99,19 +99,40 @@ public final class PayPalMessageView: UIControl {
     ///   - config: Config object that holds all of the required parameters for the message view.
     ///   - stateDelegate: Delegate property in charge of announcing rendering and fetching events.
     ///   - eventDelegate: Delegate property in charge of interaction-related events.
-    public required init(
+    public convenience init(
         config: PayPalMessageConfig,
         stateDelegate: PayPalMessageViewStateDelegate? = nil,
         eventDelegate: PayPalMessageViewEventDelegate? = nil
     ) {
-        self.viewModel = PayPalMessageViewModel(config: config)
+        self.init(
+            config: config,
+            stateDelegate: stateDelegate,
+            eventDelegate: eventDelegate,
+            requester: MessageRequest(),
+            merchantProfileProvider: MerchantProfileProvider()
+        )
+    }
+
+    internal init(
+        config: PayPalMessageConfig,
+        stateDelegate: PayPalMessageViewStateDelegate? = nil,
+        eventDelegate: PayPalMessageViewEventDelegate? = nil,
+        requester: MessageRequestable,
+        merchantProfileProvider: MerchantProfileHashGetable
+    ) {
+        self.viewModel = PayPalMessageViewModel(
+            config: config,
+            requester: requester,
+            merchantProfileProvider: merchantProfileProvider,
+            eventDelegate: eventDelegate,
+            stateDelegate: stateDelegate
+        )
 
         super.init(frame: .zero)
+        
+        viewModel.delegate = self
+        viewModel.messageView = self
 
-        self.stateDelegate = stateDelegate
-        self.eventDelegate = eventDelegate
-
-        configDelegates()
         configViews()
         configTouchTarget()
 
@@ -164,13 +185,6 @@ public final class PayPalMessageView: UIControl {
     }
 
     // MARK: - Config Functions
-
-    private func configDelegates() {
-        viewModel.stateDelegate = stateDelegate
-        viewModel.eventDelegate = eventDelegate
-        viewModel.delegate = self
-        viewModel.messageView = self
-    }
 
     private func configViews() {
         backgroundColor = .clear

@@ -103,7 +103,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private let requester: MessageRequestable
 
     /// helper class to build the parameters for the PayPalMessageView
-    private let parameterBuilder: PayPalMessageViewParametersBuilder
+    private let parameterBuilder = PayPalMessageViewParametersBuilder()
 
     /// obtains the Merchant Hash and requests it if necessary
     private let merchantProfileProvider: MerchantProfileHashGetable
@@ -118,12 +118,11 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
     init(
         config: PayPalMessageConfig,
-        requester: MessageRequestable = MessageRequest(),
-        parameterBuilder: PayPalMessageViewParametersBuilder = PayPalMessageViewParametersBuilder(),
-        merchantProfileProvider: MerchantProfileHashGetable = MerchantProfileProvider(),
-        delegate: PayPalMessageViewModelDelegate? = nil,
+        requester: MessageRequestable,
+        merchantProfileProvider: MerchantProfileHashGetable,
         eventDelegate: PayPalMessageViewEventDelegate? = nil,
         stateDelegate: PayPalMessageViewStateDelegate? = nil,
+        delegate: PayPalMessageViewModelDelegate? = nil,
         messageView: PayPalMessageView? = nil
     ) {
         self.clientID = config.data.clientID
@@ -140,7 +139,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.ignoreCache = config.data.ignoreCache
 
         self.requester = requester
-        self.parameterBuilder = parameterBuilder
         self.merchantProfileProvider = merchantProfileProvider
         self.delegate = delegate
         self.eventDelegate = eventDelegate
