@@ -34,6 +34,7 @@ class MerchantProfileRequestMock: MerchantProfileRequestable {
     func fetchMerchantProfile(
         environment: Environment,
         clientID: String,
+        merchantID: String?,
         onCompletion: @escaping (Result<MerchantProfileData, Error>) -> Void
     ) {
         requestsPerformed += 1
