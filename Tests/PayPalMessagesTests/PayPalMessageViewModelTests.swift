@@ -99,8 +99,9 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.amount = newAmount
         XCTAssertEqual(viewModel.amount, newAmount)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testSimplePlacementUpdate() {
@@ -119,8 +120,9 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.placement = newValue
         XCTAssertEqual(viewModel.placement, newValue)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testSimpleOfferTypeUpdate() {
@@ -139,8 +141,9 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.offerType = newValue
         XCTAssertEqual(viewModel.offerType, newValue)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testBuyerCountryTypeUpdate() {
@@ -159,8 +162,9 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.buyerCountry = newValue
         XCTAssertEqual(viewModel.buyerCountry, newValue)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testSimpleLogoTypeUpdate() {
@@ -181,8 +185,9 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.logoType = newValue
         XCTAssertEqual(viewModel.logoType, newValue)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testSimpleColorUpdate() {
@@ -203,8 +208,10 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.color = newValue
         XCTAssertEqual(viewModel.color, newValue)
 
+        viewModel.flushUpdates()
+
         // verify a request has NOT been performed as color changes shouldn't trigger them
-        assert(mockedRequest, calledTimes: 1)
+        XCTAssertEqual(mockedRequest.requestsPerformed, 1)
     }
 
     func testSimpleAlignmentUpdate() {
@@ -225,8 +232,10 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.alignment = newValue
         XCTAssertEqual(viewModel.alignment, newValue)
 
+        viewModel.flushUpdates()
+
         // verify a request has NOT been performed as alignment changes shouldn't trigger them
-        assert(mockedRequest, calledTimes: 1)
+        XCTAssertEqual(mockedRequest.requestsPerformed, 1)
     }
 
     // MARK: - Test Duplicated Value Updates
@@ -246,12 +255,16 @@ final class PayPalMessageViewModelTests: XCTestCase {
         let newAmount = Double.random(in: 0...1000)
         viewModel.amount = newAmount
 
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
 
         // set the same amount again, verify another redundant request hasn't been performed
         viewModel.amount = newAmount
 
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     // MARK: - Test Update In Progress Cases
@@ -309,7 +322,9 @@ final class PayPalMessageViewModelTests: XCTestCase {
         let newerAmount = newAmount - 1
         viewModel.amount = newerAmount
 
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testUpdateInProgressFromConfig() {
@@ -333,13 +348,17 @@ final class PayPalMessageViewModelTests: XCTestCase {
         let newAmount = Double.random(in: 1...1000)
         viewModel.amount = newAmount
 
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
 
         // test a new config being set overrides the update in progress flag and triggers and update
         let newConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
         viewModel.config = newConfig
 
-        assert(mockedRequest, calledTimes: 3)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 3)
     }
 
     // MARK: - Test Merchant Provider
@@ -362,16 +381,6 @@ final class PayPalMessageViewModelTests: XCTestCase {
         XCTAssertTrue(mockedDelegate.onLoadingCalled)
         XCTAssertFalse(mockedDelegate.onErrorCalled)
         XCTAssertNotNil(viewModel.messageParameters)
-    }
-
-    // MARK: - Helpers
-
-    private func assert(_ mockRequest: PayPalMessageRequestMock, calledTimes count: Int) {
-        let predicate = NSPredicate { _, _ in
-            return mockRequest.requestsPerformed == count
-        }
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: mockRequest)
-        wait(for: [expectation], timeout: 2)
     }
 
     private func makePayPalMessageViewModel(

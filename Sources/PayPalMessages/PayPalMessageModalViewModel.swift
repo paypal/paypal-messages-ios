@@ -198,17 +198,24 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             withTimeInterval: queueTimeInterval,
             repeats: false
         ) { _ in
-            guard let jsonData = try? JSONEncoder().encode(self.makeConfig()),
-                  let jsonString = String(data: jsonData, encoding: .utf8) else { return }
-
-            log(.debug, "Update props: \(jsonString)")
-
-            self.webView.evaluateJavaScript(
-                "window.actions.updateProps(\(jsonString))"
-            ) { _, _ in
-                // TODO: Does the JS error text get returned here?
-            }
+            self.flushUpdates()
         }
+    }
+
+    // Exposed internally for tests
+    func flushUpdates() {
+        guard let jsonData = try? JSONEncoder().encode(self.makeConfig()),
+              let jsonString = String(data: jsonData, encoding: .utf8) else { return }
+
+        log(.debug, "Update props: \(jsonString)")
+
+        self.webView.evaluateJavaScript(
+            "window.actions.updateProps(\(jsonString))"
+        ) { _, _ in
+            // TODO: Does the JS error text get returned here?
+        }
+        
+        queuedTimer?.invalidate()
     }
 
     func userContentController(
