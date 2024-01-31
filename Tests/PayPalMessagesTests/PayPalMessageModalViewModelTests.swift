@@ -71,9 +71,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     func testUpdateConfig() {
-        let expectation = expectation(description: "Evaluate JavaScript Callback")
         let (viewModel, webView, _, _) = makePayPalMessageModalViewModel()
-        webView.evaluateJavaScriptCallback = { _ in expectation.fulfill() }
 
         XCTAssertNil(viewModel.amount)
         XCTAssertNil(viewModel.offerType)
@@ -92,7 +90,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertFalse(webView.evaluateJavaScriptCalled)
 
-        waitForExpectations(timeout: 0.5)
+        viewModel.flushUpdates()
 
         XCTAssertTrue(webView.evaluateJavaScriptCalled)
 
@@ -122,9 +120,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     func testUpdateIndividualProperties() {
-        let expectation = expectation(description: "Evaluate JavaScript Callback")
         let (viewModel, webView, _, _) = makePayPalMessageModalViewModel()
-        webView.evaluateJavaScriptCallback = { _ in expectation.fulfill() }
 
         XCTAssertNil(viewModel.amount)
         XCTAssertNil(viewModel.offerType)
@@ -137,7 +133,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertFalse(webView.evaluateJavaScriptCalled)
 
-        waitForExpectations(timeout: 0.5)
+        viewModel.flushUpdates()
 
         let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"}"
 
