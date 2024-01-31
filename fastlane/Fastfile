@@ -1,3 +1,5 @@
+require 'json'
+
 skip_docs
 default_platform(:ios)
 
@@ -7,6 +9,28 @@ def setup_xcode
     version: "14.3.1",
     select_for_current_build_only: true
   )
+end
+
+# Updates the Carthage JSON file with the specified version
+def version_bump_carthage(path:, version_number:)
+  Dir.chdir("..") do
+    framework_url = "https://github.com/paypal/paypal-messages-ios/releases/download/#{version_number}/PayPalMessages.framework.zip"
+    xcframework_url = "https://github.com/paypal/paypal-messages-ios/releases/download/#{version_number}/PayPalMessages.xcframework.zip"
+
+    parsed_data = JSON.parse(File.read(path)) 
+    parsed_data[version_number] = "#{framework_url}?alt=#{xcframework_url}"
+    json_string = JSON.pretty_generate(parsed_data)
+
+    File.open(path, 'w') { |file| file.puts(json_string) }
+  end
+end
+
+def version_bump_spm(checksum_file:, version_number:)
+  Dir.chdir("..") do
+    sh "sed -i '' -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\\1 = \"#{version_number}\"/' Package.swift"
+    checksum = sh("shasum -a 256 #{checksum_file} | cut -d ' ' -f 1").strip!
+    sh "sed -i '' -E 's/checksum: *\"[0-9a-z]+\"/checksum: \"#{checksum}\"/' Package.swift"
+  end
 end
 
 platform :ios do
@@ -145,17 +169,80 @@ platform :ios do
         version_number: options[:version]
       )
 
-      sh "rm -rf ../Carthage"
-
-      # Create Carthage xcframework
-      carthage(
-        command: "build",
-        no_skip_current: true,
-        use_xcframeworks: true
+      version_bump_carthage(
+        path: "Carthage/PayPalMessages.json",
+        version_number: options[:version]
       )
 
-      # Zip xcframework in prep to be included with the GitHub release
-      sh "cd .. && zip -r PayPalMessages.xcframework.zip Carthage"
+      sh "rm -rf ../build"
+
+      ENV["CODE_SIGN_IDENTITY"] = ""
+      ENV["CODE_SIGNING_REQUIRED"] = "NO"
+      ENV["CODE_SIGN_ENTITLEMENTS"] = ""
+      ENV["CODE_SIGNING_ALLOWED"] = "NO"
+
+      xcodebuild(
+        archive: true,
+        clean: true,
+        project: "PayPalMessages.xcodeproj",
+        scheme: "PayPalMessages",
+        configuration: "Release",
+        sdk: "iphoneos",
+        archive_path: "./build/Archives/Device.xcarchive"
+      )
+
+      xcodebuild(
+        archive: true,
+        clean: true,
+        project: "PayPalMessages.xcodeproj",
+        scheme: "PayPalMessages",
+        configuration: "Release",
+        sdk: "iphonesimulator",
+        archive_path: "./build/Archives/Simulator.xcarchive"
+      )
+
+      # Set global env that will be used in the next xcodebuild command
+      ENV["EXCLUDED_ARCHS"] = "arm64"
+
+      # For the older universal framework asset the device and simulator must be built separately due to conflicting architectures.
+      # Both the device and simulator include amd64 architecture which is incompatible with `lipo`, so arm64 is excluded from the
+      # simulator so that the binaries can be combined
+      xcodebuild(
+        archive: true,
+        clean: true,
+        project: "PayPalMessages.xcodeproj",
+        scheme: "PayPalMessages",
+        configuration: "Release",
+        sdk: "iphonesimulator",
+        archive_path: "./build/Archives/Simulator-NoArm64.xcarchive"
+      )
+
+      create_xcframework(
+        frameworks: [
+          "build/Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework",
+          "build/Archives/Simulator.xcarchive/Products/Library/Frameworks/PayPalMessages.framework"
+        ],
+        output: "build/PayPalMessages.xcframework"
+      )
+
+      # Combine device and simulator builds into single universal framework
+      Dir.chdir("../build") do
+        # Base framework
+        sh "cp -R Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework ."
+        # Copy Simulator into base framework
+        sh "cp -R Archives/Simulator-NoArm64.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/Modules/PayPalMessages.swiftmodule/ PayPalMessages.framework/Modules/PayPalMessages.swiftmodule"
+        # Combine binaries
+        sh "lipo Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/PayPalMessages Archives/Simulator-NoArm64.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/PayPalMessages -create -output PayPalMessages.framework/PayPalMessages"
+        # Zip up framework
+        sh "zip -r PayPalMessages.framework.zip PayPalMessages.framework"
+        # Zip up xcframework
+        sh "zip -r PayPalMessages.xcframework.zip PayPalMessages.xcframework"
+      end
+
+      version_bump_spm(
+        version_number: options[:version],
+        checksum_file: "build/PayPalMessages.xcframework.zip"
+      )
     end
   end
 
@@ -173,6 +260,6 @@ platform :ios do
 
   desc "Publish podspec to Trunk"
   lane :publish do
-    # pod_push(path: "PayPalMessages.podspec")
+    pod_push(path: "PayPalMessages.podspec")
   end
 end
