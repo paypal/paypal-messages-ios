@@ -12,7 +12,6 @@ let defaultMessageConfig: PayPalMessageConfig = {
     )
     // Override defaults for ease of development
     config.data.ignoreCache = false
-    config.data.devTouchpoint = false
 
     return config
 }()

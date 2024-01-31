@@ -1,8 +1,7 @@
 import Foundation
 
 public enum Environment: Equatable {
-    case local(port: String = "8443")
-    case stage(host: String)
+    case stage(host: String, devTouchpoint: Bool = false, stageTag: String? = nil)
     case sandbox
     case live
 
@@ -14,8 +13,6 @@ public enum Environment: Equatable {
             return "sandbox"
         case .stage:
             return "stage"
-        case .local:
-            return "local"
         }
     }
 
@@ -23,7 +20,7 @@ public enum Environment: Equatable {
         switch self {
         case .live, .sandbox:
             return true
-        case .stage, .local:
+        case .stage:
             return false
         }
     }
@@ -32,7 +29,7 @@ public enum Environment: Equatable {
         switch self {
         case .live, .sandbox:
             return URLSession.shared
-        case .stage, .local:
+        case .stage:
             return URLSession(
                 configuration: .default,
                 delegate: DevelopmentSession(),
@@ -44,9 +41,7 @@ public enum Environment: Equatable {
     // swiftlint:disable force_unwrapping
     private var baseURL: URL {
         switch self {
-        case .local(let port):
-            return URL(string: "https://localhost.paypal.com:\(port)")!
-        case .stage(let host):
+        case .stage(let host, _, _):
             return URL(string: "https://www.\(host)")!
         case .sandbox:
             return URL(string: "https://www.sandbox.paypal.com")!
@@ -58,14 +53,12 @@ public enum Environment: Equatable {
     // swiftlint:disable force_unwrapping
     private var loggerBaseURL: URL {
         switch self {
-        case .stage(let host):
+        case .stage(let host, _, _):
             return URL(string: "https://api.\(host)")!
         case .sandbox:
             return URL(string: "https://api.sandbox.paypal.com")!
         case .live:
             return URL(string: "https://api.paypal.com")!
-        default:
-            return baseURL
         }
     }
 
@@ -80,24 +73,35 @@ public enum Environment: Equatable {
 
     func url(_ path: PayPalMessagePath, _ queryParams: [String: String?]? = nil) -> URL? {
         var parts = URLComponents()
-        var queryItems: [URLQueryItem]?
-
-        if let queryParams, !queryParams.isEmpty {
-            queryItems = queryParams.map { URLQueryItem(name: $0.key, value: $0.value) }
-        }
+        var queryItems = queryParams?.compactMap { key, value in
+            value != nil ? URLQueryItem(name: key, value: value) : nil
+        } ?? []
 
         let basePath: URL
         if path == .log {
             basePath = loggerBaseURL
         } else {
             basePath = baseURL
+
+            // Append dev_touchpoint and stage_tag query parameters only for .stage case
+            if case .stage(_, let devTouchpoint, let stageTag) = self {
+                if devTouchpoint {
+                    queryItems.append(URLQueryItem(name: "dev_touchpoint", value: "\(devTouchpoint)"))
+                }
+                if let stageTag, !stageTag.isEmpty {
+                    queryItems.append(URLQueryItem(name: "stage_tag", value: stageTag))
+                }
+            }
         }
 
         parts.scheme = basePath.scheme
         parts.host = basePath.host
-        parts.port = basePath.port
         parts.path = path.rawValue
-        parts.queryItems = queryItems
+
+        if !queryItems.isEmpty {
+            parts.queryItems = queryItems
+        }
+
 
         return parts.url
     }

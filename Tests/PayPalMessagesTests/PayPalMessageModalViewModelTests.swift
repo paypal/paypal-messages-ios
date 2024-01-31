@@ -2,17 +2,19 @@
 import WebKit
 import XCTest
 
+// swiftlint:disable:next type_body_length
 final class PayPalMessageModalViewModelTests: XCTestCase {
 
     let navigation = WKNavigation()
     let mockSender = LogSenderMock()
 
+    var modal: PayPalMessageModal?
+
     override func setUp() {
         super.setUp()
 
         // Inject mock sender to intercept log requests
-        let logger = Logger.get(for: "test", in: .live)
-        logger.sender = mockSender
+        AnalyticsService.shared.sender = mockSender
     }
 
     // Helper function to convert JSON string to dictionary
@@ -41,16 +43,13 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
                 clientID: "testclientid",
                 environment: .live,
                 amount: 100.0,
-                currency: "USD",
                 placement: .home,
                 offerType: .payLaterLongTerm
             )
         )
         config.data.buyerCountry = "US"
         config.data.channel = "TEST"
-        config.data.devTouchpoint = true
         config.data.ignoreCache = true
-        config.data.stageTag = "test"
 
         let (viewModel, webView, stateDelegate, eventDelegate) = makePayPalMessageModalViewModel(
             config: config
@@ -58,13 +57,10 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.clientID, "testclientid")
         XCTAssertEqual(viewModel.amount, 100.0)
-        XCTAssertEqual(viewModel.currency, "USD")
         XCTAssertEqual(viewModel.placement, .home)
         XCTAssertEqual(viewModel.offerType, .payLaterLongTerm)
         XCTAssertEqual(viewModel.buyerCountry, "US")
         XCTAssertEqual(viewModel.channel, "TEST")
-        XCTAssertEqual(viewModel.stageTag, "test")
-        XCTAssertTrue(viewModel.devTouchpoint ?? false)
         XCTAssertTrue(viewModel.ignoreCache ?? false)
         XCTAssertEqual(viewModel.environment, .live)
 
@@ -108,14 +104,17 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
-            let actualDictionary = convertToDictionary(from: actualJSONString) else {
+              let actualDictionary = convertToDictionary(from: actualJSONString) else {
             XCTFail("Failed to convert JSON strings to dictionaries")
             return
         }
 
         // Check if the actualJSONString matches the desired pattern
         let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
-        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            XCTFail("Failed to create NSRegularExpression")
+            return
+        }
         let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
 
         XCTAssertTrue(!matches.isEmpty)
@@ -148,14 +147,17 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         }
 
         guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
-            let actualDictionary = convertToDictionary(from: actualJSONString) else {
+              let actualDictionary = convertToDictionary(from: actualJSONString) else {
             XCTFail("Failed to convert JSON strings to dictionaries")
             return
         }
 
         // Check if the actualJSONString matches the desired pattern
         let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
-        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            XCTFail("Failed to create NSRegularExpression")
+            return
+        }
         let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
 
         XCTAssertTrue(!matches.isEmpty)
@@ -326,9 +328,12 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,
-            eventDelegate: eventDelegate
+            eventDelegate: eventDelegate,
+            modal: modal
         )
-        viewModel.modal = modal
+
+        // Create a strong reference so the modal does not get cleaned up immediatedly after getting passed into the view model
+        self.modal = modal
 
         return (
             viewModel,

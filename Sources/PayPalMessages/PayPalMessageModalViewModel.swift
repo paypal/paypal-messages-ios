@@ -8,8 +8,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     weak var stateDelegate: PayPalMessageModalStateDelegate?
     /// Delegate property in charge of interaction-related events.
     weak var eventDelegate: PayPalMessageModalEventDelegate?
-
-    var modal: PayPalMessageModal?
+    /// modal view controller passed into logger and delegate functions
+    weak var modal: PayPalMessageModal?
 
     var environment: Environment {
         didSet { queueUpdate(from: oldValue, to: environment) }
@@ -30,9 +30,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     var amount: Double? {
         didSet { queueUpdate(from: oldValue, to: amount) }
     }
-    var currency: String? {
-        didSet { queueUpdate(from: oldValue, to: currency) }
-    }
     var buyerCountry: String? {
         didSet { queueUpdate(from: oldValue, to: buyerCountry) }
     }
@@ -51,16 +48,13 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     var ignoreCache: Bool? { // swiftlint:disable:this discouraged_optional_boolean
         didSet { queueUpdate(from: oldValue, to: ignoreCache) }
     }
-    // Development content
-    var devTouchpoint: Bool? { // swiftlint:disable:this discouraged_optional_boolean
-        didSet { queueUpdate(from: oldValue, to: devTouchpoint) }
-    }
-    // Custom development stage modal bundle
-    var stageTag: String? {
-        didSet { queueUpdate(from: oldValue, to: stageTag) }
-    }
+
+
     // Standalone modal
     var integrationIdentifier: String?
+
+    var merchantProfileHash: String?
+
 
     // MARK: - Computed Private Properties
 
@@ -71,20 +65,17 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             "merchant_id": merchantID,
             "partner_attribution_id": partnerAttributionID,
             "amount": amount?.description,
-            "currency": currency,
             "buyer_country": buyerCountry,
             "offer": offerType?.rawValue,
             "channel": channel,
             "placement": placement?.rawValue,
-            "integration_type": integrationType,
+            "version": BuildInfo.version,
+            "integration_type": BuildInfo.integrationType,
             "integration_identifier": integrationIdentifier,
-            // Dev options
             "ignore_cache": ignoreCache?.description,
-            "dev_touchpoint": devTouchpoint?.description,
-            "stage_tag": stageTag,
-            "integration_version": Logger.integrationVersion,
-            "device_id": Logger.deviceID,
-            "session_id": Logger.sessionID,
+            "integration_version": AnalyticsLogger.integrationVersion,
+            "device_id": AnalyticsLogger.deviceID,
+            "session_id": AnalyticsLogger.sessionID,
             "features": "native-modal"
         ].filter {
             guard let value = $0.value else { return false }
@@ -101,7 +92,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
     // MARK: - Private Properties
 
-    private let integrationType: String = "NATIVE_IOS"
     /// Config update queue debounce time interval
     private let queueTimeInterval: TimeInterval = 0.01
     private let webView: WKWebView
@@ -110,7 +100,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     /// Completion callback called after webview has loaded and is ready to be viewed
     private var loadCompletionHandler: LoadCompletionHandler?
 
-    let logger: ComponentLogger
+    let logger: AnalyticsLogger
 
     // MARK: - Initializers
 
@@ -118,36 +108,26 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         config: PayPalMessageModalConfig,
         webView: WKWebView,
         stateDelegate: PayPalMessageModalStateDelegate? = nil,
-        eventDelegate: PayPalMessageModalEventDelegate? = nil
+        eventDelegate: PayPalMessageModalEventDelegate? = nil,
+        modal: PayPalMessageModal
     ) {
         environment = config.data.environment
         clientID = config.data.clientID
         merchantID = config.data.merchantID
         partnerAttributionID = config.data.partnerAttributionID
         amount = config.data.amount
-        currency = config.data.currency
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
         channel = config.data.channel
         placement = config.data.placement
         ignoreCache = config.data.ignoreCache
-        devTouchpoint = config.data.devTouchpoint
-        stageTag = config.data.stageTag
 
         self.webView = webView
         self.stateDelegate = stateDelegate
         self.eventDelegate = eventDelegate
+        self.modal = modal
 
-        self.logger = Logger.createModalLogger(
-            environment: environment,
-            clientID: clientID,
-            merchantID: merchantID,
-            partnerAttributionID: partnerAttributionID,
-            offerType: offerType,
-            amount: amount,
-            placement: placement,
-            buyerCountryCode: buyerCountry
-        )
+        self.logger = AnalyticsLogger(.modal(Weak(modal)))
 
         super.init()
 
@@ -166,14 +146,11 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         merchantID = config.data.merchantID
         partnerAttributionID = config.data.partnerAttributionID
         amount = config.data.amount
-        currency = config.data.currency
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
         channel = config.data.channel
         placement = config.data.placement
         ignoreCache = config.data.ignoreCache
-        devTouchpoint = config.data.devTouchpoint
-        stageTag = config.data.stageTag
     }
 
     func makeConfig() -> PayPalMessageModalConfig {
@@ -181,7 +158,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             clientID: self.clientID,
             environment: self.environment,
             amount: self.amount,
-            currency: self.currency,
             placement: self.placement,
             offerType: self.offerType
         ))
@@ -190,8 +166,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         config.data.partnerAttributionID = partnerAttributionID
         config.data.buyerCountry = buyerCountry
         config.data.channel = channel
-        config.data.stageTag = stageTag
-        config.data.devTouchpoint = devTouchpoint
         config.data.ignoreCache = ignoreCache
 
         return config
@@ -203,7 +177,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         loadCompletionHandler = completionHandler
 
-        log(.info, "Load modal webview URL: \(safeUrl)")
+        log(.debug, "Load modal webview URL: \(safeUrl)")
 
         webView.load(URLRequest(url: safeUrl))
     }
@@ -227,7 +201,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             guard let jsonData = try? JSONEncoder().encode(self.makeConfig()),
                   let jsonString = String(data: jsonData, encoding: .utf8) else { return }
 
-            log(.info, "Update props: \(jsonString)")
+            log(.debug, "Update props: \(jsonString)")
 
             self.webView.evaluateJavaScript(
                 "window.actions.updateProps(\(jsonString))"
@@ -250,7 +224,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             return
         }
 
-        log(.info, "Modal event: [\(eventName)] \(eventArgs)")
+        log(.debug, "Modal event: [\(eventName)] \(eventArgs)")
 
         guard !eventArgs.isEmpty else { return }
 
@@ -270,15 +244,14 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         switch eventName {
         case "onCalculate":
-            if let amount = eventArgs[0]["amount"] as? Double,
-               let modal = modal {
+            if let modal, let amount = eventArgs[0]["amount"] as? Double {
                 eventDelegate?.onCalculate(modal, data: .init(value: amount))
             }
 
         case "onClick":
-            if let src = eventArgs[0]["page_view_link_source"] as? String,
-               let linkName = eventArgs[0]["page_view_link_name"] as? String,
-               let modal {
+            if let modal,
+               let src = eventArgs[0]["page_view_link_source"] as? String,
+               let linkName = eventArgs[0]["page_view_link_name"] as? String {
                 eventDelegate?.onClick(modal, data: .init(linkName: linkName, linkSrc: src))
             }
 
@@ -297,7 +270,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         switch environment {
         case .live, .sandbox:
             completionHandler(.performDefaultHandling, nil)
-        case .stage, .local:
+        case .stage:
             guard let serverTrust = challenge.protectionSpace.serverTrust else {
                 return completionHandler(.performDefaultHandling, nil)
             }

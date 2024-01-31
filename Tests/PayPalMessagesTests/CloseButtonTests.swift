@@ -3,7 +3,7 @@ import XCTest
 
 class CloseButtonTests: XCTestCase {
 
-    var closeButton: CloseButton!
+    var closeButton: CloseButton?
     var onTapCalled = false
 
     override func setUp() {
@@ -21,37 +21,42 @@ class CloseButtonTests: XCTestCase {
     }
 
     func testButtonInitialization() {
-        XCTAssertNotNil(closeButton)
-        XCTAssertEqual(closeButton.alpha, 1.0)
-        XCTAssertEqual(closeButton.accessibilityLabel, "Cancel")
-        XCTAssertEqual(closeButton.imageView?.contentMode, .scaleAspectFit)
+        guard let button = closeButton else { return }
+        XCTAssertNotNil(button)
+        XCTAssertEqual(button.alpha, 1.0)
+        XCTAssertEqual(button.accessibilityLabel, "Cancel")
+        XCTAssertEqual(button.imageView?.contentMode, .scaleAspectFit)
     }
 
     func testButtonHighlightAnimation() {
+        guard let button = closeButton else { return }
         // Initially, the button should not be highlighted
-        XCTAssertFalse(closeButton.isHighlighted)
-        XCTAssertEqual(closeButton.alpha, 1.0)
+        XCTAssertFalse(button.isHighlighted)
+        XCTAssertEqual(button.alpha, 1.0)
 
         // Simulate the button being highlighted
-        closeButton.isHighlighted = true
+        button.isHighlighted = true
 
         // Use XCTAssertEqual with a tolerance parameter
-        XCTAssertEqual(closeButton.alpha, CloseButton.Constants.fadeOutAlpha, accuracy: 0.001)
+        XCTAssertEqual(button.alpha, CloseButton.Constants.fadeOutAlpha, accuracy: 0.001)
 
         // Simulate the button being unhighlighted
-        closeButton.isHighlighted = false
+        button.isHighlighted = false
 
         // Use XCTAssertEqual with a tolerance parameter
-        XCTAssertEqual(closeButton.alpha, 1.0, accuracy: 0.001)
+        XCTAssertEqual(button.alpha, 1.0, accuracy: 0.001)
     }
 
     func testIntrinsicContentSize() {
+        guard let button = closeButton else { return }
         // Calculate the expected intrinsic content size based on your constants
-        let expectedWidth = CloseButton.Constants.buttonSize.width + (CloseButton.Constants.contenInset.left + CloseButton.Constants.contenInset.right)
-        let expectedHeight = CloseButton.Constants.buttonSize.height + (CloseButton.Constants.contenInset.top + CloseButton.Constants.contenInset.bottom)
+        let expectedWidth = CloseButton.Constants.buttonSize.width +
+            (CloseButton.Constants.contenInset.left + CloseButton.Constants.contenInset.right)
+        let expectedHeight = CloseButton.Constants.buttonSize.height +
+            (CloseButton.Constants.contenInset.top + CloseButton.Constants.contenInset.bottom)
 
         // Get the actual intrinsic content size from the button
-        let intrinsicSize = closeButton.intrinsicContentSize
+        let intrinsicSize = button.intrinsicContentSize
 
         // Assert that the actual intrinsic content size matches the expected size
         XCTAssertEqual(intrinsicSize.width, expectedWidth)
@@ -59,6 +64,7 @@ class CloseButtonTests: XCTestCase {
     }
 
     func testInitWithoutClosure() {
+        guard let button = closeButton else { return }
         // Initialize a CloseButton using the init() method
         closeButton = CloseButton()
 
@@ -66,9 +72,9 @@ class CloseButtonTests: XCTestCase {
         XCTAssertNotNil(closeButton)
 
         // Assert that the button is properly configured
-        XCTAssertEqual(closeButton.alpha, 1.0)
-        XCTAssertEqual(closeButton.accessibilityLabel, "Cancel")
-        XCTAssertEqual(closeButton.imageView?.contentMode, .scaleAspectFit)
+        XCTAssertEqual(button.alpha, 1.0)
+        XCTAssertEqual(button.accessibilityLabel, "Cancel")
+        XCTAssertEqual(button.imageView?.contentMode, .scaleAspectFit)
     }
 
     func testTappedCloseButtonCallsOnTap() {

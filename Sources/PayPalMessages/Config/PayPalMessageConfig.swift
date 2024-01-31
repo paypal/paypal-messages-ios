@@ -20,10 +20,6 @@ public class PayPalMessageData: NSObject {
     public var buyerCountry: String?
     /// Skips the caching layer
     public var ignoreCache = false
-    /// Uses the content set that is currently under active development. For development purposes only.
-    public var devTouchpoint = false
-    /// Allows the message to pull up a development build of the web modal. For development purposes only.
-    public var stageTag: String?
 
     /// Standard integration
     public init(
@@ -107,9 +103,9 @@ public class PayPalMessageConfig: NSObject {
         deviceID: String? = nil,
         sessionID: String? = nil
     ) {
-        Logger.integrationName = integrationName
-        Logger.integrationVersion = integrationVersion
-        Logger.deviceID = deviceID
-        Logger.sessionID = sessionID
+        AnalyticsLogger.integrationName = integrationName
+        AnalyticsLogger.integrationVersion = integrationVersion
+        AnalyticsLogger.deviceID = deviceID
+        AnalyticsLogger.sessionID = sessionID
     }
 }

@@ -3,22 +3,22 @@ import XCTest
 @testable import PayPalMessages
 
 class PayPalMessageModalTests: XCTestCase {
+
     let config = PayPalMessageModalConfig(
         data: .init(
             clientID: "Test123",
             environment: .sandbox,
             amount: 100.0,
-            currency: "USD",
             offerType: .payLaterLongTerm
         )
     )
 
-    var modalViewController: PayPalMessageModal!
+    var modalViewController: PayPalMessageModal?
 
     override func setUp() {
         super.setUp()
         modalViewController = PayPalMessageModal(config: config)
-        modalViewController.loadViewIfNeeded()
+        modalViewController?.loadViewIfNeeded()
     }
 
     override func tearDown() {
@@ -37,47 +37,55 @@ class PayPalMessageModalTests: XCTestCase {
         XCTAssertEqual(preferredOrientation, .portrait)
         XCTAssertFalse(shouldAutoRotate)
     }
-    
+
     func testViewOnLoadingDelegate() {
-        let stateDelegateMock = PayPalMessageModalStateDelegateMock()
-        modalViewController.stateDelegate = stateDelegateMock
+        if let viewController = modalViewController {
+            let stateDelegateMock = PayPalMessageModalStateDelegateMock()
+            viewController.stateDelegate = stateDelegateMock
 
-        modalViewController.viewDidLoad()
+            viewController.viewDidLoad()
 
-        XCTAssertTrue(stateDelegateMock.onLoadingCalled)
+            XCTAssertTrue(stateDelegateMock.onLoadingCalled)
+        }
     }
-    
+
     func testViewWillAppearCallsOnShowDelegate() {
-        let eventDelegateMock = PayPalMessageModalEventDelegateMock()
-        modalViewController.eventDelegate = eventDelegateMock
+        if let viewController = modalViewController {
+            let eventDelegateMock = PayPalMessageModalEventDelegateMock()
+            viewController.eventDelegate = eventDelegateMock
 
-        modalViewController.viewWillAppear(false)
+            viewController.viewWillAppear(false)
 
-        XCTAssertTrue(eventDelegateMock.onShowCalled)
+            XCTAssertTrue(eventDelegateMock.onShowCalled)
+        }
     }
-    
+
     func testModalDismissalCallsOnCloseDelegate() {
-        let eventDelegateMock = PayPalMessageModalEventDelegateMock()
-        modalViewController.eventDelegate = eventDelegateMock
+        if let viewController = modalViewController {
+            let eventDelegateMock = PayPalMessageModalEventDelegateMock()
+            viewController.eventDelegate = eventDelegateMock
 
-        modalViewController.viewDidDisappear(false)
+            viewController.viewDidDisappear(false)
 
-        XCTAssertTrue(eventDelegateMock.onCloseCalled)
+            XCTAssertTrue(eventDelegateMock.onCloseCalled)
+        }
     }
-    
+
     func testModalPresentationAndDismissal() {
-        let eventDelegateMock = PayPalMessageModalEventDelegateMock()
-        modalViewController.eventDelegate = eventDelegateMock
+        if let viewController = modalViewController {
+            let eventDelegateMock = PayPalMessageModalEventDelegateMock()
+            viewController.eventDelegate = eventDelegateMock
 
-        modalViewController.show()
-        modalViewController.viewWillAppear(false)
+            viewController.show()
+            viewController.viewWillAppear(false)
 
-        XCTAssertTrue(eventDelegateMock.onShowCalled)
+            XCTAssertTrue(eventDelegateMock.onShowCalled)
 
-        modalViewController.hide()
-        modalViewController.viewDidDisappear(false)
+            viewController.hide()
+            viewController.viewDidDisappear(false)
 
-        XCTAssertTrue(eventDelegateMock.onCloseCalled)
+            XCTAssertTrue(eventDelegateMock.onCloseCalled)
+        }
     }
 
     func testIntegrationInitializer() {
@@ -85,7 +93,6 @@ class PayPalMessageModalTests: XCTestCase {
         let merchantID = "Merchant456"
         let partnerAttributionID = "Partner789"
         let amount = 100.0
-        let currency = "USD"
         let placement = PayPalMessagePlacement.home
         let offerType = PayPalMessageOfferType.payLaterShortTerm
         let closeButtonWidth = 30
@@ -102,7 +109,6 @@ class PayPalMessageModalTests: XCTestCase {
             environment: environment,
             partnerAttributionID: partnerAttributionID,
             amount: amount,
-            currency: currency,
             placement: placement,
             offerType: offerType,
             modalCloseButton: ModalCloseButtonConfig(
@@ -119,7 +125,6 @@ class PayPalMessageModalTests: XCTestCase {
         XCTAssertEqual(modalDataConfig.merchantID, merchantID)
         XCTAssertEqual(modalDataConfig.partnerAttributionID, partnerAttributionID)
         XCTAssertEqual(modalDataConfig.amount, amount)
-        XCTAssertEqual(modalDataConfig.currency, currency)
         XCTAssertEqual(modalDataConfig.placement, placement)
         XCTAssertEqual(modalDataConfig.offerType, offerType)
         XCTAssertEqual(modalDataConfig.modalCloseButton.width, closeButtonWidth)

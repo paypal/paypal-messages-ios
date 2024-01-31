@@ -51,7 +51,9 @@ class MessageResponseTests: XCTestCase {
                 }
             }
         }
-        """.data(using: .utf8)!
+        """
+            // swiftlint:disable force_unwrapping
+            .data(using: .utf8)!
 
         let decoder = JSONDecoder()
         let messageResponse = try decoder.decode(MessageResponse.self, from: json)
