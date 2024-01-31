@@ -49,9 +49,11 @@ class MessageRequest: MessageRequestable {
             "merchant_config": parameters.merchantProfileHash,
             "ignore_cache": parameters.ignoreCache.description,
             "instance_id": parameters.instanceID,
-            "integration_version": Logger.integrationVersion,
-            "device_id": Logger.deviceID,
-            "session_id": Logger.sessionID
+            "version": BuildInfo.version,
+            "integration_type": BuildInfo.integrationType,
+            "integration_version": AnalyticsLogger.integrationVersion,
+            "device_id": AnalyticsLogger.deviceID,
+            "session_id": AnalyticsLogger.sessionID
         ].filter {
             guard let value = $0.value else { return false }
 
@@ -71,7 +73,7 @@ class MessageRequest: MessageRequestable {
         }
         let startingTimestamp = Date()
 
-        log(.info, "fetchMessage URL is \(url)")
+        log(.debug, "fetchMessage URL is \(url)")
         fetch(url, headers: headers, session: parameters.environment.urlSession) { data, response, _ in
             guard let response = response as? HTTPURLResponse else {
                 onCompletion(.failure(.invalidResponse()))

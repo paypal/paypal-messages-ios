@@ -10,8 +10,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
         super.setUp()
 
         // Inject mock sender to intercept log requests
-        let logger = Logger.get(for: "testclientid", in: .sandbox)
-        logger.sender = mockSender
+        AnalyticsService.shared.sender = mockSender
     }
 
     // MARK: - Test Initial Config Values
@@ -394,13 +393,11 @@ final class PayPalMessageViewModelTests: XCTestCase {
             config: mockedConfig,
             requester: mockedRequest,
             merchantProfileProvider: mockedMerchantProfile,
-            eventDelegate: mockedDelegate,
             stateDelegate: mockedDelegate,
+            eventDelegate: mockedDelegate,
             delegate: mockedView,
             messageView: messageView
         )
-
-        viewModel.queueMessageContentUpdate(requiresFetch: true, fireImmediately: true)
 
         return viewModel
     }

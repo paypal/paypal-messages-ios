@@ -8,12 +8,13 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     let navigation = WKNavigation()
     let mockSender = LogSenderMock()
 
+    var modal: PayPalMessageModal?
+
     override func setUp() {
         super.setUp()
 
         // Inject mock sender to intercept log requests
-        let logger = Logger.get(for: "test", in: .live)
-        logger.sender = mockSender
+        AnalyticsService.shared.sender = mockSender
     }
 
     // Helper function to convert JSON string to dictionary
@@ -327,9 +328,12 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,
-            eventDelegate: eventDelegate
+            eventDelegate: eventDelegate,
+            modal: modal
         )
-        viewModel.modal = modal
+
+        // Create a strong reference so the modal does not get cleaned up immediatedly after getting passed into the view model
+        self.modal = modal
 
         return (
             viewModel,

@@ -103,9 +103,9 @@ public class PayPalMessageConfig: NSObject {
         deviceID: String? = nil,
         sessionID: String? = nil
     ) {
-        Logger.integrationName = integrationName
-        Logger.integrationVersion = integrationVersion
-        Logger.deviceID = deviceID
-        Logger.sessionID = sessionID
+        AnalyticsLogger.integrationName = integrationName
+        AnalyticsLogger.integrationVersion = integrationVersion
+        AnalyticsLogger.deviceID = deviceID
+        AnalyticsLogger.sessionID = sessionID
     }
 }
