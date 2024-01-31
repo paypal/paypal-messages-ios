@@ -194,17 +194,24 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             withTimeInterval: queueTimeInterval,
             repeats: false
         ) { _ in
-            if self.fetchMessageContentPending {
-                self.fetchMessageContent()
-                self.fetchMessageContentPending = false
-            } else {
-                self.delegate?.refreshContent(messageParameters: self.messageParameters)
-            }
+            self.flushUpdates()
         }
 
         if fireImmediately {
             queuedTimer?.fire()
         }
+    }
+
+    // Exposed internally for tests
+    func flushUpdates() {
+        if fetchMessageContentPending {
+            fetchMessageContent()
+            fetchMessageContentPending = false
+        } else {
+            delegate?.refreshContent(messageParameters: self.messageParameters)
+        }
+
+        queuedTimer?.invalidate()
     }
 
     /// Refreshes the Message content only if there's a new amount or logo type set
