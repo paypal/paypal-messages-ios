@@ -485,6 +485,34 @@ final class PayPalMessageLoggerTests: XCTestCase {
         XCTAssert(clientID1 == "testloggerclientid3" || clientID2 == "testloggerclientid3")
     }
 
+    func testNilDeviceIDDoesNotOverwrite() {
+        PayPalMessageConfig.setGlobalAnalytics(
+            integrationName: "Test_SDK",
+            integrationVersion: "0.1.0"
+        )
+
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
+
+        messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
+
+        AnalyticsService.shared.flushEvents()
+        
+        guard let data = mockSender.calls.last,
+              let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return XCTFail("invalid JSON data")
+        }
+
+        guard let deviceID = (data["data"] as? [String: Any])?["device_id"] as? String else {
+            return XCTFail("missing device_id")
+        }
+        guard let sessionID = (data["data"] as? [String: Any])?["session_id"] as? String else {
+            return XCTFail("missing session_id")
+        }
+
+        XCTAssert(deviceID == "987654321")
+        XCTAssert(sessionID == "123456789")
+    }
+
     // MARK: - Helper assert functions
 
     private func assert(payload: [String: Any], equals expectedPayload: [String: Any]) {

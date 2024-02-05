@@ -214,7 +214,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         ) { _, _ in
             // TODO: Does the JS error text get returned here?
         }
-        
+
         queuedTimer?.invalidate()
     }
 
