@@ -31,9 +31,9 @@ public final class PayPalMessageView: UIControl {
     @Proxy(\.viewModel.amount)
     public var amount: Double?
 
-    /// Read-write property that holds the message placement.
-    @Proxy(\.viewModel.placement)
-    public var placement: PayPalMessagePlacement?
+    /// Read-write property that holds the message pageType.
+    @Proxy(\.viewModel.pageType)
+    public var pageType: PayPalMessagePageType?
 
     /// Read-write property that holds the message offer type.
     @Proxy(\.viewModel.offerType)
@@ -52,8 +52,8 @@ public final class PayPalMessageView: UIControl {
     public var color: PayPalMessageColor
 
     /// Read-write property that holds the message's alignment.
-    @Proxy(\.viewModel.alignment)
-    public var alignment: PayPalMessageTextAlignment
+    @Proxy(\.viewModel.textAlign)
+    public var textAlign: PayPalMessageTextAlign
 
     /// Read-write property that holds the cache status
     @Proxy(\.viewModel.ignoreCache)

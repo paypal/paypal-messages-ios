@@ -42,8 +42,8 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     var channel: String?
 
     // Location within the application
-    @Proxy(\.viewModel.placement)
-    var placement: PayPalMessagePlacement?
+    @Proxy(\.viewModel.pageType)
+    var pageType: PayPalMessagePageType?
 
     // Skip Juno cache
     @Proxy(\.viewModel.ignoreCache)

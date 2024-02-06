@@ -45,7 +45,7 @@ class UIKitContentViewController: UIViewController {
 
     lazy var alignmentTypePicker: UISegmentedControl = getSegmentedControl(
         action: #selector(updatePayPalMessageMessage),
-        forType: PayPalMessageTextAlignment.self
+        forType: PayPalMessageTextAlign.self
     )
 
     lazy var offerTypePicker: UISegmentedControl = getSegmentedControl(
@@ -173,7 +173,7 @@ class UIKitContentViewController: UIViewController {
     private func loadDefaultSelections() {
         loadSegmentedIndex(item: defaultMessageConfig.style.logoType, picker: logoTypePicker)
         loadSegmentedIndex(item: defaultMessageConfig.style.color, picker: colorTypePicker)
-        loadSegmentedIndex(item: defaultMessageConfig.style.textAlignment, picker: alignmentTypePicker)
+        loadSegmentedIndex(item: defaultMessageConfig.style.textAlign, picker: alignmentTypePicker)
         buyerCountryField.text = defaultMessageConfig.data.buyerCountry
         ignoreCacheSwitch.isOn = defaultMessageConfig.data.ignoreCache
 
@@ -236,7 +236,7 @@ class UIKitContentViewController: UIViewController {
             style: .init(
                 logoType: getCurrentLogoType(),
                 color: getCurrentMessageColor(),
-                textAlignment: getCurrentAlignment()
+                textAlign: getCurrentAlignment()
             )
         )
 
@@ -255,8 +255,8 @@ class UIKitContentViewController: UIViewController {
         PayPalMessageColor.allCases[colorTypePicker.selectedSegmentIndex]
     }
 
-    private func getCurrentAlignment() -> PayPalMessageTextAlignment {
-        PayPalMessageTextAlignment.allCases[alignmentTypePicker.selectedSegmentIndex]
+    private func getCurrentAlignment() -> PayPalMessageTextAlign {
+        PayPalMessageTextAlign.allCases[alignmentTypePicker.selectedSegmentIndex]
     }
 
     private func getCurrentOfferType() -> PayPalMessageOfferType? {

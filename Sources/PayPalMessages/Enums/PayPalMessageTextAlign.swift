@@ -1,5 +1,5 @@
 /// Text alignment option for a PayPal Message
-public enum PayPalMessageTextAlignment: String, CaseIterable {
+public enum PayPalMessageTextAlign: String, CaseIterable {
     /// Text aligned to the left
     case left
     /// Text aligned to the center
