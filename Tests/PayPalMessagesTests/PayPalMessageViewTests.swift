@@ -56,6 +56,7 @@ class PayPalMessageViewTests: XCTestCase {
         XCTAssertNil(weakMessageView)
     }
 
+    // swiftlint:disable:next function_body_length
     func testMessageAccessibilityLabel() {
         let config = config
 
