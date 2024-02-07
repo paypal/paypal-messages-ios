@@ -21,7 +21,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 textAlignment: .left
             )
         ),
-        requester: PayPalMessageRequestMock(scenario: .success),
+        requester: PayPalMessageRequestMock(scenario: .success()),
         merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
     )
     let modal = PayPalMessageModal(

@@ -316,6 +316,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         return parameterBuilder
             .makeParameters(
                 message: response.defaultMainContent,
+                messageAlternative: response.defaultMainAlternative,
                 offerType: response.offerType,
                 linkDescription: response.defaultDisclaimer,
                 logoPlaceholder: response.logoPlaceholder,
@@ -367,7 +368,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             availableWidth: messageResponse?.modalCloseButtonAvailWidth,
             availableHeight: messageResponse?.modalCloseButtonAvailHeight,
             color: color,
-            colorType: messageResponse?.modalCloseButtonColorType
+            colorType: messageResponse?.modalCloseButtonColorType,
+            alternativeText: messageResponse?.modalCloseButtonAlternativeText
         )
 
         let config = PayPalMessageModalConfig(

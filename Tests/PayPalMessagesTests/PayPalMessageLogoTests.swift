@@ -14,6 +14,7 @@ final class PayPalMessageLogoTests: XCTestCase {
     ) {
         let resultParameter = paramsBuilder.makeParameters(
             message: "",
+            messageAlternative: nil,
             offerType: PayPalMessageResponseOfferType.payLaterShortTerm,
             linkDescription: "",
             logoPlaceholder: "",
@@ -262,6 +263,7 @@ final class PayPalMessageLogoTests: XCTestCase {
             for productGroup in allProductGroups {
                 let resultParameter = paramsBuilder.makeParameters(
                     message: "",
+                    messageAlternative: nil,
                     offerType: PayPalMessageResponseOfferType.payLaterShortTerm,
                     linkDescription: "",
                     logoPlaceholder: "",

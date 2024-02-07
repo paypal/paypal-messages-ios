@@ -18,7 +18,8 @@ class MessageResponseTests: XCTestCase {
                     "available_width": 60,
                     "available_height": 60,
                     "color": "#001435",
-                    "color_type": "dark"
+                    "color_type": "dark",
+                    "alternative_text": "PayPal Modal Close"
                 },
                 "variables": {
                     "inline_logo_placeholder": "%paypal_logo%"
@@ -43,6 +44,7 @@ class MessageResponseTests: XCTestCase {
             "content": {
                 "default": {
                     "main": "As low as $187.17/mo with %paypal_logo%.",
+                    "main_alternative": "As low as $187.17 per month with PayPal.",
                     "disclaimer": "Learn more"
                 },
                 "generic": {
@@ -62,5 +64,7 @@ class MessageResponseTests: XCTestCase {
         XCTAssertEqual(messageResponse.productGroup, .payLater)
         XCTAssertEqual(messageResponse.defaultMainContent, "As low as $187.17/mo with %paypal_logo%.")
         XCTAssertEqual(messageResponse.defaultDisclaimer, "Learn more")
+        XCTAssertEqual(messageResponse.defaultMainAlternative, "As low as $187.17 per month with PayPal.")
+        XCTAssertEqual(messageResponse.modalCloseButtonAlternativeText, "PayPal Modal Close")
     }
 }
