@@ -111,9 +111,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private let merchantProfileProvider: MerchantProfileHashGetable
 
     /// modal instance attached to the message
-    private lazy var modal: PayPalMessageModal = {
-        PayPalMessageModal(config: makeModalConfig(), eventDelegate: self)
-    }()
+    private var modal: PayPalMessageModal?
 
     /// Tracking logger
     private let logger: AnalyticsLogger
@@ -228,7 +226,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             guard let self else { return }
 
             self.merchantProfileHash = profileHash
-            modal.merchantProfileHash = profileHash
 
             let parameters = self.makeRequestParameters()
 
@@ -284,7 +281,10 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         // Enable the tap gesture
         isMessageViewInteractive = true
 
-        modal.setConfig(makeModalConfig())
+        if let modal {
+            modal.merchantProfileHash = merchantProfileHash
+            modal.setConfig(makeModalConfig())
+        }
 
         log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))")
     }
@@ -408,7 +408,14 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             linkSrc: "learn_more"
         ))
 
-        modal.show()
+        if modal == nil {
+            modal = PayPalMessageModal(config: makeModalConfig(), eventDelegate: self)
+        }
+
+        if let modal {
+            modal.merchantProfileHash = merchantProfileHash
+            modal.show()
+        }
     }
 
     // MARK: Modal Event Delegate Functions
