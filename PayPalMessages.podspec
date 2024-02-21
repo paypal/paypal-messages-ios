@@ -13,6 +13,6 @@ Pod::Spec.new do |s|
 
   s.source_files    = "Sources/PayPalMessages/**/*.swift"
   s.resource_bundle = {
-    "PayPalMessages" => ['Sources/PayPalMessages/*.xcassets']
+    "PayPalMessages" => ['Sources/PayPalMessages/*.xcassets', 'Sources/PayPalMessages/PrivacyInfo.xcprivacy']
   }
 end
