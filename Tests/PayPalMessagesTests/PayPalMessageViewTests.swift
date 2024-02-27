@@ -78,7 +78,7 @@ class PayPalMessageViewTests: XCTestCase {
             modalCloseButtonAvailHeight: 60,
             modalCloseButtonColor: "#2d2d2d",
             modalCloseButtonColorType: "DARK",
-            modalCloseButtonAlternativeText: "PayPal Modal Close"
+            modalCloseButtonAlternativeText: "PayPal learn more modal close"
         )
 
         let messageView = PayPalMessageView(
@@ -109,7 +109,7 @@ class PayPalMessageViewTests: XCTestCase {
             modalCloseButtonAvailHeight: 60,
             modalCloseButtonColor: "#2d2d2d",
             modalCloseButtonColorType: "DARK",
-            modalCloseButtonAlternativeText: "PayPal Modal Close"
+            modalCloseButtonAlternativeText: "PayPal learn more modal close"
         )
 
         let messageView2 = PayPalMessageView(
@@ -140,7 +140,7 @@ class PayPalMessageViewTests: XCTestCase {
             modalCloseButtonAvailHeight: 60,
             modalCloseButtonColor: "#2d2d2d",
             modalCloseButtonColorType: "DARK",
-            modalCloseButtonAlternativeText: "PayPal Modal Close"
+            modalCloseButtonAlternativeText: "PayPal learn more modal close"
         )
 
         let messageView3 = PayPalMessageView(

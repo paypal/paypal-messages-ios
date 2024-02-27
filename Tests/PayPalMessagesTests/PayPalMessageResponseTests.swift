@@ -19,7 +19,7 @@ class MessageResponseTests: XCTestCase {
                     "available_height": 60,
                     "color": "#001435",
                     "color_type": "dark",
-                    "alternative_text": "PayPal Modal Close"
+                    "alternative_text": "PayPal learn more modal close"
                 },
                 "variables": {
                     "inline_logo_placeholder": "%paypal_logo%"
@@ -65,6 +65,6 @@ class MessageResponseTests: XCTestCase {
         XCTAssertEqual(messageResponse.defaultMainContent, "As low as $187.17/mo with %paypal_logo%.")
         XCTAssertEqual(messageResponse.defaultDisclaimer, "Learn more")
         XCTAssertEqual(messageResponse.defaultMainAlternative, "As low as $187.17 per month with PayPal.")
-        XCTAssertEqual(messageResponse.modalCloseButtonAlternativeText, "PayPal Modal Close")
+        XCTAssertEqual(messageResponse.modalCloseButtonAlternativeText, "PayPal learn more modal close")
     }
 }

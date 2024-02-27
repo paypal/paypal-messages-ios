@@ -26,7 +26,7 @@ class ModalCloseButtonConfig: NSObject {
         self.availableHeight = availableHeight ?? 60
         self.color = color ?? UIColor(hexString: "#001435")
         self.colorType = colorType ?? "dark"
-        self.alternativeText = alternativeText ?? "PayPal Learn More Modal Close"
+        self.alternativeText = alternativeText ?? "PayPal learn more modal close"
     }
 
     deinit {}

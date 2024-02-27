@@ -101,7 +101,7 @@ class PayPalMessageModalTests: XCTestCase {
         let closeButtonAvailableHeight = 70
         let closeButtonColor = UIColor(hexString: "#001435")
         let closeButtonColorType = "light"
-        let closeButtonAlternativeText = "PayPal Modal Close"
+        let closeButtonAlternativeText = "PayPal learn more modal close"
         let environment = Environment.sandbox
 
         let modalDataConfig = PayPalMessageModalDataConfig(
