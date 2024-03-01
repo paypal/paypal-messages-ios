@@ -38,7 +38,7 @@ class PayPalMessageModalDataConfig: NSObject {
     var amount: Double?
     var buyerCountry: String?
     var offerType: PayPalMessageOfferType?
-    var placement: PayPalMessagePlacement?
+    var pageType: PayPalMessagePageType?
     var channel: String?
     var ignoreCache: Bool? // swiftlint:disable:this discouraged_optional_boolean
     var modalCloseButton: ModalCloseButtonConfig
@@ -48,13 +48,13 @@ class PayPalMessageModalDataConfig: NSObject {
         clientID: String,
         environment: Environment,
         amount: Double? = nil,
-        placement: PayPalMessagePlacement? = nil,
+        pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
         modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
         self.clientID = clientID
         self.amount = amount
-        self.placement = placement
+        self.pageType = pageType
         self.offerType = offerType
         self.modalCloseButton = modalCloseButton
         self.environment = environment
@@ -67,7 +67,7 @@ class PayPalMessageModalDataConfig: NSObject {
         environment: Environment,
         partnerAttributionID: String,
         amount: Double? = nil,
-        placement: PayPalMessagePlacement? = nil,
+        pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
         modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
@@ -75,7 +75,7 @@ class PayPalMessageModalDataConfig: NSObject {
         self.merchantID = merchantID
         self.partnerAttributionID = partnerAttributionID
         self.amount = amount
-        self.placement = placement
+        self.pageType = pageType
         self.offerType = offerType
         self.modalCloseButton = modalCloseButton
         self.environment = environment
@@ -118,7 +118,7 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         case buyerCountry
         case offerType = "offer"
         case channel
-        case placement
+        case pageType
         case ignoreCache
     }
 
@@ -132,7 +132,7 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         try container.encodeIfPresent(data.buyerCountry, forKey: .buyerCountry)
         try container.encodeIfPresent(data.offerType?.rawValue, forKey: .offerType)
         try container.encodeIfPresent(data.channel, forKey: .channel)
-        try container.encodeIfPresent(data.placement?.rawValue, forKey: .placement)
+        try container.encodeIfPresent(data.pageType?.rawValue, forKey: .pageType)
         try container.encodeIfPresent(data.ignoreCache, forKey: .ignoreCache)
     }
 }

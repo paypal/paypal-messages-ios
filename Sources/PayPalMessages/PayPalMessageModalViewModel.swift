@@ -41,8 +41,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         didSet { queueUpdate(from: oldValue, to: channel) }
     }
     // Location within the application
-    var placement: PayPalMessagePlacement? {
-        didSet { queueUpdate(from: oldValue, to: placement) }
+    var pageType: PayPalMessagePageType? {
+        didSet { queueUpdate(from: oldValue, to: pageType) }
     }
     // Skip Juno cache
     var ignoreCache: Bool? { // swiftlint:disable:this discouraged_optional_boolean
@@ -68,7 +68,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             "buyer_country": buyerCountry,
             "offer": offerType?.rawValue,
             "channel": channel,
-            "placement": placement?.rawValue,
+            "page_type": pageType?.rawValue,
             "version": BuildInfo.version,
             "integration_type": BuildInfo.integrationType,
             "integration_identifier": integrationIdentifier,
@@ -119,7 +119,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
         channel = config.data.channel
-        placement = config.data.placement
+        pageType = config.data.pageType
         ignoreCache = config.data.ignoreCache
 
         self.webView = webView
@@ -149,7 +149,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
         channel = config.data.channel
-        placement = config.data.placement
+        pageType = config.data.pageType
         ignoreCache = config.data.ignoreCache
     }
 
@@ -158,7 +158,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             clientID: self.clientID,
             environment: self.environment,
             amount: self.amount,
-            placement: self.placement,
+            pageType: self.pageType,
             offerType: self.offerType
         ))
 

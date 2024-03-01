@@ -11,7 +11,7 @@ struct MessageRequestParameters {
     let partnerAttributionID: String?
     let logoType: PayPalMessageLogoType
     let buyerCountry: String?
-    let placement: PayPalMessagePlacement?
+    let pageType: PayPalMessagePageType?
     let amount: Double?
     let offerType: PayPalMessageOfferType?
     let merchantProfileHash: String?
@@ -43,7 +43,7 @@ class MessageRequest: MessageRequestable {
             "partner_attribution_id": parameters.partnerAttributionID,
             "logo_type": parameters.logoType.rawValue,
             "buyer_country": parameters.buyerCountry,
-            "placement": parameters.placement?.rawValue,
+            "page_type": parameters.pageType?.rawValue,
             "amount": parameters.amount?.description,
             "offer": parameters.offerType?.rawValue,
             "merchant_config": parameters.merchantProfileHash,
