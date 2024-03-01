@@ -101,6 +101,7 @@ class PayPalMessageModalTests: XCTestCase {
         let closeButtonAvailableHeight = 70
         let closeButtonColor = UIColor(hexString: "#001435")
         let closeButtonColorType = "light"
+        let closeButtonAlternativeText = "PayPal learn more modal close"
         let environment = Environment.sandbox
 
         let modalDataConfig = PayPalMessageModalDataConfig(
@@ -117,7 +118,8 @@ class PayPalMessageModalTests: XCTestCase {
                 availableWidth: closeButtonAvailableWidth,
                 availableHeight: closeButtonAvailableHeight,
                 color: closeButtonColor,
-                colorType: closeButtonColorType
+                colorType: closeButtonColorType,
+                alternativeText: closeButtonAlternativeText
             )
         )
 
@@ -133,6 +135,7 @@ class PayPalMessageModalTests: XCTestCase {
         XCTAssertEqual(modalDataConfig.modalCloseButton.availableHeight, closeButtonAvailableHeight)
         XCTAssertEqual(modalDataConfig.modalCloseButton.color, closeButtonColor)
         XCTAssertEqual(modalDataConfig.modalCloseButton.colorType, closeButtonColorType)
+        XCTAssertEqual(modalDataConfig.modalCloseButton.alternativeText, closeButtonAlternativeText)
         XCTAssertEqual(modalDataConfig.environment, environment)
     }
 }

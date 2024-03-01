@@ -9,6 +9,7 @@ class ModalCloseButtonConfig: NSObject {
     var availableHeight: Int
     var color: UIColor
     var colorType: String
+    var alternativeText: String
 
     init(
         width: Int? = nil,
@@ -16,7 +17,8 @@ class ModalCloseButtonConfig: NSObject {
         availableWidth: Int? = nil,
         availableHeight: Int? = nil,
         color: UIColor? = nil,
-        colorType: String? = nil
+        colorType: String? = nil,
+        alternativeText: String? = nil
     ) {
         self.width = width ?? 26
         self.height = height ?? 26
@@ -24,6 +26,7 @@ class ModalCloseButtonConfig: NSObject {
         self.availableHeight = availableHeight ?? 60
         self.color = color ?? UIColor(hexString: "#001435")
         self.colorType = colorType ?? "dark"
+        self.alternativeText = alternativeText ?? "PayPal learn more modal close"
     }
 
     deinit {}
