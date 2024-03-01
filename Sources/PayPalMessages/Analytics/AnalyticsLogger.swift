@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 class Weak<T: AnyObject> {
 
@@ -12,8 +13,8 @@ class Weak<T: AnyObject> {
 class AnalyticsLogger: Encodable {
 
     // Global Details
-    static var deviceID: String?
-    static var sessionID: String?
+    static var deviceID: String? = UIDevice.current.identifierForVendor?.uuidString
+    static var sessionID: String = UUID().uuidString
     static var integrationVersion: String?
     static var integrationName: String?
 
