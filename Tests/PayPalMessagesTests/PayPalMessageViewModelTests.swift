@@ -104,7 +104,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
         XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
-    func testSimplePlacementUpdate() {
+    func testSimplePageTypeUpdate() {
         let mockedRequest = PayPalMessageRequestMock(scenario: .success())
 
         // init ViewModel with mocked delegate in error scenario
@@ -112,13 +112,13 @@ final class PayPalMessageViewModelTests: XCTestCase {
             mockedRequest: mockedRequest
         )
 
-        XCTAssertNil(viewModel.placement)
+        XCTAssertNil(viewModel.pageType)
         XCTAssertEqual(mockedRequest.requestsPerformed, 1)
 
         // test the new parameter is being correctly sent
-        let newValue: PayPalMessagePlacement = .payment
-        viewModel.placement = newValue
-        XCTAssertEqual(viewModel.placement, newValue)
+        let newValue: PayPalMessagePageType = .checkout
+        viewModel.pageType = newValue
+        XCTAssertEqual(viewModel.pageType, newValue)
 
         viewModel.flushUpdates()
 
@@ -224,13 +224,13 @@ final class PayPalMessageViewModelTests: XCTestCase {
             mockedConfig: mockedConfig
         )
 
-        XCTAssertEqual(viewModel.alignment, mockedConfig.style.textAlignment)
+        XCTAssertEqual(viewModel.textAlign, mockedConfig.style.textAlign)
         XCTAssertEqual(mockedRequest.requestsPerformed, 1)
 
         // test the new AND different parameter is being correctly sent
-        let newValue: PayPalMessageTextAlignment = .center
-        viewModel.alignment = newValue
-        XCTAssertEqual(viewModel.alignment, newValue)
+        let newValue: PayPalMessageTextAlign = .center
+        viewModel.textAlign = newValue
+        XCTAssertEqual(viewModel.textAlign, newValue)
 
         viewModel.flushUpdates()
 

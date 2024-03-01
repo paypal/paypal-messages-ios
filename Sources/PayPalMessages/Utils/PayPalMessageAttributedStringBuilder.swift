@@ -125,7 +125,7 @@ final class PayPalMessageAttributedStringBuilder {
     ) -> NSMutableParagraphStyle {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = getAccessibilityScaledValue(Constants.lineSpacing)
-        style.alignment = parameters.textAlignment
+        style.alignment = parameters.textAlign
         return style
     }
 

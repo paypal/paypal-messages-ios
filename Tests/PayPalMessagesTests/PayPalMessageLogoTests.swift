@@ -19,7 +19,7 @@ final class PayPalMessageLogoTests: XCTestCase {
             linkDescription: "",
             logoPlaceholder: "",
             logoType: logoType,
-            payPalAlignment: .left,
+            payPalAlign: .left,
             payPalColor: color,
             productGroup: productGroup
         )
@@ -268,7 +268,7 @@ final class PayPalMessageLogoTests: XCTestCase {
                     linkDescription: "",
                     logoPlaceholder: "",
                     logoType: .none,
-                    payPalAlignment: .left,
+                    payPalAlign: .left,
                     payPalColor: color,
                     productGroup: productGroup
                 )

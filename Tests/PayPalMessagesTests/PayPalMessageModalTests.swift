@@ -93,7 +93,7 @@ class PayPalMessageModalTests: XCTestCase {
         let merchantID = "Merchant456"
         let partnerAttributionID = "Partner789"
         let amount = 100.0
-        let placement = PayPalMessagePlacement.home
+        let pageType = PayPalMessagePageType.home
         let offerType = PayPalMessageOfferType.payLaterShortTerm
         let closeButtonWidth = 30
         let closeButtonHeight = 30
@@ -110,7 +110,7 @@ class PayPalMessageModalTests: XCTestCase {
             environment: environment,
             partnerAttributionID: partnerAttributionID,
             amount: amount,
-            placement: placement,
+            pageType: pageType,
             offerType: offerType,
             modalCloseButton: ModalCloseButtonConfig(
                 width: closeButtonWidth,
@@ -127,7 +127,7 @@ class PayPalMessageModalTests: XCTestCase {
         XCTAssertEqual(modalDataConfig.merchantID, merchantID)
         XCTAssertEqual(modalDataConfig.partnerAttributionID, partnerAttributionID)
         XCTAssertEqual(modalDataConfig.amount, amount)
-        XCTAssertEqual(modalDataConfig.placement, placement)
+        XCTAssertEqual(modalDataConfig.pageType, pageType)
         XCTAssertEqual(modalDataConfig.offerType, offerType)
         XCTAssertEqual(modalDataConfig.modalCloseButton.width, closeButtonWidth)
         XCTAssertEqual(modalDataConfig.modalCloseButton.height, closeButtonHeight)

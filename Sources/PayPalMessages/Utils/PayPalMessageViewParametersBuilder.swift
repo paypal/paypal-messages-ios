@@ -10,7 +10,7 @@ struct PayPalMessageViewParametersBuilder {
         linkDescription: String,
         logoPlaceholder: String,
         logoType: PayPalMessageLogoType,
-        payPalAlignment: PayPalMessageTextAlignment,
+        payPalAlign: PayPalMessageTextAlign,
         payPalColor: PayPalMessageColor,
         productGroup: PayPalMessageResponseProductGroup
     ) -> PayPalMessageViewParameters {
@@ -44,7 +44,7 @@ struct PayPalMessageViewParametersBuilder {
             linkDescription: linkDescription,
             linkColor: getLinkColor(payPalColor),
             linkUnderlineColor: getUnderlineLinkColor(payPalColor),
-            textAlignment: getAlignment(payPalAlignment),
+            textAlign: getAlignment(payPalAlign),
             accessibilityLabel: accessibilityLabel,
             accessibilityTraits: .button,
             isAccessibilityElement: true
@@ -179,8 +179,8 @@ struct PayPalMessageViewParametersBuilder {
         }
     }
 
-    private func getAlignment(_ textAlignment: PayPalMessageTextAlignment) -> NSTextAlignment {
-        switch textAlignment {
+    private func getAlignment(_ textAlign: PayPalMessageTextAlign) -> NSTextAlignment {
+        switch textAlign {
         case .left:
             return .left
 

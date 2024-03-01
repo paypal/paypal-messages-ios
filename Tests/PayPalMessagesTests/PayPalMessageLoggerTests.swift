@@ -12,13 +12,13 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 clientID: "testloggerclientid",
                 environment: .live,
                 amount: 50.0,
-                placement: .product,
+                pageType: .productDetails,
                 offerType: .payLaterLongTerm
             ),
             style: .init(
                 logoType: .inline,
                 color: .black,
-                textAlignment: .left
+                textAlign: .left
             )
         ),
         requester: PayPalMessageRequestMock(scenario: .success()),
@@ -30,7 +30,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 clientID: "testloggerclientid",
                 environment: .live,
                 amount: 50.0,
-                placement: .product,
+                pageType: .productDetails,
                 offerType: .payLaterLongTerm
             )
         )
@@ -94,7 +94,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                     [
                         "amount": 50,
                         "offer_type": "PAY_LATER_LONG_TERM",
-                        "placement": "product",
+                        "page_type": "product-details",
                         "type": "message",
                         "number_key": 50.5,
                         "string_key": "hello",
@@ -168,7 +168,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                     [
                         "amount": 50,
                         "offer_type": "PAY_LATER_LONG_TERM",
-                        "placement": "product",
+                        "page_type": "product-details",
                         "type": "modal",
                         "number_key": 50.5,
                         "string_key": "hello",
@@ -238,7 +238,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                     [
                         "amount": 50,
                         "offer_type": "PAY_LATER_LONG_TERM",
-                        "placement": "product",
+                        "page_type": "product-details",
                         "type": "message",
                         "string_key": "hello",
                         "style_logo_type": "inline",
@@ -255,7 +255,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                     [
                         "amount": 50,
                         "offer_type": "PAY_LATER_LONG_TERM",
-                        "placement": "product",
+                        "page_type": "product-details",
                         "type": "modal",
                         "string_key": "world",
                         "component_events": [
@@ -307,7 +307,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                     [
                         "amount": 50,
                         "offer_type": "PAY_LATER_LONG_TERM",
-                        "placement": "product",
+                        "page_type": "product-details",
                         "type": "message",
                         "style_logo_type": "inline",
                         "style_color": "black",
@@ -365,7 +365,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                     [
                         "amount": 50,
                         "offer_type": "PAY_LATER_LONG_TERM",
-                        "placement": "product",
+                        "page_type": "product-details",
                         "type": "message",
                         "style_logo_type": "inline",
                         "style_color": "black",
@@ -432,7 +432,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                     [
                         "amount": 100,
                         "offer_type": "PAY_LATER_LONG_TERM",
-                        "placement": "product",
+                        "page_type": "product-details",
                         "type": "message",
                         "style_logo_type": "inline",
                         "style_color": "black",
@@ -483,6 +483,34 @@ final class PayPalMessageLoggerTests: XCTestCase {
         XCTAssert(clientID1 != clientID2)
         XCTAssert(clientID1 == "testloggerclientid2" || clientID2 == "testloggerclientid2")
         XCTAssert(clientID1 == "testloggerclientid3" || clientID2 == "testloggerclientid3")
+    }
+
+    func testNilDeviceIDDoesNotOverwrite() {
+        PayPalMessageConfig.setGlobalAnalytics(
+            integrationName: "Test_SDK",
+            integrationVersion: "0.1.0"
+        )
+
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
+
+        messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
+
+        AnalyticsService.shared.flushEvents()
+        
+        guard let data = mockSender.calls.last,
+              let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return XCTFail("invalid JSON data")
+        }
+
+        guard let deviceID = (data["data"] as? [String: Any])?["device_id"] as? String else {
+            return XCTFail("missing device_id")
+        }
+        guard let sessionID = (data["data"] as? [String: Any])?["session_id"] as? String else {
+            return XCTFail("missing session_id")
+        }
+
+        XCTAssert(deviceID == "987654321")
+        XCTAssert(sessionID == "123456789")
     }
 
     // MARK: - Helper assert functions

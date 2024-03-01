@@ -13,7 +13,7 @@ public class PayPalMessageData: NSObject {
     /// Price expressed in cents amount based on the current context (i.e. individual product price vs total cart price)
     public var amount: Double?
     /// Message screen location (e.g. product, cart, home)
-    public var placement: PayPalMessagePlacement?
+    public var pageType: PayPalMessagePageType?
     /// Preferred message offer to display
     public var offerType: PayPalMessageOfferType?
     /// Consumer's country (Integrations must be approved by PayPal to use this option)
@@ -26,12 +26,12 @@ public class PayPalMessageData: NSObject {
         clientID: String,
         environment: Environment,
         amount: Double? = nil,
-        placement: PayPalMessagePlacement? = nil,
+        pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil
     ) {
         self.clientID = clientID
         self.amount = amount
-        self.placement = placement
+        self.pageType = pageType
         self.offerType = offerType
         self.environment = environment
     }
@@ -43,14 +43,14 @@ public class PayPalMessageData: NSObject {
         environment: Environment,
         partnerAttributionID: String,
         amount: Double? = nil,
-        placement: PayPalMessagePlacement? = nil,
+        pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil
     ) {
         self.clientID = clientID
         self.merchantID = merchantID
         self.partnerAttributionID = partnerAttributionID
         self.amount = amount
-        self.placement = placement
+        self.pageType = pageType
         self.offerType = offerType
         self.environment = environment
     }
@@ -65,16 +65,16 @@ public class PayPalMessageStyle: NSObject {
     /// Text and logo color
     public var color: PayPalMessageColor
     /// Text alignment
-    public var textAlignment: PayPalMessageTextAlignment
+    public var textAlign: PayPalMessageTextAlign
 
     public init(
         logoType: PayPalMessageLogoType = .inline,
         color: PayPalMessageColor = .black,
-        textAlignment: PayPalMessageTextAlignment = .right
+        textAlign: PayPalMessageTextAlign = .right
     ) {
         self.logoType = logoType
         self.color = color
-        self.textAlignment = textAlignment
+        self.textAlign = textAlign
     }
 
     deinit {}
@@ -105,7 +105,13 @@ public class PayPalMessageConfig: NSObject {
     ) {
         AnalyticsLogger.integrationName = integrationName
         AnalyticsLogger.integrationVersion = integrationVersion
-        AnalyticsLogger.deviceID = deviceID
-        AnalyticsLogger.sessionID = sessionID
+
+        if let deviceID {
+            AnalyticsLogger.deviceID = deviceID
+        }
+
+        if let sessionID {
+            AnalyticsLogger.sessionID = sessionID
+        }
     }
 }
