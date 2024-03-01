@@ -73,7 +73,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
         XCTAssertTrue(mockedDelegate.onErrorCalled)
         XCTAssertNil(viewModel.messageParameters)
 
-        guard case .invalidResponse(let paypalDebugID) = mockedDelegate.error else {
+        guard case .invalidResponse(let paypalDebugID, _, _) = mockedDelegate.error else {
             XCTFail("Expected error invalidResponse")
             return
         }

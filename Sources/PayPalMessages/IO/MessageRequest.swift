@@ -74,28 +74,38 @@ class MessageRequest: MessageRequestable {
         let startingTimestamp = Date()
 
         log(.debug, "fetchMessage URL is \(url)")
+
         fetch(url, headers: headers, session: parameters.environment.urlSession) { data, response, _ in
+            let requestDuration = startingTimestamp.timeIntervalSinceNow
+
             guard let response = response as? HTTPURLResponse else {
                 onCompletion(.failure(.invalidResponse()))
                 return
             }
-            let requestDuration = startingTimestamp.timeIntervalSinceNow
 
-            guard response.statusCode == 200,
-                  let data,
-                  var messageResponse = try? JSONDecoder().decode(
-                    MessageResponse.self,
-                    from: data
-                  ) else {
-                onCompletion(.failure(
-                    .invalidResponse(paypalDebugID: response.paypalDebugID)
-                ))
-                return
+            switch response.statusCode {
+            case 200:
+                guard let data, var messageResponse = try? JSONDecoder().decode(MessageResponse.self, from: data) else {
+                    onCompletion(.failure(.invalidResponse(paypalDebugID: response.paypalDebugID)))
+                    return
+                }
+
+                messageResponse.requestDuration = requestDuration
+
+                onCompletion(.success(messageResponse))
+
+            default:
+                guard let data, let responseError = try? JSONDecoder().decode(ResponseError.self, from: data) else {
+                    onCompletion(.failure(.invalidResponse(paypalDebugID: response.paypalDebugID)))
+                    return
+                }
+
+                onCompletion(.failure(.invalidResponse(
+                    paypalDebugID: responseError.paypalDebugID,
+                    issue: responseError.issue,
+                    description: responseError.description
+                )))
             }
-
-            messageResponse.requestDuration = requestDuration
-
-            onCompletion(.success(messageResponse))
         }
     }
 }
