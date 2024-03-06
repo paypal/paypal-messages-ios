@@ -310,12 +310,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         }
 
         guard let presentingViewController = UIViewController.getPresentingViewController() else {
-            log(.error, "Unable to retrieve presenting view controller")
+            log(.error, "Unable to retrieve presenting view controller", for: environment)
             return
         }
 
         if presentingViewController == self {
-            log(.warn, "Modal is already presenting")
+            log(.warn, "Modal is already presenting", for: environment)
             return
         }
 

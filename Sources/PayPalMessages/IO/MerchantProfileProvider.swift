@@ -69,12 +69,13 @@ class MerchantProfileProvider: MerchantProfileHashGetable {
         ) { [weak self] result in
             switch result {
             case .success(let merchantProfileData):
-                log(.debug, "Merchant Request Hash succeeded with \(merchantProfileData.hash)")
+                log(.debug, "Merchant Request Hash succeeded with \(merchantProfileData.hash)", for: environment)
                 self?.setCachedMerchantProfileData(merchantProfileData, clientID: clientID, merchantID: merchantID)
                 onCompletion(merchantProfileData)
 
             case .failure(let error):
-                log(.debug, "Merchant Request Hash failed with \(error.localizedDescription)")
+                print("merchatProifle 78")
+                log(.debug, "Merchant Request Hash failed with \(error.localizedDescription)", for: environment)
                 onCompletion(nil)
             }
         }

@@ -285,8 +285,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             modal.merchantProfileHash = merchantProfileHash
             modal.setConfig(makeModalConfig())
         }
-
-        log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))")
+        print("messageView")
+        log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))", for: environment)
     }
 
     // MARK: - Message Request Builder

@@ -72,8 +72,8 @@ class MessageRequest: MessageRequestable {
             return
         }
         let startingTimestamp = Date()
-
-        log(.debug, "fetchMessage URL is \(url)")
+        print("messageRequest")
+        log(.debug, "fetchMessage URL is \(url)", for: parameters.environment)
 
         fetch(url, headers: headers, session: parameters.environment.urlSession) { data, response, _ in
             let requestDuration = startingTimestamp.timeIntervalSinceNow

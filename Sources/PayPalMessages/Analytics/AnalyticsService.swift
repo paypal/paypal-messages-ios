@@ -64,7 +64,7 @@ class LogSender: LogSendable {
             .accept: "application/json",
             .contentType: "application/cloudevents+json"
         ]
-
+        print("analytics")
         log(.debug, "log_payload", with: data, for: environment)
 
         fetch(url, method: .post, headers: headers, body: data, session: environment.urlSession) { _, _, _ in }
