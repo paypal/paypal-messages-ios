@@ -176,6 +176,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         guard let safeUrl = url else { return }
 
         loadCompletionHandler = completionHandler
+
         log(.debug, "Load modal webview URL: \(safeUrl)", for: environment)
 
         webView.load(URLRequest(url: safeUrl))
