@@ -74,7 +74,6 @@ class MerchantProfileProvider: MerchantProfileHashGetable {
                 onCompletion(merchantProfileData)
 
             case .failure(let error):
-                print("merchatProifle 78")
                 log(.debug, "Merchant Request Hash failed with \(error.localizedDescription)", for: environment)
                 onCompletion(nil)
             }

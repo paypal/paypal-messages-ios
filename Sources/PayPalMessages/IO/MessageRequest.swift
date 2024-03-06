@@ -72,7 +72,7 @@ class MessageRequest: MessageRequestable {
             return
         }
         let startingTimestamp = Date()
-        print("messageRequest")
+
         log(.debug, "fetchMessage URL is \(url)", for: parameters.environment)
 
         fetch(url, headers: headers, session: parameters.environment.urlSession) { data, response, _ in

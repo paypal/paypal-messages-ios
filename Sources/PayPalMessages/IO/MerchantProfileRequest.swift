@@ -35,7 +35,7 @@ class MerchantProfileRequest: MerchantProfileRequestable {
             onCompletion(.failure(RequestError.invalidClientID))
             return
         }
-        print("merchatProifleReq 72")
+
         log(.debug, "fetcheMerchantProfile URL is \(url)", for: environment)
 
         fetch(url, headers: headers, session: environment.urlSession) { data, _, error in

@@ -205,7 +205,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     func flushUpdates() {
         guard let jsonData = try? JSONEncoder().encode(self.makeConfig()),
               let jsonString = String(data: jsonData, encoding: .utf8) else { return }
-        print("messageModalView 209")
+
         log(.debug, "Update props: \(jsonString)", for: environment)
 
         self.webView.evaluateJavaScript(
@@ -226,11 +226,10 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
               let eventName = json["name"] as? String,
               var eventArgs = json["args"] as? [[String: Any]] else {
-            print("messageModalView 230")
             log(.error, "Unable to parse modal event body", for: environment)
             return
         }
-        print("messageModalView 234")
+
         log(.debug, "Modal event: [\(eventName)] \(eventArgs)", for: environment)
 
         guard !eventArgs.isEmpty else { return }
