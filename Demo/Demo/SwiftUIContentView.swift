@@ -42,7 +42,9 @@ struct SwiftUIContentView: View {
             )
         )
 
-        messageConfig.data.buyerCountry = buyerCountry
+        if !buyerCountry.isEmpty {
+            messageConfig.data.buyerCountry = buyerCountry
+        }
         messageConfig.data.ignoreCache = ignoreCache
 
         return messageConfig

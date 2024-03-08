@@ -1,7 +1,7 @@
 import Foundation
 
 public enum Environment: Equatable {
-    case stage(host: String, devTouchpoint: Bool = false, stageTag: String? = nil)
+    case develop(host: String, devTouchpoint: Bool = false, stageTag: String? = nil)
     case sandbox
     case live
 
@@ -11,8 +11,8 @@ public enum Environment: Equatable {
             return "production"
         case .sandbox:
             return "sandbox"
-        case .stage:
-            return "stage"
+        case .develop:
+            return "develop"
         }
     }
 
@@ -20,7 +20,7 @@ public enum Environment: Equatable {
         switch self {
         case .live, .sandbox:
             return true
-        case .stage:
+        case .develop:
             return false
         }
     }
@@ -29,7 +29,7 @@ public enum Environment: Equatable {
         switch self {
         case .live, .sandbox:
             return URLSession.shared
-        case .stage:
+        case .develop:
             return URLSession(
                 configuration: .default,
                 delegate: DevelopmentSession(),
@@ -41,7 +41,7 @@ public enum Environment: Equatable {
     // swiftlint:disable force_unwrapping
     private var baseURL: URL {
         switch self {
-        case .stage(let host, _, _):
+        case .develop(let host, _, _):
             return URL(string: "https://www.\(host)")!
         case .sandbox:
             return URL(string: "https://www.sandbox.paypal.com")!
@@ -53,7 +53,7 @@ public enum Environment: Equatable {
     // swiftlint:disable force_unwrapping
     private var loggerBaseURL: URL {
         switch self {
-        case .stage(let host, _, _):
+        case .develop(let host, _, _):
             return URL(string: "https://api.\(host)")!
         case .sandbox:
             return URL(string: "https://api.sandbox.paypal.com")!
@@ -83,8 +83,8 @@ public enum Environment: Equatable {
         } else {
             basePath = baseURL
 
-            // Append dev_touchpoint and stage_tag query parameters only for .stage case
-            if case .stage(_, let devTouchpoint, let stageTag) = self {
+            // Append dev_touchpoint and stage_tag query parameters only for .develop case
+            if case .develop(_, let devTouchpoint, let stageTag) = self {
                 if devTouchpoint {
                     queryItems.append(URLQueryItem(name: "dev_touchpoint", value: "\(devTouchpoint)"))
                 }

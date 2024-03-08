@@ -277,7 +277,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         switch environment {
         case .live, .sandbox:
             completionHandler(.performDefaultHandling, nil)
-        case .stage:
+        case .develop:
             guard let serverTrust = challenge.protectionSpace.serverTrust else {
                 return completionHandler(.performDefaultHandling, nil)
             }
