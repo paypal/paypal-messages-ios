@@ -286,7 +286,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             modal.setConfig(makeModalConfig())
         }
 
-        log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))")
+        log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))", for: environment)
     }
 
     // MARK: - Message Request Builder

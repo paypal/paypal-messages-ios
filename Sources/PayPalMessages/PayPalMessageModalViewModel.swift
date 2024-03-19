@@ -177,7 +177,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         loadCompletionHandler = completionHandler
 
-        log(.debug, "Load modal webview URL: \(safeUrl)")
+        log(.debug, "Load modal webview URL: \(safeUrl)", for: environment)
 
         webView.load(URLRequest(url: safeUrl))
     }
@@ -207,7 +207,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         guard let jsonData = try? JSONEncoder().encode(self.makeConfig()),
               let jsonString = String(data: jsonData, encoding: .utf8) else { return }
 
-        log(.debug, "Update props: \(jsonString)")
+        log(.debug, "Update props: \(jsonString)", for: environment)
 
         self.webView.evaluateJavaScript(
             "window.actions.updateProps(\(jsonString))"
@@ -227,11 +227,11 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
               let eventName = json["name"] as? String,
               var eventArgs = json["args"] as? [[String: Any]] else {
-            log(.error, "Unable to parse modal event body")
+            log(.error, "Unable to parse modal event body", for: environment)
             return
         }
 
-        log(.debug, "Modal event: [\(eventName)] \(eventArgs)")
+        log(.debug, "Modal event: [\(eventName)] \(eventArgs)", for: environment)
 
         guard !eventArgs.isEmpty else { return }
 
