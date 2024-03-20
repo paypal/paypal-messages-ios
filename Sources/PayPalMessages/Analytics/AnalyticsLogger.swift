@@ -48,7 +48,7 @@ class AnalyticsLogger: Encodable {
         case amount = "amount"
         case pageType = "page_type"
         case buyerCountryCode = "buyer_country_code"
-        case channel = "channel"
+        case channel = "presentment_channel"
         // Message Only
         case styleLogoType = "style_logo_type"
         case styleColor = "style_color"
@@ -73,9 +73,10 @@ class AnalyticsLogger: Encodable {
 
             try container.encode("message", forKey: .type)
             try container.encodeIfPresent(message.offerType?.rawValue, forKey: .offerType)
-            try container.encodeIfPresent(message.amount, forKey: .amount)
+            try container.encodeIfPresent(message.amount?.description, forKey: .amount)
             try container.encodeIfPresent(message.pageType?.rawValue, forKey: .pageType)
             try container.encodeIfPresent(message.buyerCountry, forKey: .buyerCountryCode)
+            try container.encodeIfPresent(message.channel, forKey: .channel)
             try container.encodeIfPresent(message.logoType.rawValue, forKey: .styleLogoType)
             try container.encodeIfPresent(message.color.rawValue, forKey: .styleColor)
             try container.encodeIfPresent(message.textAlign.rawValue, forKey: .styleTextAlign)
@@ -88,6 +89,7 @@ class AnalyticsLogger: Encodable {
             try container.encodeIfPresent(modal.amount, forKey: .amount)
             try container.encodeIfPresent(modal.pageType?.rawValue, forKey: .pageType)
             try container.encodeIfPresent(modal.buyerCountry, forKey: .buyerCountryCode)
+            try container.encodeIfPresent(modal.channel, forKey: .channel)
         }
     }
 

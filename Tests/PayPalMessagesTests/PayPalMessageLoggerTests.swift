@@ -496,7 +496,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
 
         AnalyticsService.shared.flushEvents()
-        
+
         guard let data = mockSender.calls.last,
               let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return XCTFail("invalid JSON data")

@@ -37,7 +37,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         didSet { queueUpdate(from: oldValue, to: offerType) }
     }
     // Content channel
-    var channel: String? {
+    var channel: String {
         didSet { queueUpdate(from: oldValue, to: channel) }
     }
     // Location within the application
