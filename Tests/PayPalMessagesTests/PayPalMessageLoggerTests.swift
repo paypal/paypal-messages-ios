@@ -92,8 +92,9 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "session_id": "123456789",
                 "components": [
                     [
-                        "amount": 50,
+                        "amount": "50.0",
                         "offer_type": "PAY_LATER_LONG_TERM",
+                        "presentment_channel": "UPSTREAM",
                         "page_type": "product-details",
                         "type": "message",
                         "number_key": 50.5,
@@ -105,8 +106,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
-                                "render_duration": 10,
-                                "request_duration": 15
+                                "render_duration": "10",
+                                "request_duration": "15"
                             ],
                             [
                                 "event_type": "message_clicked",
@@ -166,8 +167,9 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "session_id": "123456789",
                 "components": [
                     [
-                        "amount": 50,
+                        "amount": "50.0",
                         "offer_type": "PAY_LATER_LONG_TERM",
+                        "presentment_channel": "UPSTREAM",
                         "page_type": "product-details",
                         "type": "modal",
                         "number_key": 50.5,
@@ -236,8 +238,9 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "session_id": "123456789",
                 "components": [
                     [
-                        "amount": 50,
+                        "amount": "50.0",
                         "offer_type": "PAY_LATER_LONG_TERM",
+                        "presentment_channel": "UPSTREAM",
                         "page_type": "product-details",
                         "type": "message",
                         "string_key": "hello",
@@ -247,14 +250,15 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
-                                "render_duration": 10,
-                                "request_duration": 15
+                                "render_duration": "10",
+                                "request_duration": "15"
                             ]
                         ]
                     ],
                     [
-                        "amount": 50,
+                        "amount": "50.0",
                         "offer_type": "PAY_LATER_LONG_TERM",
+                        "presentment_channel": "UPSTREAM",
                         "page_type": "product-details",
                         "type": "modal",
                         "string_key": "world",
@@ -305,8 +309,9 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "session_id": "123456789",
                 "components": [
                     [
-                        "amount": 50,
+                        "amount": "50.0",
                         "offer_type": "PAY_LATER_LONG_TERM",
+                        "presentment_channel": "UPSTREAM",
                         "page_type": "product-details",
                         "type": "message",
                         "style_logo_type": "inline",
@@ -315,8 +320,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
-                                "render_duration": 10,
-                                "request_duration": 15
+                                "render_duration": "10",
+                                "request_duration": "15"
                             ]
                         ]
                     ]
@@ -363,8 +368,9 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "session_id": "123456789",
                 "components": [
                     [
-                        "amount": 50,
+                        "amount": "50.0",
                         "offer_type": "PAY_LATER_LONG_TERM",
+                        "presentment_channel": "UPSTREAM",
                         "page_type": "product-details",
                         "type": "message",
                         "style_logo_type": "inline",
@@ -430,8 +436,9 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "session_id": "123456789",
                 "components": [
                     [
-                        "amount": 100,
+                        "amount": "100.0",
                         "offer_type": "PAY_LATER_LONG_TERM",
+                        "presentment_channel": "UPSTREAM",
                         "page_type": "product-details",
                         "type": "message",
                         "style_logo_type": "inline",
@@ -440,8 +447,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
-                                "render_duration": 10,
-                                "request_duration": 15
+                                "render_duration": "10",
+                                "request_duration": "15"
                             ]
                         ]
                     ]
