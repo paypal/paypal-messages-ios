@@ -5,4 +5,6 @@ public enum BuildInfo {
     public internal(set) static var version: String = "1.0.0-prerelease.6"
     /// Message rendering environment
     public static let integrationType: String = "NATIVE_IOS"
+    /// Default message content channel
+    public static let channel: String = "UPSTREAM"
 }

@@ -39,7 +39,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // Content channel
     @Proxy(\.viewModel.channel)
-    var channel: String?
+    var channel: String
 
     // Location within the application
     @Proxy(\.viewModel.pageType)

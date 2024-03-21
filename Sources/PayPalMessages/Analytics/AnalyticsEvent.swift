@@ -22,8 +22,8 @@ enum AnalyticsEvent: Encodable {
             var container = encoder.container(keyedBy: StaticKey.self)
 
             try container.encode("message_rendered", forKey: .eventType)
-            try container.encode(renderDuration, forKey: .renderDuration)
-            try container.encode(requestDuration, forKey: .requestDuration)
+            try container.encode(renderDuration.description, forKey: .renderDuration)
+            try container.encode(requestDuration.description, forKey: .requestDuration)
 
         case let .messageClick(linkName, linkSrc):
             var container = encoder.container(keyedBy: StaticKey.self)

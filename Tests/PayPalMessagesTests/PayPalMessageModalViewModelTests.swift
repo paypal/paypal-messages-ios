@@ -94,7 +94,14 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertTrue(webView.evaluateJavaScriptCalled)
 
-        let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":200,\"offer\":\"PAY_LATER_SHORT_TERM\"}"
+        let expectedJSONString = """
+        {
+            "client_id": "testclientid",
+            "amount": 200,
+            "offer": "PAY_LATER_SHORT_TERM",
+            "channel": "UPSTREAM"
+        }
+        """
 
         guard let actualJSONString = webView.evaluateJavaScriptString else {
             XCTFail("Failed to get JavaScript string")
@@ -135,7 +142,14 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         viewModel.flushUpdates()
 
-        let expectedJSONString = "{\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"}"
+        let expectedJSONString = """
+        {
+            "client_id": "testclientid",
+            "amount": 300,
+            "offer": "PAYPAL_CREDIT_NO_INTEREST",
+            "channel": "UPSTREAM"
+        }
+        """
 
         guard let actualJSONString = webView.evaluateJavaScriptString else {
             XCTFail("Failed to get JavaScript string")

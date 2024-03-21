@@ -48,7 +48,7 @@ class PayPalMessageRequestMock: MessageRequestable {
         }
 
         if case .success(messageResponse: let messageResponse) = scenario, let messageResponse {
-           return messageResponse
+            return messageResponse
         }
 
         return MessageResponse(

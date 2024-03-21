@@ -60,7 +60,6 @@ class LogSender: LogSendable {
         guard let url = environment.url(.log) else { return }
         let headers: [HTTPHeader: String] = [
             .acceptLanguage: "en_US",
-            .requestedBy: "native-checkout-sdk",
             .accept: "application/json",
             .contentType: "application/cloudevents+json"
         ]

@@ -43,6 +43,9 @@ public final class PayPalMessageView: UIControl {
     @Proxy(\.viewModel.buyerCountry)
     public var buyerCountry: String?
 
+    @Proxy(\.viewModel.channel)
+    public var channel: String
+
     /// Read-write property that holds the message's logo style.
     @Proxy(\.viewModel.logoType)
     public var logoType: PayPalMessageLogoType

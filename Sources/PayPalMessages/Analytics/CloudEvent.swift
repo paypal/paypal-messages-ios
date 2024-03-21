@@ -81,10 +81,7 @@ class CloudEvent: Encodable {
         partnerAttributionID: String?,
         merchantProfileHash: String?
     ) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-
-        self.time = dateFormatter.string(from: Date())
+        self.time = ISO8601DateFormatter().string(from: Date())
         self.id = UUID().uuidString
         self.loggers = [logger]
         self.environment = environment
