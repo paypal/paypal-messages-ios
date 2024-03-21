@@ -86,7 +86,7 @@ class AnalyticsLogger: Encodable {
 
             try container.encode("modal", forKey: .type)
             try container.encodeIfPresent(modal.offerType?.rawValue, forKey: .offerType)
-            try container.encodeIfPresent(modal.amount, forKey: .amount)
+            try container.encodeIfPresent(modal.amount?.description, forKey: .amount)
             try container.encodeIfPresent(modal.pageType?.rawValue, forKey: .pageType)
             try container.encodeIfPresent(modal.buyerCountry, forKey: .buyerCountryCode)
             try container.encodeIfPresent(modal.channel, forKey: .channel)
