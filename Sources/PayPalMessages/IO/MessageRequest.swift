@@ -52,8 +52,6 @@ class MessageRequest: MessageRequestable {
             "version": BuildInfo.version,
             "integration_type": BuildInfo.integrationType,
             "integration_version": AnalyticsLogger.integrationVersion,
-            "device_id": AnalyticsLogger.deviceID,
-            "session_id": AnalyticsLogger.sessionID
         ].filter {
             guard let value = $0.value else { return false }
 
