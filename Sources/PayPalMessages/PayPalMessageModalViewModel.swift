@@ -41,8 +41,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         didSet { queueUpdate(from: oldValue, to: channel) }
     }
     // Location within the application
-    var placement: PayPalMessagePlacement? {
-        didSet { queueUpdate(from: oldValue, to: placement) }
+    var pageType: PayPalMessagePageType? {
+        didSet { queueUpdate(from: oldValue, to: pageType) }
     }
     // Skip Juno cache
     var ignoreCache: Bool? { // swiftlint:disable:this discouraged_optional_boolean
@@ -68,7 +68,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             "buyer_country": buyerCountry,
             "offer": offerType?.rawValue,
             "channel": channel,
-            "placement": placement?.rawValue,
+            "page_type": pageType?.rawValue,
             "version": BuildInfo.version,
             "integration_type": BuildInfo.integrationType,
             "integration_identifier": integrationIdentifier,
@@ -119,7 +119,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
         channel = config.data.channel
-        placement = config.data.placement
+        pageType = config.data.pageType
         ignoreCache = config.data.ignoreCache
 
         self.webView = webView
@@ -149,7 +149,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
         channel = config.data.channel
-        placement = config.data.placement
+        pageType = config.data.pageType
         ignoreCache = config.data.ignoreCache
     }
 
@@ -158,7 +158,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             clientID: self.clientID,
             environment: self.environment,
             amount: self.amount,
-            placement: self.placement,
+            pageType: self.pageType,
             offerType: self.offerType
         ))
 
@@ -177,7 +177,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         loadCompletionHandler = completionHandler
 
-        log(.debug, "Load modal webview URL: \(safeUrl)")
+        log(.debug, "Load modal webview URL: \(safeUrl)", for: environment)
 
         webView.load(URLRequest(url: safeUrl))
     }
@@ -207,14 +207,14 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         guard let jsonData = try? JSONEncoder().encode(self.makeConfig()),
               let jsonString = String(data: jsonData, encoding: .utf8) else { return }
 
-        log(.debug, "Update props: \(jsonString)")
+        log(.debug, "Update props: \(jsonString)", for: environment)
 
         self.webView.evaluateJavaScript(
             "window.actions.updateProps(\(jsonString))"
         ) { _, _ in
             // TODO: Does the JS error text get returned here?
         }
-        
+
         queuedTimer?.invalidate()
     }
 
@@ -227,11 +227,11 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
               let eventName = json["name"] as? String,
               var eventArgs = json["args"] as? [[String: Any]] else {
-            log(.error, "Unable to parse modal event body")
+            log(.error, "Unable to parse modal event body", for: environment)
             return
         }
 
-        log(.debug, "Modal event: [\(eventName)] \(eventArgs)")
+        log(.debug, "Modal event: [\(eventName)] \(eventArgs)", for: environment)
 
         guard !eventArgs.isEmpty else { return }
 
@@ -277,7 +277,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         switch environment {
         case .live, .sandbox:
             completionHandler(.performDefaultHandling, nil)
-        case .stage:
+        case .develop:
             guard let serverTrust = challenge.protectionSpace.serverTrust else {
                 return completionHandler(.performDefaultHandling, nil)
             }

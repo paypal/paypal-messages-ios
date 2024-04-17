@@ -14,11 +14,12 @@ final class PayPalMessageLogoTests: XCTestCase {
     ) {
         let resultParameter = paramsBuilder.makeParameters(
             message: "",
+            messageAlternative: nil,
             offerType: PayPalMessageResponseOfferType.payLaterShortTerm,
             linkDescription: "",
             logoPlaceholder: "",
             logoType: logoType,
-            payPalAlignment: .left,
+            payPalAlign: .left,
             payPalColor: color,
             productGroup: productGroup
         )
@@ -262,11 +263,12 @@ final class PayPalMessageLogoTests: XCTestCase {
             for productGroup in allProductGroups {
                 let resultParameter = paramsBuilder.makeParameters(
                     message: "",
+                    messageAlternative: nil,
                     offerType: PayPalMessageResponseOfferType.payLaterShortTerm,
                     linkDescription: "",
                     logoPlaceholder: "",
                     logoType: .none,
-                    payPalAlignment: .left,
+                    payPalAlign: .left,
                     payPalColor: color,
                     productGroup: productGroup
                 )

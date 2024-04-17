@@ -43,7 +43,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
                 clientID: "testclientid",
                 environment: .live,
                 amount: 100.0,
-                placement: .home,
+                pageType: .home,
                 offerType: .payLaterLongTerm
             )
         )
@@ -57,7 +57,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.clientID, "testclientid")
         XCTAssertEqual(viewModel.amount, 100.0)
-        XCTAssertEqual(viewModel.placement, .home)
+        XCTAssertEqual(viewModel.pageType, .home)
         XCTAssertEqual(viewModel.offerType, .payLaterLongTerm)
         XCTAssertEqual(viewModel.buyerCountry, "US")
         XCTAssertEqual(viewModel.channel, "TEST")

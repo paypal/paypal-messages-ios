@@ -36,7 +36,7 @@ class MerchantProfileRequest: MerchantProfileRequestable {
             return
         }
 
-        log(.debug, "fetcheMerchantProfile URL is \(url)")
+        log(.debug, "fetcheMerchantProfile URL is \(url)", for: environment)
 
         fetch(url, headers: headers, session: environment.urlSession) { data, _, error in
             guard let data = data, error == nil else {

@@ -6,7 +6,7 @@ class EnvironmentTests: XCTestCase {
 
     // Test rawValue correctness
     func testRawValues() {
-        XCTAssertEqual(Environment.stage(host: "testhost").rawValue, "stage")
+        XCTAssertEqual(Environment.develop(host: "testhost").rawValue, "develop")
         XCTAssertEqual(Environment.sandbox.rawValue, "sandbox")
         XCTAssertEqual(Environment.live.rawValue, "production")
     }
@@ -15,12 +15,12 @@ class EnvironmentTests: XCTestCase {
     func testEnvironmentSetting() {
         XCTAssertTrue(Environment.live.isProduction)
         XCTAssertTrue(Environment.sandbox.isProduction)
-        XCTAssertFalse(Environment.stage(host: "testhost").isProduction)
+        XCTAssertFalse(Environment.develop(host: "testhost").isProduction)
     }
 
     // Test URL construction
     func testURLConstruction() {
-        let stageURL = Environment.stage(host: "testhost").url(.modal, ["param": "value"])
+        let stageURL = Environment.develop(host: "testhost").url(.modal, ["param": "value"])
         XCTAssertEqual(stageURL?.absoluteString, "https://www.testhost/credit-presentment/lander/modal?param=value")
 
         let sandboxURL = Environment.sandbox.url(.merchantProfile)

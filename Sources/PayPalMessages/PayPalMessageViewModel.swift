@@ -39,8 +39,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     }
 
     /// Changing its value will cause the message content being refetched only if an update is detected.
-    var placement: PayPalMessagePlacement? {
-        didSet { queueUpdate(from: oldValue, to: placement) }
+    var pageType: PayPalMessagePageType? {
+        didSet { queueUpdate(from: oldValue, to: pageType) }
     }
 
     /// Changing its value will cause the message content being refetched only if an update is detected.
@@ -69,8 +69,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     }
 
     /// Changing its value will not cause the message content being refetched. It will only trigger an UI update.
-    var alignment: PayPalMessageTextAlignment {
-        didSet { queueUpdate(from: oldValue, to: alignment, requiresFetch: false) }
+    var textAlign: PayPalMessageTextAlign {
+        didSet { queueUpdate(from: oldValue, to: textAlign, requiresFetch: false) }
     }
 
     var ignoreCache: Bool {
@@ -111,9 +111,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private let merchantProfileProvider: MerchantProfileHashGetable
 
     /// modal instance attached to the message
-    private lazy var modal: PayPalMessageModal = {
-        PayPalMessageModal(config: makeModalConfig(), eventDelegate: self)
-    }()
+    private var modal: PayPalMessageModal?
 
     /// Tracking logger
     private let logger: AnalyticsLogger
@@ -134,12 +132,12 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.partnerAttributionID = config.data.partnerAttributionID
         self.environment = config.data.environment
         self.amount = config.data.amount
-        self.placement = config.data.placement
+        self.pageType = config.data.pageType
         self.offerType = config.data.offerType
         self.buyerCountry = config.data.buyerCountry
         self.color = config.style.color
         self.logoType = config.style.logoType
-        self.alignment = config.style.textAlignment
+        self.textAlign = config.style.textAlign
         self.ignoreCache = config.data.ignoreCache
 
         self.requester = requester
@@ -159,12 +157,12 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private func updateConfig(_ config: PayPalMessageConfig) {
         self.clientID = config.data.clientID
         self.amount = config.data.amount
-        self.placement = config.data.placement
+        self.pageType = config.data.pageType
         self.offerType = config.data.offerType
         self.buyerCountry = config.data.buyerCountry
         self.color = config.style.color
         self.logoType = config.style.logoType
-        self.alignment = config.style.textAlignment
+        self.textAlign = config.style.textAlign
         self.ignoreCache = config.data.ignoreCache
     }
 
@@ -228,7 +226,6 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             guard let self else { return }
 
             self.merchantProfileHash = profileHash
-            modal.merchantProfileHash = profileHash
 
             let parameters = self.makeRequestParameters()
 
@@ -284,9 +281,12 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         // Enable the tap gesture
         isMessageViewInteractive = true
 
-        modal.setConfig(makeModalConfig())
+        if let modal {
+            modal.merchantProfileHash = merchantProfileHash
+            modal.setConfig(makeModalConfig())
+        }
 
-        log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))")
+        log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))", for: environment)
     }
 
     // MARK: - Message Request Builder
@@ -299,7 +299,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             partnerAttributionID: partnerAttributionID,
             logoType: logoType,
             buyerCountry: buyerCountry,
-            placement: placement,
+            pageType: pageType,
             amount: amount,
             offerType: offerType,
             merchantProfileHash: merchantProfileHash,
@@ -316,11 +316,12 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         return parameterBuilder
             .makeParameters(
                 message: response.defaultMainContent,
+                messageAlternative: response.defaultMainAlternative,
                 offerType: response.offerType,
                 linkDescription: response.defaultDisclaimer,
                 logoPlaceholder: response.logoPlaceholder,
                 logoType: logoType,
-                payPalAlignment: alignment,
+                payPalAlign: textAlign,
                 payPalColor: color,
                 productGroup: response.productGroup
             )
@@ -334,13 +335,13 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
                 clientID: clientID,
                 environment: environment,
                 amount: amount,
-                placement: placement,
+                pageType: pageType,
                 offerType: offerType
             ),
             style: .init(
                 logoType: logoType,
                 color: color,
-                textAlignment: alignment
+                textAlign: textAlign
             )
         )
         config.data.merchantID = merchantID
@@ -367,7 +368,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             availableWidth: messageResponse?.modalCloseButtonAvailWidth,
             availableHeight: messageResponse?.modalCloseButtonAvailHeight,
             color: color,
-            colorType: messageResponse?.modalCloseButtonColorType
+            colorType: messageResponse?.modalCloseButtonColorType,
+            alternativeText: messageResponse?.modalCloseButtonAlternativeText
         )
 
         let config = PayPalMessageModalConfig(
@@ -375,7 +377,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
                 clientID: clientID,
                 environment: environment,
                 amount: amount,
-                placement: placement,
+                pageType: pageType,
                 offerType: offerType,
                 modalCloseButton: modalCloseButton
             )
@@ -406,7 +408,14 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             linkSrc: "learn_more"
         ))
 
-        modal.show()
+        if modal == nil {
+            modal = PayPalMessageModal(config: makeModalConfig(), eventDelegate: self)
+        }
+
+        if let modal {
+            modal.merchantProfileHash = merchantProfileHash
+            modal.show()
+        }
     }
 
     // MARK: Modal Event Delegate Functions

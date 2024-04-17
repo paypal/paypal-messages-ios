@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 class Weak<T: AnyObject> {
 
@@ -12,8 +13,8 @@ class Weak<T: AnyObject> {
 class AnalyticsLogger: Encodable {
 
     // Global Details
-    static var deviceID: String?
-    static var sessionID: String?
+    static var deviceID: String? = UIDevice.current.identifierForVendor?.uuidString
+    static var sessionID: String = UUID().uuidString
     static var integrationVersion: String?
     static var integrationName: String?
 
@@ -45,7 +46,7 @@ class AnalyticsLogger: Encodable {
         // Integration Details
         case offerType = "offer_type"
         case amount = "amount"
-        case placement = "placement"
+        case pageType = "page_type"
         case buyerCountryCode = "buyer_country_code"
         case channel = "channel"
         // Message Only
@@ -73,11 +74,11 @@ class AnalyticsLogger: Encodable {
             try container.encode("message", forKey: .type)
             try container.encodeIfPresent(message.offerType?.rawValue, forKey: .offerType)
             try container.encodeIfPresent(message.amount, forKey: .amount)
-            try container.encodeIfPresent(message.placement?.rawValue, forKey: .placement)
+            try container.encodeIfPresent(message.pageType?.rawValue, forKey: .pageType)
             try container.encodeIfPresent(message.buyerCountry, forKey: .buyerCountryCode)
             try container.encodeIfPresent(message.logoType.rawValue, forKey: .styleLogoType)
             try container.encodeIfPresent(message.color.rawValue, forKey: .styleColor)
-            try container.encodeIfPresent(message.alignment.rawValue, forKey: .styleTextAlign)
+            try container.encodeIfPresent(message.textAlign.rawValue, forKey: .styleTextAlign)
 
         case .modal(let weakModal):
             guard let modal = weakModal.value else { return }
@@ -85,7 +86,7 @@ class AnalyticsLogger: Encodable {
             try container.encode("modal", forKey: .type)
             try container.encodeIfPresent(modal.offerType?.rawValue, forKey: .offerType)
             try container.encodeIfPresent(modal.amount, forKey: .amount)
-            try container.encodeIfPresent(modal.placement?.rawValue, forKey: .placement)
+            try container.encodeIfPresent(modal.pageType?.rawValue, forKey: .pageType)
             try container.encodeIfPresent(modal.buyerCountry, forKey: .buyerCountryCode)
         }
     }

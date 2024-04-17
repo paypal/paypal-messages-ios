@@ -42,8 +42,8 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     var channel: String?
 
     // Location within the application
-    @Proxy(\.viewModel.placement)
-    var placement: PayPalMessagePlacement?
+    @Proxy(\.viewModel.pageType)
+    var pageType: PayPalMessagePageType?
 
     // Skip Juno cache
     @Proxy(\.viewModel.ignoreCache)
@@ -259,7 +259,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.isAccessibilityElement = true
-        closeButton.accessibilityLabel = "PayPal Learn More Modal Close"
+        closeButton.accessibilityLabel = modalCloseButtonConfig.alternativeText
 
         view.addSubview(closeButton)
 
@@ -310,12 +310,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         }
 
         guard let presentingViewController = UIViewController.getPresentingViewController() else {
-            log(.error, "Unable to retrieve presenting view controller")
+            log(.error, "Unable to retrieve presenting view controller", for: environment)
             return
         }
 
         if presentingViewController == self {
-            log(.warn, "Modal is already presenting")
+            log(.warn, "Modal is already presenting", for: environment)
             return
         }
 

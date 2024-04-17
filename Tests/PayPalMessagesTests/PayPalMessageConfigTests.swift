@@ -39,7 +39,7 @@ func testSetGlobalAnalyticsWithDefaults() {
 func testStandardIntegrationInitialization() {
     let clientID = "Client123"
     let amount = 100.0
-    let placement = PayPalMessagePlacement.home
+    let pageType = PayPalMessagePageType.home
     let offerType = PayPalMessageOfferType.payLaterShortTerm
     let environment = Environment.sandbox
 
@@ -47,22 +47,22 @@ func testStandardIntegrationInitialization() {
         clientID: clientID,
         environment: environment,
         amount: amount,
-        placement: placement,
+        pageType: pageType,
         offerType: offerType
     )
 
-    let style = PayPalMessageStyle(logoType: .inline, color: .black, textAlignment: .right)
+    let style = PayPalMessageStyle(logoType: .inline, color: .black, textAlign: .right)
     let config = PayPalMessageConfig(data: data, style: style)
 
     XCTAssertEqual(config.data.clientID, clientID)
     XCTAssertEqual(config.data.amount, amount)
-    XCTAssertEqual(config.data.placement, placement)
+    XCTAssertEqual(config.data.pageType, pageType)
     XCTAssertEqual(config.data.offerType, offerType)
     XCTAssertEqual(config.data.environment, environment)
 
     XCTAssertEqual(config.style.logoType, .inline)
     XCTAssertEqual(config.style.color, .black)
-    XCTAssertEqual(config.style.textAlignment, .right)
+    XCTAssertEqual(config.style.textAlign, .right)
 }
 
 func testPartnerIntegrationInitialization() {
@@ -70,7 +70,7 @@ func testPartnerIntegrationInitialization() {
     let merchantID = "Merchant456"
     let partnerAttributionID = "Partner789"
     let amount = 100.0
-    let placement = PayPalMessagePlacement.home
+    let pageType = PayPalMessagePageType.home
     let offerType = PayPalMessageOfferType.payLaterShortTerm
     let environment = Environment.sandbox
 
@@ -80,22 +80,22 @@ func testPartnerIntegrationInitialization() {
         environment: environment,
         partnerAttributionID: partnerAttributionID,
         amount: amount,
-        placement: placement,
+        pageType: pageType,
         offerType: offerType
     )
 
-    let style = PayPalMessageStyle(logoType: .inline, color: .black, textAlignment: .right)
+    let style = PayPalMessageStyle(logoType: .inline, color: .black, textAlign: .right)
     let config = PayPalMessageConfig(data: data, style: style)
 
     XCTAssertEqual(config.data.clientID, clientID)
     XCTAssertEqual(config.data.merchantID, merchantID)
     XCTAssertEqual(config.data.partnerAttributionID, partnerAttributionID)
     XCTAssertEqual(config.data.amount, amount)
-    XCTAssertEqual(config.data.placement, placement)
+    XCTAssertEqual(config.data.pageType, pageType)
     XCTAssertEqual(config.data.offerType, offerType)
     XCTAssertEqual(config.data.environment, environment)
 
     XCTAssertEqual(config.style.logoType, .inline)
     XCTAssertEqual(config.style.color, .black)
-    XCTAssertEqual(config.style.textAlignment, .right)
+    XCTAssertEqual(config.style.textAlign, .right)
 }

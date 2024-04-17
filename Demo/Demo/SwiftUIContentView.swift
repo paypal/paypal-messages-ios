@@ -9,11 +9,11 @@ struct SwiftUIContentView: View {
 
     @State private var logoType: PayPalMessageLogoType = defaultMessageConfig.style.logoType
     @State private var messageColor: PayPalMessageColor = defaultMessageConfig.style.color
-    @State private var textAlignment: PayPalMessageTextAlignment = defaultMessageConfig.style.textAlignment
+    @State private var textAlign: PayPalMessageTextAlign = defaultMessageConfig.style.textAlign
 
     @State private var clientID: String = defaultMessageConfig.data.clientID
     @State private var amount: Double? = defaultMessageConfig.data.amount
-    @State private var placement: PayPalMessagePlacement? = defaultMessageConfig.data.placement
+    @State private var pageType: PayPalMessagePageType? = defaultMessageConfig.data.pageType
     @State private var offerType: PayPalMessageOfferType? = defaultMessageConfig.data.offerType
     @State private var buyerCountry: String = defaultMessageConfig.data.buyerCountry ?? ""
     @State private var ignoreCache: Bool = defaultMessageConfig.data.ignoreCache
@@ -32,17 +32,19 @@ struct SwiftUIContentView: View {
                 clientID: clientID,
                 environment: defaultMessageConfig.data.environment,
                 amount: amount,
-                placement: placement,
+                pageType: pageType,
                 offerType: offerType
             ),
             style: .init(
                 logoType: logoType,
                 color: messageColor,
-                textAlignment: textAlignment
+                textAlign: textAlign
             )
         )
 
-        messageConfig.data.buyerCountry = buyerCountry
+        if !buyerCountry.isEmpty {
+            messageConfig.data.buyerCountry = buyerCountry
+        }
         messageConfig.data.ignoreCache = ignoreCache
 
         return messageConfig
@@ -98,8 +100,8 @@ struct SwiftUIContentView: View {
                     }
 
                 // Text Alignment
-                ReusablePicker(options: PayPalMessageTextAlignment.allCases, selectedOption: $textAlignment)
-                    .onChange(of: textAlignment) { _ in
+                ReusablePicker(options: PayPalMessageTextAlign.allCases, selectedOption: $textAlign)
+                    .onChange(of: textAlign) { _ in
                         debounceConfigUpdate()
                     }
             }
@@ -190,7 +192,7 @@ struct SwiftUIContentView: View {
 
         logoType = defaultStyle.logoType
         messageColor = defaultStyle.color
-        textAlignment = defaultStyle.textAlignment
+        textAlign = defaultStyle.textAlign
         offerType = defaultData.offerType
         amount = defaultData.amount
         buyerCountry = defaultData.buyerCountry ?? ""

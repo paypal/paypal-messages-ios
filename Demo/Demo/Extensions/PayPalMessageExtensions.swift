@@ -4,7 +4,7 @@ import PayPalMessages
 // MARK: - Enum Displaying Helpers
 typealias PayPalMessageEnumType = CaseIterable & CustomStringConvertible & Equatable
 
-extension PayPalMessageTextAlignment: CustomStringConvertible {
+extension PayPalMessageTextAlign: CustomStringConvertible {
 
     public var description: String {
         switch self {
