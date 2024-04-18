@@ -101,15 +101,11 @@ class PayPalMessageModalConfig: NSObject, Encodable {
 
     public static func setGlobalAnalytics(
         integrationName: String,
-        integrationVersion: String,
-        deviceID: String? = nil,
-        sessionID: String? = nil
+        integrationVersion: String
     ) {
         PayPalMessageConfig.setGlobalAnalytics(
             integrationName: integrationName,
-            integrationVersion: integrationVersion,
-            deviceID: deviceID,
-            sessionID: sessionID
+            integrationVersion: integrationVersion
         )
     }
 

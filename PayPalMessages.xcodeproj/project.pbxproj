@@ -11,6 +11,7 @@
 		C61D84472B33348C00F372EF /* CloudEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61D84462B33348C00F372EF /* CloudEvent.swift */; };
 		C62FF8232B742C9400890823 /* ResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62FF8222B742C9400890823 /* ResponseError.swift */; };
 		C62FF8252B74315B00890823 /* ResponseErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62FF8242B74315B00890823 /* ResponseErrorTests.swift */; };
+		C62FF8272B852E4000890823 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C62FF8262B852E4000890823 /* PrivacyInfo.xcprivacy */; };
 		C635F4362A9645B10096F9FF /* PayPalMessages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C635F42E2A9645B10096F9FF /* PayPalMessages.framework */; };
 		C635F4C12A964A020096F9FF /* PayPalMessageModalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F48E2A964A020096F9FF /* PayPalMessageModalViewModel.swift */; };
 		C635F4C32A964A020096F9FF /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4912A964A020096F9FF /* AnalyticsEvent.swift */; };
@@ -91,6 +92,7 @@
 		C61D84462B33348C00F372EF /* CloudEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudEvent.swift; sourceTree = "<group>"; };
 		C62FF8222B742C9400890823 /* ResponseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseError.swift; sourceTree = "<group>"; };
 		C62FF8242B74315B00890823 /* ResponseErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseErrorTests.swift; sourceTree = "<group>"; };
+		C62FF8262B852E4000890823 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C635F42E2A9645B10096F9FF /* PayPalMessages.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PayPalMessages.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C635F4352A9645B10096F9FF /* PayPalMessagesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PayPalMessagesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C635F48E2A964A020096F9FF /* PayPalMessageModalViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageModalViewModel.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				C635F4AC2A964A020096F9FF /* Utils */,
 				C635F4BE2A964A020096F9FF /* Views */,
 				C635F4AB2A964A020096F9FF /* Assets.xcassets */,
+				C62FF8262B852E4000890823 /* PrivacyInfo.xcprivacy */,
 				C635F4C02A964A020096F9FF /* PayPalMessageModal.swift */,
 				C635F48E2A964A020096F9FF /* PayPalMessageModalViewModel.swift */,
 				C635F4982A964A020096F9FF /* PayPalMessageView.swift */,
@@ -460,6 +463,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C62FF8272B852E4000890823 /* PrivacyInfo.xcprivacy in Resources */,
 				C635F4DA2A964A020096F9FF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -5,35 +5,14 @@ import XCTest
 func testSetGlobalAnalytics() {
     let integrationName = "MyIntegration"
     let integrationVersion = "1.0"
-    let deviceID = "Device123"
-    let sessionID = "Session456"
 
     PayPalMessageModalConfig.setGlobalAnalytics(
-        integrationName: integrationName,
-        integrationVersion: integrationVersion,
-        deviceID: deviceID,
-        sessionID: sessionID
-    )
-
-    XCTAssertEqual(AnalyticsLogger.integrationName, integrationName)
-    XCTAssertEqual(AnalyticsLogger.integrationVersion, integrationVersion)
-    XCTAssertEqual(AnalyticsLogger.deviceID, deviceID)
-    XCTAssertEqual(AnalyticsLogger.sessionID, sessionID)
-}
-
-func testSetGlobalAnalyticsWithDefaults() {
-    let integrationName = "MyIntegration"
-    let integrationVersion = "1.0"
-
-    PayPalMessageConfig.setGlobalAnalytics(
         integrationName: integrationName,
         integrationVersion: integrationVersion
     )
 
     XCTAssertEqual(AnalyticsLogger.integrationName, integrationName)
     XCTAssertEqual(AnalyticsLogger.integrationVersion, integrationVersion)
-    XCTAssertNil(AnalyticsLogger.deviceID)
-    XCTAssertNil(AnalyticsLogger.sessionID)
 }
 
 func testStandardIntegrationInitialization() {
