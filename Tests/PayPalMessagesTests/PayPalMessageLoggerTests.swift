@@ -43,9 +43,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
 
         PayPalMessageConfig.setGlobalAnalytics(
             integrationName: "Test_SDK",
-            integrationVersion: "0.1.0",
-            deviceID: "987654321",
-            sessionID: "123456789"
+            integrationVersion: "0.1.0"
         )
 
         // Inject mock sender to intercept log requests
@@ -88,8 +86,6 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "client_id": "testloggerclientid",
                 "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
-                "device_id": "987654321",
-                "session_id": "123456789",
                 "components": [
                     [
                         "amount": "50.0",
@@ -163,8 +159,6 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "integration_type": "NATIVE_IOS",
                 "client_id": "testloggerclientid",
                 "integration_version": "0.1.0",
-                "device_id": "987654321",
-                "session_id": "123456789",
                 "components": [
                     [
                         "amount": "50.0",
@@ -234,8 +228,6 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "client_id": "testloggerclientid",
                 "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
-                "device_id": "987654321",
-                "session_id": "123456789",
                 "components": [
                     [
                         "amount": "50.0",
@@ -305,8 +297,6 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "client_id": "testloggerclientid",
                 "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
-                "device_id": "987654321",
-                "session_id": "123456789",
                 "components": [
                     [
                         "amount": "50.0",
@@ -364,8 +354,6 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "client_id": "testloggerclientid",
                 "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
-                "device_id": "987654321",
-                "session_id": "123456789",
                 "components": [
                     [
                         "amount": "50.0",
@@ -432,8 +420,6 @@ final class PayPalMessageLoggerTests: XCTestCase {
                 "client_id": "testloggerclientid2",
                 "merchant_profile_hash": "TEST_HASH",
                 "integration_version": "0.1.0",
-                "device_id": "987654321",
-                "session_id": "123456789",
                 "components": [
                     [
                         "amount": "100.0",
@@ -490,34 +476,6 @@ final class PayPalMessageLoggerTests: XCTestCase {
         XCTAssert(clientID1 != clientID2)
         XCTAssert(clientID1 == "testloggerclientid2" || clientID2 == "testloggerclientid2")
         XCTAssert(clientID1 == "testloggerclientid3" || clientID2 == "testloggerclientid3")
-    }
-
-    func testNilDeviceIDDoesNotOverwrite() {
-        PayPalMessageConfig.setGlobalAnalytics(
-            integrationName: "Test_SDK",
-            integrationVersion: "0.1.0"
-        )
-
-        let messageLogger = AnalyticsLogger(.message(Weak(message)))
-
-        messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
-
-        AnalyticsService.shared.flushEvents()
-
-        guard let data = mockSender.calls.last,
-              let data = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            return XCTFail("invalid JSON data")
-        }
-
-        guard let deviceID = (data["data"] as? [String: Any])?["device_id"] as? String else {
-            return XCTFail("missing device_id")
-        }
-        guard let sessionID = (data["data"] as? [String: Any])?["session_id"] as? String else {
-            return XCTFail("missing session_id")
-        }
-
-        XCTAssert(deviceID == "987654321")
-        XCTAssert(sessionID == "123456789")
     }
 
     // MARK: - Helper assert functions

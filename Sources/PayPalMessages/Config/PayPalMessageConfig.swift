@@ -105,19 +105,9 @@ public class PayPalMessageConfig: NSObject {
 
     public static func setGlobalAnalytics(
         integrationName: String,
-        integrationVersion: String,
-        deviceID: String? = nil,
-        sessionID: String? = nil
+        integrationVersion: String
     ) {
         AnalyticsLogger.integrationName = integrationName
         AnalyticsLogger.integrationVersion = integrationVersion
-
-        if let deviceID {
-            AnalyticsLogger.deviceID = deviceID
-        }
-
-        if let sessionID {
-            AnalyticsLogger.sessionID = sessionID
-        }
     }
 }

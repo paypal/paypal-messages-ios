@@ -105,8 +105,6 @@ class CloudEvent: Encodable {
 
         var dataContainer = container.nestedContainer(keyedBy: IntegrationKey.self, forKey: .data)
 
-        try dataContainer.encodeIfPresent(AnalyticsLogger.deviceID, forKey: .deviceID)
-        try dataContainer.encodeIfPresent(AnalyticsLogger.sessionID, forKey: .sessionID)
         try dataContainer.encodeIfPresent(AnalyticsLogger.integrationVersion, forKey: .integrationVersion)
         try dataContainer.encodeIfPresent(AnalyticsLogger.integrationName, forKey: .integrationName)
 
@@ -139,8 +137,6 @@ class CloudEvent: Encodable {
         case partnerAttributionID = "partner_attribution_id"
         case merchantProfileHash = "merchant_profile_hash"
         // Global Details
-        case deviceID = "device_id"
-        case sessionID = "session_id"
         case integrationVersion = "integration_version"
         case integrationName = "integration_name"
         // Build Details
