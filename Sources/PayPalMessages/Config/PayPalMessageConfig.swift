@@ -18,6 +18,8 @@ public class PayPalMessageData: NSObject {
     public var offerType: PayPalMessageOfferType?
     /// Consumer's country (Integrations must be approved by PayPal to use this option)
     public var buyerCountry: String?
+    /// Message content channel
+    public var channel: String
     /// Skips the caching layer
     public var ignoreCache = false
 
@@ -27,13 +29,15 @@ public class PayPalMessageData: NSObject {
         environment: Environment,
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
-        offerType: PayPalMessageOfferType? = nil
+        offerType: PayPalMessageOfferType? = nil,
+        channel: String = BuildInfo.channel
     ) {
         self.clientID = clientID
         self.amount = amount
         self.pageType = pageType
         self.offerType = offerType
         self.environment = environment
+        self.channel = channel
     }
 
     /// Partner integration
@@ -44,7 +48,8 @@ public class PayPalMessageData: NSObject {
         partnerAttributionID: String,
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
-        offerType: PayPalMessageOfferType? = nil
+        offerType: PayPalMessageOfferType? = nil,
+        channel: String = BuildInfo.channel
     ) {
         self.clientID = clientID
         self.merchantID = merchantID
@@ -53,6 +58,7 @@ public class PayPalMessageData: NSObject {
         self.pageType = pageType
         self.offerType = offerType
         self.environment = environment
+        self.channel = channel
     }
 
     deinit {}

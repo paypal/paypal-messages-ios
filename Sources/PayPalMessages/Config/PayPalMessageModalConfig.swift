@@ -42,7 +42,7 @@ class PayPalMessageModalDataConfig: NSObject {
     var buyerCountry: String?
     var offerType: PayPalMessageOfferType?
     var pageType: PayPalMessagePageType?
-    var channel: String?
+    var channel: String
     var ignoreCache: Bool? // swiftlint:disable:this discouraged_optional_boolean
     var modalCloseButton: ModalCloseButtonConfig
 
@@ -53,6 +53,7 @@ class PayPalMessageModalDataConfig: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
+        channel: String = BuildInfo.channel,
         modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
         self.clientID = clientID
@@ -61,6 +62,7 @@ class PayPalMessageModalDataConfig: NSObject {
         self.offerType = offerType
         self.modalCloseButton = modalCloseButton
         self.environment = environment
+        self.channel = channel
     }
 
     /// Partner integration
@@ -72,6 +74,7 @@ class PayPalMessageModalDataConfig: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
+        channel: String = BuildInfo.channel,
         modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
         self.clientID = clientID
@@ -82,6 +85,7 @@ class PayPalMessageModalDataConfig: NSObject {
         self.offerType = offerType
         self.modalCloseButton = modalCloseButton
         self.environment = environment
+        self.channel = channel
     }
 
     deinit {}
