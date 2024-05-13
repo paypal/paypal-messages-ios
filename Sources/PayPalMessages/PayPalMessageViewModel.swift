@@ -252,10 +252,9 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private func onMessageRequestFailed(error: PayPalMessageError) {
         messageResponse = nil
 
-        let errorDescription = error.description ?? ""
         self.logger.addEvent(.messageError(
-            errorName: "\(error)",
-            errorDescription: errorDescription
+            errorName: error.issue ?? "\(error)",
+            errorDescription: error.description ?? ""
         ))
 
         if let stateDelegate, let messageView {
@@ -410,7 +409,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         }
 
         logger.addEvent(.messageClick(
-            linkName: messageResponse?.defaultDisclaimer ?? "Learn More",
+            linkName: messageResponse?.defaultDisclaimer ?? "Learn more",
             linkSrc: "learn_more"
         ))
 

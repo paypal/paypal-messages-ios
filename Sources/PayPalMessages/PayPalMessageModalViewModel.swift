@@ -74,6 +74,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             "integration_identifier": integrationIdentifier,
             "ignore_cache": ignoreCache?.description,
             "integration_version": AnalyticsLogger.integrationVersion,
+            "integration_name": AnalyticsLogger.integrationName,
             "features": "native-modal"
         ].filter {
             guard let value = $0.value else { return false }
