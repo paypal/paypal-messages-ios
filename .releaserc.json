@@ -1,5 +1,5 @@
 {
-    "branches": ["main", {"name": "develop", "prerelease": true}, {"name": "prerelease", "prerelease": true}],
+    "branches": ["main", { "name": "develop", "prerelease": true }, { "name": "alpha", "prerelease": true }],
     "tagFormat": "${version}",
     "plugins": [
         [
@@ -51,7 +51,13 @@
         [
             "@semantic-release/git",
             {
-                "assets": ["CHANGELOG.md", "Package.swift", "PayPalMessages.podspec", "Carthage/PayPalMessages.json", "Sources/**/BuildInfo.swift"],
+                "assets": [
+                    "CHANGELOG.md",
+                    "Package.swift",
+                    "PayPalMessages.podspec",
+                    "Carthage/PayPalMessages.json",
+                    "Sources/**/BuildInfo.swift"
+                ],
                 "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
             }
         ],
@@ -63,4 +69,3 @@
         ]
     ]
 }
-

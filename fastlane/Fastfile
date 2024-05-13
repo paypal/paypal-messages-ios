@@ -158,73 +158,102 @@ platform :ios do
 
   desc "Update version number in various files"
   lane :release do |options|
-    if options[:version] 
-      # Update the hardcoded version string in the Swift code 
-      build_info_path = sh "find .. -name 'BuildInfo.swift'"
-      sh "sed -i '' -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\\1 = \"#{options[:version]}\"/' #{build_info_path}"
+    return unless options[:version]
 
-      # Update the version in the podspec file
-      version_bump_podspec(
-        path: "PayPalMessages.podspec",
-        version_number: options[:version]
-      )
+    # Update the hardcoded version string in the Swift code 
+    build_info_path = sh "find .. -name 'BuildInfo.swift'"
+    sh "sed -i '' -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\\1 = \"#{options[:version]}\"/' #{build_info_path}"
 
-      version_bump_carthage(
-        path: "Carthage/PayPalMessages.json",
-        version_number: options[:version]
-      )
+    # Update the version in the podspec file
+    version_bump_podspec(
+      path: "PayPalMessages.podspec",
+      version_number: options[:version]
+    )
 
-      sh "rm -rf ../build"
+    version_bump_carthage(
+      path: "Carthage/PayPalMessages.json",
+      version_number: options[:version]
+    )
 
-      ENV["CODE_SIGN_IDENTITY"] = ""
-      ENV["CODE_SIGNING_REQUIRED"] = "NO"
-      ENV["CODE_SIGN_ENTITLEMENTS"] = ""
-      ENV["CODE_SIGNING_ALLOWED"] = "NO"
+    sh "rm -rf ../build"
 
-      xcodebuild(
-        archive: true,
-        clean: true,
-        project: "PayPalMessages.xcodeproj",
-        scheme: "PayPalMessages",
-        configuration: "Release",
-        sdk: "iphoneos",
-        archive_path: "./build/Archives/Device.xcarchive"
-      )
+    # Manual codesigning below
+    ENV["CODE_SIGN_IDENTITY"] = ""
+    ENV["CODE_SIGNING_REQUIRED"] = "NO"
+    ENV["CODE_SIGN_ENTITLEMENTS"] = ""
+    ENV["CODE_SIGNING_ALLOWED"] = "NO"
 
-      xcodebuild(
-        archive: true,
-        clean: true,
-        project: "PayPalMessages.xcodeproj",
-        scheme: "PayPalMessages",
-        configuration: "Release",
-        sdk: "iphonesimulator",
-        archive_path: "./build/Archives/Simulator.xcarchive"
-      )
+    xcodebuild(
+      archive: true,
+      clean: true,
+      project: "PayPalMessages.xcodeproj",
+      scheme: "PayPalMessages",
+      configuration: "Release",
+      sdk: "iphoneos",
+      archive_path: "./build/Archives/Device.xcarchive"
+    )
 
-      # Set global env that will be used in the next xcodebuild command
-      ENV["EXCLUDED_ARCHS"] = "arm64"
+    xcodebuild(
+      archive: true,
+      clean: true,
+      project: "PayPalMessages.xcodeproj",
+      scheme: "PayPalMessages",
+      configuration: "Release",
+      sdk: "iphonesimulator",
+      archive_path: "./build/Archives/Simulator.xcarchive"
+    )
 
-      # For the older universal framework asset the device and simulator must be built separately due to conflicting architectures.
-      # Both the device and simulator include amd64 architecture which is incompatible with `lipo`, so arm64 is excluded from the
-      # simulator so that the binaries can be combined
-      xcodebuild(
-        archive: true,
-        clean: true,
-        project: "PayPalMessages.xcodeproj",
-        scheme: "PayPalMessages",
-        configuration: "Release",
-        sdk: "iphonesimulator",
-        archive_path: "./build/Archives/Simulator-NoArm64.xcarchive"
-      )
+    # Set global env that will be used in the next xcodebuild command
+    ENV["EXCLUDED_ARCHS"] = "arm64"
 
-      create_xcframework(
-        frameworks: [
-          "build/Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework",
-          "build/Archives/Simulator.xcarchive/Products/Library/Frameworks/PayPalMessages.framework"
-        ],
-        output: "build/PayPalMessages.xcframework"
-      )
+    # For the older universal framework asset the device and simulator must be built separately due to conflicting architectures.
+    # Both the device and simulator include amd64 architecture which is incompatible with `lipo`, so arm64 is excluded from the
+    # simulator so that the binaries can be combined
+    xcodebuild(
+      archive: true,
+      clean: true,
+      project: "PayPalMessages.xcodeproj",
+      scheme: "PayPalMessages",
+      configuration: "Release",
+      sdk: "iphonesimulator",
+      archive_path: "./build/Archives/Simulator-NoArm64.xcarchive"
+    )
 
+    create_xcframework(
+      frameworks: [
+        "build/Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework",
+        "build/Archives/Simulator.xcarchive/Products/Library/Frameworks/PayPalMessages.framework"
+      ],
+      output: "build/PayPalMessages.xcframework"
+    )
+
+
+    temp_dir = ENV["RUNNER_TEMP"] || ENV["TMPDIR"]
+    ENV["CERTIFICATE_PATH"] = "#{temp_dir}/distribution_certificate.p12"
+    ENV["KEYCHAIN_PATH"] = "#{temp_dir}/distribution.keychain-db"
+
+    # Import base64 certificate to file
+    sh "echo $DISTRIBUTION_CERTIFICATE_BASE64 | base64 --decode -o $CERTIFICATE_PATH"
+
+    # Create new keychain to import distribution certificate
+    create_keychain(
+      path: ENV["KEYCHAIN_PATH"],
+      password: ENV["KEYCHAIN_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 21600,
+      lock_when_sleeps: true
+    )
+
+    # Import certificate to keychain
+    import_certificate(
+      certificate_path: ENV["CERTIFICATE_PATH"],
+      certificate_password: ENV["DISTRIBUTION_CERTIFICATE_PASSWORD"],
+      keychain_path: ENV["KEYCHAIN_PATH"],
+      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+    )
+
+    begin
       # Combine device and simulator builds into single universal framework
       Dir.chdir("../build") do
         # Base framework
@@ -235,15 +264,25 @@ platform :ios do
         sh "lipo Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/PayPalMessages Archives/Simulator-NoArm64.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/PayPalMessages -create -output PayPalMessages.framework/PayPalMessages"
         # Zip up framework
         sh "zip -r PayPalMessages.framework.zip PayPalMessages.framework"
+        # Sign xcframework with certificate
+        sh "codesign --timestamp -v --sign \"Braintree Payment Solutions, LLC (43253H4X22)\" PayPalMessages.xcframework"
         # Zip up xcframework
         sh "zip -r PayPalMessages.xcframework.zip PayPalMessages.xcframework"
       end
-
-      version_bump_spm(
-        version_number: options[:version],
-        checksum_file: "build/PayPalMessages.xcframework.zip"
+    rescue => e
+      error = e # Store the exception
+    ensure
+      # Cleanup keychain from machine
+      delete_keychain(
+        keychain_path: ENV["KEYCHAIN_PATH"]
       )
+      raise error if error # Re-raise the exception if it exists
     end
+
+    version_bump_spm(
+      version_number: options[:version],
+      checksum_file: "build/PayPalMessages.xcframework.zip"
+    )
   end
 
   desc "Sync develop with main branch"
