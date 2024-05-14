@@ -62,6 +62,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
 
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
         messageLogger.addEvent(.messageClick(linkName: "linkName", linkSrc: "linkSrc"))
+        messageLogger.addEvent(.messageError(errorName: "errorName", errorDescription: "errorDescription"))
 
         AnalyticsService.shared.flushEvents()
 
@@ -109,6 +110,11 @@ final class PayPalMessageLoggerTests: XCTestCase {
                                 "event_type": "message_clicked",
                                 "page_view_link_name": "linkName",
                                 "page_view_link_source": "linkSrc"
+                            ],
+                            [
+                                "event_type": "message_error",
+                                "error_name": "errorName",
+                                "error_description": "errorDescription"
                             ]
                         ]
                     ]
