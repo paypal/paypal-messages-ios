@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import PayPalMessages
 
-class EnvironmentTests: XCTestCase {
+final class EnvironmentTests: XCTestCase {
 
     // Test rawValue correctness
     func testRawValues() {

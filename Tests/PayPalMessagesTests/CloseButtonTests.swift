@@ -1,7 +1,7 @@
 @testable import PayPalMessages
 import XCTest
 
-class CloseButtonTests: XCTestCase {
+final class CloseButtonTests: XCTestCase {
 
     var closeButton: CloseButton?
     var onTapCalled = false

@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import PayPalMessages
 
-class AnyCodableTests: XCTestCase {
+final class AnyCodableTests: XCTestCase {
 
     func testInitialization() {
         // Test various initializations

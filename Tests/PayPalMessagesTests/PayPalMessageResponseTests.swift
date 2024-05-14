@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import PayPalMessages
 
-class MessageResponseTests: XCTestCase {
+final class MessageResponseTests: XCTestCase {
 
     func testDecodeMessageResponse() throws {
         let json = """
