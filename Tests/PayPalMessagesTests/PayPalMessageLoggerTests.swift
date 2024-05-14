@@ -51,6 +51,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
         AnalyticsService.shared.loggers = []
     }
 
+    // swiftlint:disable:next function_body_length
     func testMessageLoggerEvents() {
         let messageLogger = AnalyticsLogger(.message(Weak(message)))
 
