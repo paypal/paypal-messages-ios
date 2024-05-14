@@ -2,5 +2,6 @@
   "1.0.0-prerelease.4": "https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-prerelease.4/PayPalMessages.framework.zip?alt=https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-prerelease.4/PayPalMessages.xcframework.zip",
   "1.0.0-prerelease.5": "https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-prerelease.5/PayPalMessages.framework.zip?alt=https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-prerelease.5/PayPalMessages.xcframework.zip",
   "1.0.0-prerelease.6": "https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-prerelease.6/PayPalMessages.framework.zip?alt=https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-prerelease.6/PayPalMessages.xcframework.zip",
-  "1.0.0-alpha.1": "https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-alpha.1/PayPalMessages.framework.zip?alt=https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-alpha.1/PayPalMessages.xcframework.zip"
+  "1.0.0-alpha.1": "https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-alpha.1/PayPalMessages.framework.zip?alt=https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0-alpha.1/PayPalMessages.xcframework.zip",
+  "1.0.0": "https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0/PayPalMessages.framework.zip?alt=https://github.com/paypal/paypal-messages-ios/releases/download/1.0.0/PayPalMessages.xcframework.zip"
 }
