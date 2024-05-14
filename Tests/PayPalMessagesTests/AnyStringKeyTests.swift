@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import PayPalMessages
 
-class AnyStringKeyTests: XCTestCase {
+final class AnyStringKeyTests: XCTestCase {
 
     func testStringKey() {
         // Create an AnyStringKey instance with a string value

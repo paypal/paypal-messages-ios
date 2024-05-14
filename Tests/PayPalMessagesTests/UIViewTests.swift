@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import PayPalMessages
 
-class UIViewExtensionTests: XCTestCase {
+final class UIViewExtensionTests: XCTestCase {
 
     var testView: UIView?
 

@@ -4,6 +4,14 @@ import XCTest
 
 final class ResponseErrorTests: XCTestCase {
 
+    func testInitialize() throws {
+        let responseError = ResponseError(paypalDebugID: "12345", issue: "SOME_ISSUE", description: "some description")
+
+        XCTAssertEqual(responseError.paypalDebugID, "12345")
+        XCTAssertEqual(responseError.issue, "SOME_ISSUE")
+        XCTAssertEqual(responseError.description, "some description")
+    }
+
     func testErrorWithoutDetails() throws {
         let json = """
         {

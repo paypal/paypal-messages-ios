@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 @testable import PayPalMessages
 
-class PayPalMessageModalTests: XCTestCase {
+final class PayPalMessageModalTests: XCTestCase {
 
     let config = PayPalMessageModalConfig(
         data: .init(

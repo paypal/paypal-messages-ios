@@ -2,79 +2,82 @@ import Foundation
 import XCTest
 @testable import PayPalMessages
 
-func testSetGlobalAnalytics() {
-    let integrationName = "MyIntegration"
-    let integrationVersion = "1.0"
+final class PayPalMessageConfigTests: XCTestCase {
 
-    PayPalMessageModalConfig.setGlobalAnalytics(
-        integrationName: integrationName,
-        integrationVersion: integrationVersion
-    )
+    func testSetGlobalAnalytics() {
+        let integrationName = "MyIntegration"
+        let integrationVersion = "1.0"
 
-    XCTAssertEqual(AnalyticsLogger.integrationName, integrationName)
-    XCTAssertEqual(AnalyticsLogger.integrationVersion, integrationVersion)
-}
+        PayPalMessageModalConfig.setGlobalAnalytics(
+            integrationName: integrationName,
+            integrationVersion: integrationVersion
+        )
 
-func testStandardIntegrationInitialization() {
-    let clientID = "Client123"
-    let amount = 100.0
-    let pageType = PayPalMessagePageType.home
-    let offerType = PayPalMessageOfferType.payLaterShortTerm
-    let environment = Environment.sandbox
+        XCTAssertEqual(AnalyticsLogger.integrationName, integrationName)
+        XCTAssertEqual(AnalyticsLogger.integrationVersion, integrationVersion)
+    }
 
-    let data = PayPalMessageData(
-        clientID: clientID,
-        environment: environment,
-        amount: amount,
-        pageType: pageType,
-        offerType: offerType
-    )
+    func testStandardIntegrationInitialization() {
+        let clientID = "Client123"
+        let amount = 100.0
+        let pageType = PayPalMessagePageType.home
+        let offerType = PayPalMessageOfferType.payLaterShortTerm
+        let environment = Environment.sandbox
 
-    let style = PayPalMessageStyle(logoType: .inline, color: .black, textAlign: .right)
-    let config = PayPalMessageConfig(data: data, style: style)
+        let data = PayPalMessageData(
+            clientID: clientID,
+            environment: environment,
+            amount: amount,
+            pageType: pageType,
+            offerType: offerType
+        )
 
-    XCTAssertEqual(config.data.clientID, clientID)
-    XCTAssertEqual(config.data.amount, amount)
-    XCTAssertEqual(config.data.pageType, pageType)
-    XCTAssertEqual(config.data.offerType, offerType)
-    XCTAssertEqual(config.data.environment, environment)
+        let style = PayPalMessageStyle(logoType: .inline, color: .black, textAlign: .right)
+        let config = PayPalMessageConfig(data: data, style: style)
 
-    XCTAssertEqual(config.style.logoType, .inline)
-    XCTAssertEqual(config.style.color, .black)
-    XCTAssertEqual(config.style.textAlign, .right)
-}
+        XCTAssertEqual(config.data.clientID, clientID)
+        XCTAssertEqual(config.data.amount, amount)
+        XCTAssertEqual(config.data.pageType, pageType)
+        XCTAssertEqual(config.data.offerType, offerType)
+        XCTAssertEqual(config.data.environment, environment)
 
-func testPartnerIntegrationInitialization() {
-    let clientID = "Client123"
-    let merchantID = "Merchant456"
-    let partnerAttributionID = "Partner789"
-    let amount = 100.0
-    let pageType = PayPalMessagePageType.home
-    let offerType = PayPalMessageOfferType.payLaterShortTerm
-    let environment = Environment.sandbox
+        XCTAssertEqual(config.style.logoType, .inline)
+        XCTAssertEqual(config.style.color, .black)
+        XCTAssertEqual(config.style.textAlign, .right)
+    }
 
-    let data = PayPalMessageData(
-        clientID: clientID,
-        merchantID: merchantID,
-        environment: environment,
-        partnerAttributionID: partnerAttributionID,
-        amount: amount,
-        pageType: pageType,
-        offerType: offerType
-    )
+    func testPartnerIntegrationInitialization() {
+        let clientID = "Client123"
+        let merchantID = "Merchant456"
+        let partnerAttributionID = "Partner789"
+        let amount = 100.0
+        let pageType = PayPalMessagePageType.home
+        let offerType = PayPalMessageOfferType.payLaterShortTerm
+        let environment = Environment.sandbox
 
-    let style = PayPalMessageStyle(logoType: .inline, color: .black, textAlign: .right)
-    let config = PayPalMessageConfig(data: data, style: style)
+        let data = PayPalMessageData(
+            clientID: clientID,
+            merchantID: merchantID,
+            environment: environment,
+            partnerAttributionID: partnerAttributionID,
+            amount: amount,
+            pageType: pageType,
+            offerType: offerType
+        )
 
-    XCTAssertEqual(config.data.clientID, clientID)
-    XCTAssertEqual(config.data.merchantID, merchantID)
-    XCTAssertEqual(config.data.partnerAttributionID, partnerAttributionID)
-    XCTAssertEqual(config.data.amount, amount)
-    XCTAssertEqual(config.data.pageType, pageType)
-    XCTAssertEqual(config.data.offerType, offerType)
-    XCTAssertEqual(config.data.environment, environment)
+        let style = PayPalMessageStyle(logoType: .inline, color: .black, textAlign: .right)
+        let config = PayPalMessageConfig(data: data, style: style)
 
-    XCTAssertEqual(config.style.logoType, .inline)
-    XCTAssertEqual(config.style.color, .black)
-    XCTAssertEqual(config.style.textAlign, .right)
+        XCTAssertEqual(config.data.clientID, clientID)
+        XCTAssertEqual(config.data.merchantID, merchantID)
+        XCTAssertEqual(config.data.partnerAttributionID, partnerAttributionID)
+        XCTAssertEqual(config.data.amount, amount)
+        XCTAssertEqual(config.data.pageType, pageType)
+        XCTAssertEqual(config.data.offerType, offerType)
+        XCTAssertEqual(config.data.environment, environment)
+
+        XCTAssertEqual(config.style.logoType, .inline)
+        XCTAssertEqual(config.style.color, .black)
+        XCTAssertEqual(config.style.textAlign, .right)
+    }
 }
