@@ -3,22 +3,22 @@ on:
     workflow_dispatch: {}
     push:
         branches:
-            - release
+            - main
 
 jobs:
     linting:
-        uses: paypal/paypal-messages-ios/.github/workflows/linting.yml@release
+        uses: ./.github/workflows/linting.yml
 
     tests:
-        uses: paypal/paypal-messages-ios/.github/workflows/tests.yml@release
+        uses: ./.github/workflows/tests.yml
 
     build:
-      uses: paypal/paypal-messages-ios/.github/workflows/build.yml@release
+        uses: ./.github/workflows/build.yml
 
     release:
         name: Release
         needs: [linting, tests, build]
-        runs-on: macos-latest
+        runs-on: macos-13
 
         permissions:
           contents: write
@@ -33,19 +33,17 @@ jobs:
                   fetch-depth: '0'
                   persist-credentials: false
 
-            - name: Setup node
-              uses: actions/setup-node@v3
-              with:
-                node-version: "lts/*"
-
             - name: Install Dependencies
               run: |
                 bundle install
-                npm i -g @semantic-release/exec @semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits@6.1.0
+                npm install
 
             - name: GitHub Release
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
+                DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.DISTRIBUTION_CERTIFICATE_PASSWORD }}
+                KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
               run: npx semantic-release@21
 
             - name: Publish to CocoaPods

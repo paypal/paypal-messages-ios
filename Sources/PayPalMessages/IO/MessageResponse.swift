@@ -13,11 +13,14 @@ struct MessageResponse: Decodable {
     let modalCloseButtonAvailHeight: Int
     let modalCloseButtonColor: String
     let modalCloseButtonColorType: String
+    let modalCloseButtonAlternativeText: String
 
     let defaultMainContent: String
+    let defaultMainAlternative: String?
     let defaultDisclaimer: String
 
     let genericMainContent: String
+    let genericMainAlternative: String?
     let genericDisclaimer: String
 
     let logoPlaceholder: String
@@ -32,8 +35,10 @@ struct MessageResponse: Decodable {
         offerType: PayPalMessageResponseOfferType,
         productGroup: PayPalMessageResponseProductGroup,
         defaultMainContent: String,
+        defaultMainAlternative: String?,
         defaultDisclaimer: String,
         genericMainContent: String,
+        genericMainAlternative: String?,
         genericDisclaimer: String,
         logoPlaceholder: String,
         modalCloseButtonWidth: Int,
@@ -42,13 +47,16 @@ struct MessageResponse: Decodable {
         modalCloseButtonAvailHeight: Int,
         modalCloseButtonColor: String,
         modalCloseButtonColorType: String,
+        modalCloseButtonAlternativeText: String,
         trackingData: [String: AnyCodable] = [:]
     ) {
         self.offerType = offerType
         self.productGroup = productGroup
         self.defaultMainContent = defaultMainContent
+        self.defaultMainAlternative = defaultMainAlternative
         self.defaultDisclaimer = defaultDisclaimer
         self.genericMainContent = genericMainContent
+        self.genericMainAlternative = genericMainAlternative
         self.genericDisclaimer = genericDisclaimer
         self.logoPlaceholder = logoPlaceholder
         self.modalCloseButtonWidth = modalCloseButtonWidth
@@ -57,6 +65,7 @@ struct MessageResponse: Decodable {
         self.modalCloseButtonAvailHeight = modalCloseButtonAvailHeight
         self.modalCloseButtonColor = modalCloseButtonColor
         self.modalCloseButtonColorType = modalCloseButtonColorType
+        self.modalCloseButtonAlternativeText = modalCloseButtonAlternativeText
         self.trackingData = trackingData
     }
 
@@ -80,6 +89,10 @@ struct MessageResponse: Decodable {
             String.self,
             forKey: .main
         )
+        defaultMainAlternative = try defaultContentContainer.decodeIfPresent(
+            String.self,
+            forKey: .mainAlternative
+        )
         defaultDisclaimer = try defaultContentContainer.decode(
             String.self,
             forKey: .disclaimer
@@ -95,6 +108,10 @@ struct MessageResponse: Decodable {
         genericMainContent = try genericContentContainer.decode(
             String.self,
             forKey: .main
+        )
+        genericMainAlternative = try genericContentContainer.decodeIfPresent(
+            String.self,
+            forKey: .mainAlternative
         )
         genericDisclaimer = try genericContentContainer.decode(
             String.self,
@@ -167,6 +184,11 @@ struct MessageResponse: Decodable {
             forKey: .modalCloseButtonColorType
         )
 
+        modalCloseButtonAlternativeText = try modalCloseButton.decode(
+            String.self,
+            forKey: .modalCloseButtonAlternativeText
+        )
+
         // MARK: - Tracking Keys
 
         let anyMetaContainer = try container.nestedContainer(
@@ -209,6 +231,7 @@ struct MessageResponse: Decodable {
         case modalCloseButtonAvailHeight = "available_height"
         case modalCloseButtonColor = "color"
         case modalCloseButtonColorType = "color_type"
+        case modalCloseButtonAlternativeText = "alternative_text"
     }
 
     enum ContentContainerKeys: String, CodingKey {
@@ -218,6 +241,7 @@ struct MessageResponse: Decodable {
 
     enum ContentKeys: String, CodingKey {
         case main
+        case mainAlternative = "main_alternative"
         case disclaimer
     }
 

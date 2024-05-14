@@ -14,10 +14,12 @@ final class PayPalMessageLogoTests: XCTestCase {
     ) {
         let resultParameter = paramsBuilder.makeParameters(
             message: "",
+            messageAlternative: nil,
+            offerType: PayPalMessageResponseOfferType.payLaterShortTerm,
             linkDescription: "",
             logoPlaceholder: "",
             logoType: logoType,
-            payPalAlignment: .left,
+            payPalAlign: .left,
             payPalColor: color,
             productGroup: productGroup
         )
@@ -261,10 +263,12 @@ final class PayPalMessageLogoTests: XCTestCase {
             for productGroup in allProductGroups {
                 let resultParameter = paramsBuilder.makeParameters(
                     message: "",
+                    messageAlternative: nil,
+                    offerType: PayPalMessageResponseOfferType.payLaterShortTerm,
                     linkDescription: "",
                     logoPlaceholder: "",
                     logoType: .none,
-                    payPalAlignment: .left,
+                    payPalAlign: .left,
                     payPalColor: color,
                     productGroup: productGroup
                 )
@@ -272,5 +276,16 @@ final class PayPalMessageLogoTests: XCTestCase {
                 XCTAssertNil(resultImage)
             }
         }
+    }
+
+    func testImageAssetLoading() {
+        // Test loading an image without specifying a size
+        let loadingCircleImage = ImageAsset.image(.loadingCircle)
+        XCTAssertNotNil(loadingCircleImage)
+
+        // Test loading an image with a specified size
+        let closeIconImage = ImageAsset.image(.closeIcon, CGSize(width: 20, height: 20))
+        XCTAssertNotNil(closeIconImage)
+        XCTAssertEqual(closeIconImage.size, CGSize(width: 20, height: 20))
     }
 }

@@ -5,6 +5,7 @@ enum HTTPHeader: String {
 
     case accept = "Accept"
     case acceptLanguage = "Accept-Language"
+    case contentType = "Content-Type"
 
     // MARK: - PayPal Specific Headers
 

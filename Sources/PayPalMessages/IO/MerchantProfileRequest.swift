@@ -4,6 +4,7 @@ protocol MerchantProfileRequestable {
     func fetchMerchantProfile(
         environment: Environment,
         clientID: String,
+        merchantID: String?,
         onCompletion: @escaping (Result<MerchantProfileData, Error>) -> Void
     )
 }
@@ -27,14 +28,15 @@ class MerchantProfileRequest: MerchantProfileRequestable {
     func fetchMerchantProfile(
         environment: Environment,
         clientID: String,
+        merchantID: String?,
         onCompletion: @escaping (Result<MerchantProfileData, Error>) -> Void
     ) {
-        guard let url = environment.url(.merchantProfile, ["client_id": clientID]) else {
+        guard let url = environment.url(.merchantProfile, ["client_id": clientID, "merchant_id": merchantID]) else {
             onCompletion(.failure(RequestError.invalidClientID))
             return
         }
 
-        log(.info, "fetcheMerchantProfile URL is \(url)")
+        log(.debug, "fetcheMerchantProfile URL is \(url)", for: environment)
 
         fetch(url, headers: headers, session: environment.urlSession) { data, _, error in
             guard let data = data, error == nil else {

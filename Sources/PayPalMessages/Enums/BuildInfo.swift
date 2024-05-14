@@ -2,7 +2,9 @@
 // If any of the names are changed the CI should be updated as well.
 public enum BuildInfo {
     /// Library version
-    public static let version: String = "0.1.0"
+    public internal(set) static var version: String = "1.0.0-alpha.1"
     /// Message rendering environment
     public static let integrationType: String = "NATIVE_IOS"
+    /// Default message content channel
+    public static let channel: String = "UPSTREAM"
 }

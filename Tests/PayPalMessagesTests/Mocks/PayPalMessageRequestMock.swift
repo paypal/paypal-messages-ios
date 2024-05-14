@@ -4,7 +4,7 @@ import Foundation
 class PayPalMessageRequestMock: MessageRequestable {
 
     enum Scenarios {
-        case success
+        case success(messageResponse: MessageResponse? = nil)
         case neverComplete
         case error(paypalDebugID: String?)
     }
@@ -47,12 +47,18 @@ class PayPalMessageRequestMock: MessageRequestable {
             return nil
         }
 
+        if case .success(messageResponse: let messageResponse) = scenario, let messageResponse {
+            return messageResponse
+        }
+
         return MessageResponse(
             offerType: makeOfferResponseType(fromParams: lastParamsReceived),
             productGroup: makeProductGroup(fromParams: lastParamsReceived),
             defaultMainContent: "",
+            defaultMainAlternative: nil,
             defaultDisclaimer: "",
             genericMainContent: "",
+            genericMainAlternative: nil,
             genericDisclaimer: "",
             logoPlaceholder: "",
             modalCloseButtonWidth: 25,
@@ -60,7 +66,8 @@ class PayPalMessageRequestMock: MessageRequestable {
             modalCloseButtonAvailWidth: 60,
             modalCloseButtonAvailHeight: 60,
             modalCloseButtonColor: "#2d2d2d",
-            modalCloseButtonColorType: "DARK"
+            modalCloseButtonColorType: "DARK",
+            modalCloseButtonAlternativeText: ""
         )
     }
 

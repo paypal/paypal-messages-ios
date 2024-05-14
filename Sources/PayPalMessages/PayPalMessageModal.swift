@@ -4,6 +4,8 @@ import WebKit
 
 final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
+    typealias Proxy<T> = AnyProxy<PayPalMessageModal, T>
+
     // MARK: - Properties
 
     /// Delegate property in charge of announcing rendering and fetching events.
@@ -17,14 +19,17 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     @Proxy(\.viewModel.clientID)
     var clientID: String
 
+    @Proxy(\.viewModel.merchantID)
+    var merchantID: String?
+
+    @Proxy(\.viewModel.partnerAttributionID)
+    var partnerAttributionID: String?
+
     @Proxy(\.viewModel.environment)
     var environment: Environment
 
     @Proxy(\.viewModel.amount)
     var amount: Double?
-
-    @Proxy(\.viewModel.currency)
-    var currency: String?
 
     @Proxy(\.viewModel.buyerCountry)
     var buyerCountry: String?
@@ -34,34 +39,31 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // Content channel
     @Proxy(\.viewModel.channel)
-    var channel: String?
+    var channel: String
 
     // Location within the application
-    @Proxy(\.viewModel.placement)
-    var placement: PayPalMessagePlacement?
+    @Proxy(\.viewModel.pageType)
+    var pageType: PayPalMessagePageType?
 
     // Skip Juno cache
     @Proxy(\.viewModel.ignoreCache)
     var ignoreCache: Bool?
 
-    // Development content
-    @Proxy(\.viewModel.devTouchpoint)
-    var devTouchpoint: Bool?
-
-    // Custom development stage modal bundle
-    @Proxy(\.viewModel.stageTag)
-    var stageTag: String?
-
     // Standalone modal
     @Proxy(\.viewModel.integrationIdentifier)
     var integrationIdentifier: String?
+
+    @Proxy(\.viewModel.merchantProfileHash)
+    var merchantProfileHash: String?
 
     // Modal close button
     var modalCloseButtonConfig: ModalCloseButtonConfig
 
     // MARK: - Private Properties
 
-    private let viewModel: PayPalMessageModalViewModel
+    // swiftlint:disable:next implicitly_unwrapped_optional
+    private var viewModel: PayPalMessageModalViewModel!
+
     /// Flag set when modal webview has successfully loaded the first time which will prevent
     /// reloading the webview after reopening the modal after an error state
     private var hasSuccessfullyLoaded = false
@@ -90,17 +92,17 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         stateDelegate: PayPalMessageModalStateDelegate? = nil,
         eventDelegate: PayPalMessageModalEventDelegate? = nil
     ) {
-        viewModel = PayPalMessageModalViewModel(
+        self.modalCloseButtonConfig = config.data.modalCloseButton
+
+        super.init(nibName: nil, bundle: nil)
+
+        self.viewModel = PayPalMessageModalViewModel(
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,
-            eventDelegate: eventDelegate
+            eventDelegate: eventDelegate,
+            modal: self
         )
-        modalCloseButtonConfig = config.data.modalCloseButton
-
-        super.init(nibName: nil, bundle: nil)
-        // Used to pass the modal reference into the delegate functions
-        viewModel.modal = self
 
         modalTransitionStyle = .coverVertical
         modalPresentationStyle = .formSheet
@@ -256,6 +258,8 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         }
 
         closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.isAccessibilityElement = true
+        closeButton.accessibilityLabel = modalCloseButtonConfig.alternativeText
 
         view.addSubview(closeButton)
 
@@ -306,12 +310,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         }
 
         guard let presentingViewController = UIViewController.getPresentingViewController() else {
-            log(.error, "Unable to retrieve presenting view controller")
+            log(.error, "Unable to retrieve presenting view controller", for: environment)
             return
         }
 
         if presentingViewController == self {
-            log(.warn, "Modal is already presenting")
+            log(.warn, "Modal is already presenting", for: environment)
             return
         }
 

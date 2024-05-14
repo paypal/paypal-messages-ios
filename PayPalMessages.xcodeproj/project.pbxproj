@@ -7,11 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C60F156A2B3C851100E16902 /* AnalyticsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60F15692B3C851100E16902 /* AnalyticsLogger.swift */; };
+		C61D84472B33348C00F372EF /* CloudEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61D84462B33348C00F372EF /* CloudEvent.swift */; };
+		C62FF8232B742C9400890823 /* ResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62FF8222B742C9400890823 /* ResponseError.swift */; };
+		C62FF8252B74315B00890823 /* ResponseErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62FF8242B74315B00890823 /* ResponseErrorTests.swift */; };
+		C62FF8272B852E4000890823 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C62FF8262B852E4000890823 /* PrivacyInfo.xcprivacy */; };
 		C635F4362A9645B10096F9FF /* PayPalMessages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C635F42E2A9645B10096F9FF /* PayPalMessages.framework */; };
 		C635F4C12A964A020096F9FF /* PayPalMessageModalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F48E2A964A020096F9FF /* PayPalMessageModalViewModel.swift */; };
-		C635F4C22A964A020096F9FF /* ComponentLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4902A964A020096F9FF /* ComponentLogger.swift */; };
-		C635F4C32A964A020096F9FF /* ComponentLoggerEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4912A964A020096F9FF /* ComponentLoggerEvent.swift */; };
-		C635F4C42A964A020096F9FF /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4922A964A020096F9FF /* Logger.swift */; };
+		C635F4C32A964A020096F9FF /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4912A964A020096F9FF /* AnalyticsEvent.swift */; };
+		C635F4C42A964A020096F9FF /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4922A964A020096F9FF /* AnalyticsService.swift */; };
 		C635F4C52A964A020096F9FF /* AnyStringKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4932A964A020096F9FF /* AnyStringKey.swift */; };
 		C635F4C62A964A020096F9FF /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4942A964A020096F9FF /* AnyCodable.swift */; };
 		C635F4C72A964A020096F9FF /* PayPalMessageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4962A964A020096F9FF /* PayPalMessageConfig.swift */; };
@@ -21,9 +25,9 @@
 		C635F4CB2A964A020096F9FF /* PayPalMessageOfferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F49B2A964A020096F9FF /* PayPalMessageOfferType.swift */; };
 		C635F4CC2A964A020096F9FF /* BuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F49C2A964A020096F9FF /* BuildInfo.swift */; };
 		C635F4CD2A964A020096F9FF /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F49D2A964A020096F9FF /* Environment.swift */; };
-		C635F4CE2A964A020096F9FF /* PayPalMessageTextAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F49E2A964A020096F9FF /* PayPalMessageTextAlignment.swift */; };
+		C635F4CE2A964A020096F9FF /* PayPalMessageTextAlign.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F49E2A964A020096F9FF /* PayPalMessageTextAlign.swift */; };
 		C635F4CF2A964A020096F9FF /* PayPalMessageColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F49F2A964A020096F9FF /* PayPalMessageColor.swift */; };
-		C635F4D02A964A020096F9FF /* PayPalMessagePlacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4A02A964A020096F9FF /* PayPalMessagePlacement.swift */; };
+		C635F4D02A964A020096F9FF /* PayPalMessagePageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4A02A964A020096F9FF /* PayPalMessagePageType.swift */; };
 		C635F4D12A964A020096F9FF /* ImageAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4A12A964A020096F9FF /* ImageAsset.swift */; };
 		C635F4D22A964A020096F9FF /* PayPalMessageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4A22A964A020096F9FF /* PayPalMessageError.swift */; };
 		C635F4D32A964A020096F9FF /* HTTPHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4A32A964A020096F9FF /* HTTPHeaders.swift */; };
@@ -42,7 +46,6 @@
 		C635F4E02A964A020096F9FF /* Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4B22A964A020096F9FF /* Fetch.swift */; };
 		C635F4E12A964A020096F9FF /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4B42A964A020096F9FF /* UIView.swift */; };
 		C635F4E22A964A020096F9FF /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4B52A964A020096F9FF /* UIColor.swift */; };
-		C635F4E32A964A020096F9FF /* NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4B62A964A020096F9FF /* NSObject.swift */; };
 		C635F4E42A964A020096F9FF /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4B72A964A020096F9FF /* UserDefaults.swift */; };
 		C635F4E52A964A020096F9FF /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4B82A964A020096F9FF /* UIViewController.swift */; };
 		C635F4E62A964A020096F9FF /* HTTPURLResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4B92A964A020096F9FF /* HTTPURLResponse.swift */; };
@@ -63,6 +66,15 @@
 		C635F5072A96524D0096F9FF /* PayPalMessageLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4FB2A96524D0096F9FF /* PayPalMessageLoggerTests.swift */; };
 		C635F5082A96524D0096F9FF /* MerchantProfileProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4FC2A96524D0096F9FF /* MerchantProfileProviderTests.swift */; };
 		C635F5092A96524D0096F9FF /* PayPalMessageModalViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635F4FD2A96524D0096F9FF /* PayPalMessageModalViewModelTests.swift */; };
+		F23BF3832AB89AA30074FA00 /* CloseButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23BF3822AB89AA30074FA00 /* CloseButtonTests.swift */; };
+		F23BF3852AB89F670074FA00 /* UIViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23BF3842AB89F670074FA00 /* UIViewTests.swift */; };
+		F23BF3872AB8AA470074FA00 /* AnyStringKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23BF3862AB8AA470074FA00 /* AnyStringKeyTests.swift */; };
+		F23BF38B2AB8BAAC0074FA00 /* AnyCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23BF38A2AB8BAAC0074FA00 /* AnyCodableTests.swift */; };
+		F23BF38F2AB8D3A70074FA00 /* EnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23BF38E2AB8D3A70074FA00 /* EnvironmentTests.swift */; };
+		F23BF3912AB8D6E60074FA00 /* PayPalMessageModalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23BF3902AB8D6E60074FA00 /* PayPalMessageModalTests.swift */; };
+		F23BF3932AB8D8A70074FA00 /* PayPalMessageViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23BF3922AB8D8A70074FA00 /* PayPalMessageViewTests.swift */; };
+		F23BF3952AB9CEDA0074FA00 /* PayPalMessageResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23BF3942AB9CEDA0074FA00 /* PayPalMessageResponseTests.swift */; };
+		F27522982AE056670092A3BF /* PayPalMessageConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27522972AE056670092A3BF /* PayPalMessageConfigTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,12 +88,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C60F15692B3C851100E16902 /* AnalyticsLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsLogger.swift; sourceTree = "<group>"; };
+		C61D84462B33348C00F372EF /* CloudEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudEvent.swift; sourceTree = "<group>"; };
+		C62FF8222B742C9400890823 /* ResponseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseError.swift; sourceTree = "<group>"; };
+		C62FF8242B74315B00890823 /* ResponseErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseErrorTests.swift; sourceTree = "<group>"; };
+		C62FF8262B852E4000890823 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C635F42E2A9645B10096F9FF /* PayPalMessages.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PayPalMessages.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C635F4352A9645B10096F9FF /* PayPalMessagesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PayPalMessagesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C635F48E2A964A020096F9FF /* PayPalMessageModalViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageModalViewModel.swift; sourceTree = "<group>"; };
-		C635F4902A964A020096F9FF /* ComponentLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentLogger.swift; sourceTree = "<group>"; };
-		C635F4912A964A020096F9FF /* ComponentLoggerEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentLoggerEvent.swift; sourceTree = "<group>"; };
-		C635F4922A964A020096F9FF /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		C635F4912A964A020096F9FF /* AnalyticsEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
+		C635F4922A964A020096F9FF /* AnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		C635F4932A964A020096F9FF /* AnyStringKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyStringKey.swift; sourceTree = "<group>"; };
 		C635F4942A964A020096F9FF /* AnyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		C635F4962A964A020096F9FF /* PayPalMessageConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageConfig.swift; sourceTree = "<group>"; };
@@ -91,9 +107,9 @@
 		C635F49B2A964A020096F9FF /* PayPalMessageOfferType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageOfferType.swift; sourceTree = "<group>"; };
 		C635F49C2A964A020096F9FF /* BuildInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildInfo.swift; sourceTree = "<group>"; };
 		C635F49D2A964A020096F9FF /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
-		C635F49E2A964A020096F9FF /* PayPalMessageTextAlignment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageTextAlignment.swift; sourceTree = "<group>"; };
+		C635F49E2A964A020096F9FF /* PayPalMessageTextAlign.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageTextAlign.swift; sourceTree = "<group>"; };
 		C635F49F2A964A020096F9FF /* PayPalMessageColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageColor.swift; sourceTree = "<group>"; };
-		C635F4A02A964A020096F9FF /* PayPalMessagePlacement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessagePlacement.swift; sourceTree = "<group>"; };
+		C635F4A02A964A020096F9FF /* PayPalMessagePageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessagePageType.swift; sourceTree = "<group>"; };
 		C635F4A12A964A020096F9FF /* ImageAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAsset.swift; sourceTree = "<group>"; };
 		C635F4A22A964A020096F9FF /* PayPalMessageError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageError.swift; sourceTree = "<group>"; };
 		C635F4A32A964A020096F9FF /* HTTPHeaders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHeaders.swift; sourceTree = "<group>"; };
@@ -112,7 +128,6 @@
 		C635F4B22A964A020096F9FF /* Fetch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fetch.swift; sourceTree = "<group>"; };
 		C635F4B42A964A020096F9FF /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		C635F4B52A964A020096F9FF /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
-		C635F4B62A964A020096F9FF /* NSObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObject.swift; sourceTree = "<group>"; };
 		C635F4B72A964A020096F9FF /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		C635F4B82A964A020096F9FF /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		C635F4B92A964A020096F9FF /* HTTPURLResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPURLResponse.swift; sourceTree = "<group>"; };
@@ -136,6 +151,15 @@
 		C635F4FB2A96524D0096F9FF /* PayPalMessageLoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageLoggerTests.swift; sourceTree = "<group>"; };
 		C635F4FC2A96524D0096F9FF /* MerchantProfileProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantProfileProviderTests.swift; sourceTree = "<group>"; };
 		C635F4FD2A96524D0096F9FF /* PayPalMessageModalViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayPalMessageModalViewModelTests.swift; sourceTree = "<group>"; };
+		F23BF3822AB89AA30074FA00 /* CloseButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButtonTests.swift; sourceTree = "<group>"; };
+		F23BF3842AB89F670074FA00 /* UIViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewTests.swift; sourceTree = "<group>"; };
+		F23BF3862AB8AA470074FA00 /* AnyStringKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyStringKeyTests.swift; sourceTree = "<group>"; };
+		F23BF38A2AB8BAAC0074FA00 /* AnyCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodableTests.swift; sourceTree = "<group>"; };
+		F23BF38E2AB8D3A70074FA00 /* EnvironmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentTests.swift; sourceTree = "<group>"; };
+		F23BF3902AB8D6E60074FA00 /* PayPalMessageModalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPalMessageModalTests.swift; sourceTree = "<group>"; };
+		F23BF3922AB8D8A70074FA00 /* PayPalMessageViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPalMessageViewTests.swift; sourceTree = "<group>"; };
+		F23BF3942AB9CEDA0074FA00 /* PayPalMessageResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPalMessageResponseTests.swift; sourceTree = "<group>"; };
+		F27522972AE056670092A3BF /* PayPalMessageConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPalMessageConfigTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,11 +217,12 @@
 				C635F4BB2A964A020096F9FF /* Delegates */,
 				C635F49A2A964A020096F9FF /* Enums */,
 				C635F4B32A964A020096F9FF /* Extensions */,
-				C635F48F2A964A020096F9FF /* Logger */,
+				C635F48F2A964A020096F9FF /* Analytics */,
 				C635F4A52A964A020096F9FF /* IO */,
 				C635F4AC2A964A020096F9FF /* Utils */,
 				C635F4BE2A964A020096F9FF /* Views */,
 				C635F4AB2A964A020096F9FF /* Assets.xcassets */,
+				C62FF8262B852E4000890823 /* PrivacyInfo.xcprivacy */,
 				C635F4C02A964A020096F9FF /* PayPalMessageModal.swift */,
 				C635F48E2A964A020096F9FF /* PayPalMessageModalViewModel.swift */,
 				C635F4982A964A020096F9FF /* PayPalMessageView.swift */,
@@ -206,16 +231,17 @@
 			path = PayPalMessages;
 			sourceTree = "<group>";
 		};
-		C635F48F2A964A020096F9FF /* Logger */ = {
+		C635F48F2A964A020096F9FF /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				C635F4902A964A020096F9FF /* ComponentLogger.swift */,
-				C635F4912A964A020096F9FF /* ComponentLoggerEvent.swift */,
-				C635F4922A964A020096F9FF /* Logger.swift */,
+				C60F15692B3C851100E16902 /* AnalyticsLogger.swift */,
+				C635F4912A964A020096F9FF /* AnalyticsEvent.swift */,
+				C635F4922A964A020096F9FF /* AnalyticsService.swift */,
 				C635F4932A964A020096F9FF /* AnyStringKey.swift */,
 				C635F4942A964A020096F9FF /* AnyCodable.swift */,
+				C61D84462B33348C00F372EF /* CloudEvent.swift */,
 			);
-			path = Logger;
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		C635F4952A964A020096F9FF /* Config */ = {
@@ -233,9 +259,9 @@
 				C635F49B2A964A020096F9FF /* PayPalMessageOfferType.swift */,
 				C635F49C2A964A020096F9FF /* BuildInfo.swift */,
 				C635F49D2A964A020096F9FF /* Environment.swift */,
-				C635F49E2A964A020096F9FF /* PayPalMessageTextAlignment.swift */,
+				C635F49E2A964A020096F9FF /* PayPalMessageTextAlign.swift */,
 				C635F49F2A964A020096F9FF /* PayPalMessageColor.swift */,
-				C635F4A02A964A020096F9FF /* PayPalMessagePlacement.swift */,
+				C635F4A02A964A020096F9FF /* PayPalMessagePageType.swift */,
 				C635F4A12A964A020096F9FF /* ImageAsset.swift */,
 				C635F4A22A964A020096F9FF /* PayPalMessageError.swift */,
 				C635F4A32A964A020096F9FF /* HTTPHeaders.swift */,
@@ -248,10 +274,10 @@
 			isa = PBXGroup;
 			children = (
 				C635F4A62A964A020096F9FF /* MessageRequest.swift */,
+				C635F4AA2A964A020096F9FF /* MessageResponse.swift */,
 				C635F4A72A964A020096F9FF /* MerchantProfileProvider.swift */,
 				C635F4A82A964A020096F9FF /* MerchantProfileRequest.swift */,
-				C635F4A92A964A020096F9FF /* MerchantProfileData.swift */,
-				C635F4AA2A964A020096F9FF /* MessageResponse.swift */,
+				C62FF8222B742C9400890823 /* ResponseError.swift */,
 			);
 			path = IO;
 			sourceTree = "<group>";
@@ -261,6 +287,7 @@
 			children = (
 				C635F4AD2A964A020096F9FF /* PayPalMessageViewParameters.swift */,
 				C635F4AE2A964A020096F9FF /* Log.swift */,
+				C635F4A92A964A020096F9FF /* MerchantProfileData.swift */,
 				C635F4AF2A964A020096F9FF /* Proxy.swift */,
 				C635F4B02A964A020096F9FF /* PayPalMessageAttributedStringBuilder.swift */,
 				C635F4B12A964A020096F9FF /* PayPalMessageViewParametersBuilder.swift */,
@@ -274,7 +301,6 @@
 			children = (
 				C635F4B42A964A020096F9FF /* UIView.swift */,
 				C635F4B52A964A020096F9FF /* UIColor.swift */,
-				C635F4B62A964A020096F9FF /* NSObject.swift */,
 				C635F4B72A964A020096F9FF /* UserDefaults.swift */,
 				C635F4B82A964A020096F9FF /* UIViewController.swift */,
 				C635F4B92A964A020096F9FF /* HTTPURLResponse.swift */,
@@ -318,6 +344,16 @@
 				C635F4FB2A96524D0096F9FF /* PayPalMessageLoggerTests.swift */,
 				C635F4FC2A96524D0096F9FF /* MerchantProfileProviderTests.swift */,
 				C635F4FD2A96524D0096F9FF /* PayPalMessageModalViewModelTests.swift */,
+				F23BF3822AB89AA30074FA00 /* CloseButtonTests.swift */,
+				F23BF3842AB89F670074FA00 /* UIViewTests.swift */,
+				F23BF3862AB8AA470074FA00 /* AnyStringKeyTests.swift */,
+				F23BF38A2AB8BAAC0074FA00 /* AnyCodableTests.swift */,
+				F23BF38E2AB8D3A70074FA00 /* EnvironmentTests.swift */,
+				F23BF3902AB8D6E60074FA00 /* PayPalMessageModalTests.swift */,
+				F23BF3922AB8D8A70074FA00 /* PayPalMessageViewTests.swift */,
+				F23BF3942AB9CEDA0074FA00 /* PayPalMessageResponseTests.swift */,
+				F27522972AE056670092A3BF /* PayPalMessageConfigTests.swift */,
+				C62FF8242B74315B00890823 /* ResponseErrorTests.swift */,
 			);
 			path = PayPalMessagesTests;
 			sourceTree = "<group>";
@@ -427,6 +463,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C62FF8272B852E4000890823 /* PrivacyInfo.xcprivacy in Resources */,
 				C635F4DA2A964A020096F9FF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -451,38 +488,39 @@
 				C635F4D82A964A020096F9FF /* MerchantProfileData.swift in Sources */,
 				C635F4DC2A964A020096F9FF /* Log.swift in Sources */,
 				C635F4C92A964A020096F9FF /* PayPalMessageView.swift in Sources */,
+				C61D84472B33348C00F372EF /* CloudEvent.swift in Sources */,
 				C635F4EB2A964A020096F9FF /* PayPalMessageModal.swift in Sources */,
 				C635F4D12A964A020096F9FF /* ImageAsset.swift in Sources */,
 				C635F4C82A964A020096F9FF /* PayPalMessageModalConfig.swift in Sources */,
 				C635F4E22A964A020096F9FF /* UIColor.swift in Sources */,
 				C635F4D92A964A020096F9FF /* MessageResponse.swift in Sources */,
 				C635F4D22A964A020096F9FF /* PayPalMessageError.swift in Sources */,
-				C635F4CE2A964A020096F9FF /* PayPalMessageTextAlignment.swift in Sources */,
+				C635F4CE2A964A020096F9FF /* PayPalMessageTextAlign.swift in Sources */,
 				C635F4D72A964A020096F9FF /* MerchantProfileRequest.swift in Sources */,
 				C635F4CB2A964A020096F9FF /* PayPalMessageOfferType.swift in Sources */,
 				C635F4E72A964A020096F9FF /* CGFloat.swift in Sources */,
 				C635F4D52A964A020096F9FF /* MessageRequest.swift in Sources */,
+				C60F156A2B3C851100E16902 /* AnalyticsLogger.swift in Sources */,
 				C635F4E82A964A020096F9FF /* PayPalMessageModalDelegates.swift in Sources */,
 				C635F4C12A964A020096F9FF /* PayPalMessageModalViewModel.swift in Sources */,
 				C635F4D32A964A020096F9FF /* HTTPHeaders.swift in Sources */,
-				C635F4C22A964A020096F9FF /* ComponentLogger.swift in Sources */,
-				C635F4C32A964A020096F9FF /* ComponentLoggerEvent.swift in Sources */,
+				C635F4C32A964A020096F9FF /* AnalyticsEvent.swift in Sources */,
 				C635F4CA2A964A020096F9FF /* PayPalMessageViewModel.swift in Sources */,
 				C635F4E02A964A020096F9FF /* Fetch.swift in Sources */,
 				C635F4EA2A964A020096F9FF /* CloseButton.swift in Sources */,
 				C635F4DF2A964A020096F9FF /* PayPalMessageViewParametersBuilder.swift in Sources */,
 				C635F4C52A964A020096F9FF /* AnyStringKey.swift in Sources */,
 				C635F4CD2A964A020096F9FF /* Environment.swift in Sources */,
-				C635F4E32A964A020096F9FF /* NSObject.swift in Sources */,
 				C635F4D42A964A020096F9FF /* PayPalMessageLogoType.swift in Sources */,
 				C635F4DE2A964A020096F9FF /* PayPalMessageAttributedStringBuilder.swift in Sources */,
 				C635F4E42A964A020096F9FF /* UserDefaults.swift in Sources */,
-				C635F4C42A964A020096F9FF /* Logger.swift in Sources */,
+				C635F4C42A964A020096F9FF /* AnalyticsService.swift in Sources */,
 				C635F4C62A964A020096F9FF /* AnyCodable.swift in Sources */,
-				C635F4D02A964A020096F9FF /* PayPalMessagePlacement.swift in Sources */,
+				C635F4D02A964A020096F9FF /* PayPalMessagePageType.swift in Sources */,
 				C635F4E92A964A020096F9FF /* PayPalMessageDelegates.swift in Sources */,
 				C635F4CC2A964A020096F9FF /* BuildInfo.swift in Sources */,
 				C635F4E62A964A020096F9FF /* HTTPURLResponse.swift in Sources */,
+				C62FF8232B742C9400890823 /* ResponseError.swift in Sources */,
 				C635F4DD2A964A020096F9FF /* Proxy.swift in Sources */,
 				C635F4CF2A964A020096F9FF /* PayPalMessageColor.swift in Sources */,
 				C635F4C72A964A020096F9FF /* PayPalMessageConfig.swift in Sources */,
@@ -494,13 +532,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F23BF3852AB89F670074FA00 /* UIViewTests.swift in Sources */,
+				F23BF3912AB8D6E60074FA00 /* PayPalMessageModalTests.swift in Sources */,
+				F23BF3832AB89AA30074FA00 /* CloseButtonTests.swift in Sources */,
 				C635F5022A96524D0096F9FF /* PayPalMessageModalMocks.swift in Sources */,
+				F23BF3952AB9CEDA0074FA00 /* PayPalMessageResponseTests.swift in Sources */,
+				F23BF38F2AB8D3A70074FA00 /* EnvironmentTests.swift in Sources */,
+				F23BF38B2AB8BAAC0074FA00 /* AnyCodableTests.swift in Sources */,
 				C635F5012A96524D0096F9FF /* PayPalMessageLogSenderMock.swift in Sources */,
 				C635F5062A96524D0096F9FF /* PayPalMessageViewModelTests.swift in Sources */,
+				C62FF8252B74315B00890823 /* ResponseErrorTests.swift in Sources */,
 				C635F5082A96524D0096F9FF /* MerchantProfileProviderTests.swift in Sources */,
+				F27522982AE056670092A3BF /* PayPalMessageConfigTests.swift in Sources */,
 				C635F5002A96524D0096F9FF /* PayPalMessageViewMock.swift in Sources */,
 				C635F5032A96524D0096F9FF /* PayPalMessageMerchantProviderMock.swift in Sources */,
+				F23BF3872AB8AA470074FA00 /* AnyStringKeyTests.swift in Sources */,
 				C635F4FF2A96524D0096F9FF /* MerchantProfileRequestMock.swift in Sources */,
+				F23BF3932AB8D8A70074FA00 /* PayPalMessageViewTests.swift in Sources */,
 				C635F5042A96524D0096F9FF /* PayPalMessageAttributedStringTests.swift in Sources */,
 				C635F4FE2A96524D0096F9FF /* PayPalMessageRequestMock.swift in Sources */,
 				C635F5092A96524D0096F9FF /* PayPalMessageModalViewModelTests.swift in Sources */,
@@ -524,6 +572,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -570,11 +619,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -584,6 +634,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -624,10 +675,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -637,6 +689,7 @@
 		C635F43D2A9645B10096F9FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -655,7 +708,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.paypal.PayPalMessages.PayPalMessages;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -668,6 +721,7 @@
 		C635F43E2A9645B10096F9FF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -686,7 +740,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.paypal.PayPalMessages.PayPalMessages;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -699,12 +753,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.paypal.PayPalMessages.PayPalMessagesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -715,12 +771,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.paypal.PayPalMessages.PayPalMessagesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

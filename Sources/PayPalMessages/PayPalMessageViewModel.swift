@@ -2,7 +2,7 @@ import UIKit
 
 protocol PayPalMessageViewModelDelegate: AnyObject {
     /// Requests the delegate to perform a content refresh.
-    func refreshContent()
+    func refreshContent(messageParameters: PayPalMessageViewParameters?)
 }
 
 // swiftlint:disable:next type_body_length
@@ -39,8 +39,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     }
 
     /// Changing its value will cause the message content being refetched only if an update is detected.
-    var placement: PayPalMessagePlacement? {
-        didSet { queueUpdate(from: oldValue, to: placement) }
+    var pageType: PayPalMessagePageType? {
+        didSet { queueUpdate(from: oldValue, to: pageType) }
     }
 
     /// Changing its value will cause the message content being refetched only if an update is detected.
@@ -58,6 +58,10 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         didSet { queueUpdate(from: oldValue, to: buyerCountry) }
     }
 
+    var channel: String {
+        didSet { queueUpdate(from: oldValue, to: channel )}
+    }
+
     /// Changing its value will cause the message content being refetched only if an update is detected.
     var logoType: PayPalMessageLogoType {
         didSet { queueUpdate(from: oldValue, to: logoType) }
@@ -69,21 +73,18 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     }
 
     /// Changing its value will not cause the message content being refetched. It will only trigger an UI update.
-    var alignment: PayPalMessageTextAlignment {
-        didSet { queueUpdate(from: oldValue, to: alignment, requiresFetch: false) }
+    var textAlign: PayPalMessageTextAlign {
+        didSet { queueUpdate(from: oldValue, to: textAlign, requiresFetch: false) }
     }
 
     var ignoreCache: Bool {
         didSet { queueUpdate(from: oldValue, to: ignoreCache) }
     }
 
-    var stageTag: String? {
-        didSet { queueUpdate(from: oldValue, to: stageTag) }
-    }
+    var merchantProfileHash: String?
 
-    var devTouchpoint: Bool {
-        didSet { queueUpdate(from: oldValue, to: devTouchpoint) }
-    }
+    /// Update the messageView's interactivity based on the boolean flag. Disabled by default.
+    var isMessageViewInteractive = false
 
     /// returns the parameters for the style and content the message's Attributed String according to the server response
     var messageParameters: PayPalMessageViewParameters? { makeViewParameters() }
@@ -108,7 +109,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private let requester: MessageRequestable
 
     /// helper class to build the parameters for the PayPalMessageView
-    private let parameterBuilder: PayPalMessageViewParametersBuilder
+    private let parameterBuilder = PayPalMessageViewParametersBuilder()
 
     /// obtains the Merchant Hash and requests it if necessary
     private let merchantProfileProvider: MerchantProfileHashGetable
@@ -117,71 +118,58 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private var modal: PayPalMessageModal?
 
     /// Tracking logger
-    let logger: ComponentLogger
+    private let logger: AnalyticsLogger
 
     // MARK: - Inits and Setters
 
     init(
         config: PayPalMessageConfig,
-        requester: MessageRequestable = MessageRequest(),
-        parameterBuilder: PayPalMessageViewParametersBuilder = PayPalMessageViewParametersBuilder(),
-        merchantProfileProvider: MerchantProfileHashGetable = MerchantProfileProvider(),
-        delegate: PayPalMessageViewModelDelegate? = nil,
-        eventDelegate: PayPalMessageViewEventDelegate? = nil,
+        requester: MessageRequestable,
+        merchantProfileProvider: MerchantProfileHashGetable,
         stateDelegate: PayPalMessageViewStateDelegate? = nil,
-        messageView: PayPalMessageView? = nil
+        eventDelegate: PayPalMessageViewEventDelegate? = nil,
+        delegate: PayPalMessageViewModelDelegate? = nil,
+        messageView: PayPalMessageView
     ) {
         self.clientID = config.data.clientID
         self.merchantID = config.data.merchantID
         self.partnerAttributionID = config.data.partnerAttributionID
         self.environment = config.data.environment
         self.amount = config.data.amount
-        self.placement = config.data.placement
+        self.pageType = config.data.pageType
         self.offerType = config.data.offerType
         self.buyerCountry = config.data.buyerCountry
+        self.channel = config.data.channel
         self.color = config.style.color
         self.logoType = config.style.logoType
-        self.alignment = config.style.textAlignment
+        self.textAlign = config.style.textAlign
         self.ignoreCache = config.data.ignoreCache
-        self.stageTag = config.data.stageTag
-        self.devTouchpoint = config.data.devTouchpoint
 
         self.requester = requester
-        self.parameterBuilder = parameterBuilder
         self.merchantProfileProvider = merchantProfileProvider
         self.delegate = delegate
         self.eventDelegate = eventDelegate
         self.stateDelegate = stateDelegate
         self.messageView = messageView
 
-        self.logger = Logger.createMessageLogger(
-            environment: environment,
-            clientID: clientID,
-            merchantID: merchantID,
-            partnerAttributionID: partnerAttributionID,
-            offerType: offerType,
-            amount: amount,
-            placement: placement,
-            buyerCountryCode: buyerCountry,
-            styleColor: color,
-            styleLogoType: logoType,
-            styleTextAlign: alignment
-        )
+        self.logger = AnalyticsLogger(.message(Weak(messageView)))
+
+        queueMessageContentUpdate(fireImmediately: true)
     }
 
     deinit {}
 
     private func updateConfig(_ config: PayPalMessageConfig) {
+        self.clientID = config.data.clientID
         self.amount = config.data.amount
-        self.placement = config.data.placement
+        self.pageType = config.data.pageType
         self.offerType = config.data.offerType
         self.buyerCountry = config.data.buyerCountry
+        self.channel = config.data.channel
         self.color = config.style.color
         self.logoType = config.style.logoType
-        self.alignment = config.style.textAlignment
+        self.textAlign = config.style.textAlign
         self.ignoreCache = config.data.ignoreCache
-        self.stageTag = config.data.stageTag
-        self.devTouchpoint = config.data.devTouchpoint
     }
 
     // MARK: - Fetch Methods
@@ -197,7 +185,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     }
 
     /// When the message is being fetch from a Property update, it considers whether an update is not being currently executed or requested
-    func queueMessageContentUpdate(requiresFetch: Bool = true, fireImmediately: Bool = false) {
+    private func queueMessageContentUpdate(requiresFetch: Bool = true, fireImmediately: Bool = false) {
         renderStart = Date()
 
         if requiresFetch {
@@ -210,17 +198,24 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             withTimeInterval: queueTimeInterval,
             repeats: false
         ) { _ in
-            if self.fetchMessageContentPending {
-                self.fetchMessageContent()
-                self.fetchMessageContentPending = false
-            } else {
-                self.delegate?.refreshContent()
-            }
+            self.flushUpdates()
         }
 
         if fireImmediately {
             queuedTimer?.fire()
         }
+    }
+
+    // Exposed internally for tests
+    func flushUpdates() {
+        if fetchMessageContentPending {
+            fetchMessageContent()
+            fetchMessageContentPending = false
+        } else {
+            delegate?.refreshContent(messageParameters: self.messageParameters)
+        }
+
+        queuedTimer?.invalidate()
     }
 
     /// Refreshes the Message content only if there's a new amount or logo type set
@@ -229,10 +224,16 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             stateDelegate.onLoading(messageView)
         }
 
-        merchantProfileProvider.getMerchantProfileHash(environment: environment, clientID: clientID) { [weak self] profileHash in
+        merchantProfileProvider.getMerchantProfileHash(
+            environment: environment,
+            clientID: clientID,
+            merchantID: merchantID
+        ) { [weak self] profileHash in
             guard let self else { return }
 
-            let parameters = self.makeRequestParameters(merchantProfileHash: profileHash)
+            self.merchantProfileHash = profileHash
+
+            let parameters = self.makeRequestParameters()
 
             self.requester.fetchMessage(parameters: parameters) { [weak self] result in
                 switch result {
@@ -251,17 +252,19 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private func onMessageRequestFailed(error: PayPalMessageError) {
         messageResponse = nil
 
-        let errorDescription = error.description ?? ""
         self.logger.addEvent(.messageError(
-            errorName: "\(error)",
-            errorDescription: errorDescription
+            errorName: error.issue ?? "\(error)",
+            errorDescription: error.description ?? ""
         ))
 
         if let stateDelegate, let messageView {
             stateDelegate.onError(messageView, error: error)
         }
 
-        delegate?.refreshContent()
+        // Disable the tap gesture
+        isMessageViewInteractive = false
+
+        delegate?.refreshContent(messageParameters: messageParameters)
     }
 
     private func onMessageRequestReceived(response: MessageResponse) {
@@ -272,24 +275,28 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             stateDelegate.onSuccess(messageView)
         }
 
-        delegate?.refreshContent()
+        delegate?.refreshContent(messageParameters: messageParameters)
 
-        // How to get renderDuration?
-        // Is this the correct way to get requestDuration?
         logger.addEvent(.messageRender(
             // Convert to milliseconds
             renderDuration: Int((renderStart?.timeIntervalSinceNow ?? 1 / 1000) * -1000),
             requestDuration: Int((messageResponse?.requestDuration ?? 1 / 1000) * -1000)
         ))
 
-        modal?.setConfig(makeModalConfig())
+        // Enable the tap gesture
+        isMessageViewInteractive = true
 
-        log(.info, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))")
+        if let modal {
+            modal.merchantProfileHash = merchantProfileHash
+            modal.setConfig(makeModalConfig())
+        }
+
+        log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))", for: environment)
     }
 
     // MARK: - Message Request Builder
 
-    private func makeRequestParameters(merchantProfileHash: String?) -> MessageRequestParameters {
+    private func makeRequestParameters() -> MessageRequestParameters {
         .init(
             environment: environment,
             clientID: clientID,
@@ -297,13 +304,12 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             partnerAttributionID: partnerAttributionID,
             logoType: logoType,
             buyerCountry: buyerCountry,
-            placement: placement,
+            pageType: pageType,
             amount: amount,
             offerType: offerType,
             merchantProfileHash: merchantProfileHash,
             ignoreCache: ignoreCache,
-            devTouchpoint: devTouchpoint,
-            stageTag: stageTag
+            instanceID: logger.instanceId
         )
     }
 
@@ -315,10 +321,12 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         return parameterBuilder
             .makeParameters(
                 message: response.defaultMainContent,
+                messageAlternative: response.defaultMainAlternative,
+                offerType: response.offerType,
                 linkDescription: response.defaultDisclaimer,
                 logoPlaceholder: response.logoPlaceholder,
                 logoType: logoType,
-                payPalAlignment: alignment,
+                payPalAlign: textAlign,
                 payPalColor: color,
                 productGroup: response.productGroup
             )
@@ -330,23 +338,21 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         let config = PayPalMessageConfig(
             data: .init(
                 clientID: clientID,
+                environment: environment,
                 amount: amount,
-                placement: placement,
-                offerType: offerType,
-                environment: environment
+                pageType: pageType,
+                offerType: offerType
             ),
             style: .init(
                 logoType: logoType,
                 color: color,
-                textAlignment: alignment
+                textAlign: textAlign
             )
         )
         config.data.merchantID = merchantID
         config.data.partnerAttributionID = partnerAttributionID
         config.data.buyerCountry = buyerCountry
         config.data.ignoreCache = ignoreCache
-        config.data.stageTag = stageTag
-        config.data.devTouchpoint = devTouchpoint
 
         return config
     }
@@ -367,18 +373,18 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             availableWidth: messageResponse?.modalCloseButtonAvailWidth,
             availableHeight: messageResponse?.modalCloseButtonAvailHeight,
             color: color,
-            colorType: messageResponse?.modalCloseButtonColorType
+            colorType: messageResponse?.modalCloseButtonColorType,
+            alternativeText: messageResponse?.modalCloseButtonAlternativeText
         )
 
         let config = PayPalMessageModalConfig(
             data: .init(
                 clientID: clientID,
+                environment: environment,
                 amount: amount,
-                // currency: currency, TODO: Implement?
-                placement: placement,
+                pageType: pageType,
                 offerType: offerType,
-                modalCloseButton: modalCloseButton,
-                environment: environment
+                modalCloseButton: modalCloseButton
             )
         )
         // Partner options
@@ -389,30 +395,32 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         config.data.modalCloseButton = modalCloseButton
         // Dev options
         config.data.ignoreCache = ignoreCache
-        config.data.devTouchpoint = devTouchpoint
-        config.data.stageTag = stageTag
 
         return config
     }
 
     func showModal() {
+        guard isMessageViewInteractive else {
+            return
+        }
+
         if let eventDelegate, let messageView {
             eventDelegate.onClick(messageView)
         }
 
         logger.addEvent(.messageClick(
-            linkName: messageResponse?.defaultDisclaimer ?? "Learn More",
+            linkName: messageResponse?.defaultDisclaimer ?? "Learn more",
             linkSrc: "learn_more"
         ))
 
         if modal == nil {
-            modal = PayPalMessageModal(
-                config: makeModalConfig(),
-                eventDelegate: self
-            )
+            modal = PayPalMessageModal(config: makeModalConfig(), eventDelegate: self)
         }
 
-        modal?.show()
+        if let modal {
+            modal.merchantProfileHash = merchantProfileHash
+            modal.show()
+        }
     }
 
     // MARK: Modal Event Delegate Functions

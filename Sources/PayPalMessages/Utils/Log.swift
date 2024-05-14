@@ -7,7 +7,7 @@ enum LogLevel: Int {
     case error
 }
 
-func log(_ level: LogLevel, _ message: String, with data: Data? = nil, for environment: Environment = .live) {
+func log(_ level: LogLevel, _ message: String, with data: Data? = nil, for environment: Environment) {
     if level == .debug && environment.isProduction {
         return
     }

@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C67A5ACA2B2A5FE700BBF5F7 /* PayPalMessages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C67A5AC92B2A5FE700BBF5F7 /* PayPalMessages.framework */; };
+		C67A5ACB2B2A5FE700BBF5F7 /* PayPalMessages.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C67A5AC92B2A5FE700BBF5F7 /* PayPalMessages.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C6E7C4922A38AC56003C05E4 /* DemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E7C4912A38AC56003C05E4 /* DemoApp.swift */; };
 		C6E7C4942A38AC56003C05E4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E7C4932A38AC56003C05E4 /* ContentView.swift */; };
 		C6E7C4962A38AC5D003C05E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6E7C4952A38AC5D003C05E4 /* Assets.xcassets */; };
 		C6E7C4992A38AC5D003C05E4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6E7C4982A38AC5D003C05E4 /* Preview Assets.xcassets */; };
-		C6E7C4A72A38ADC7003C05E4 /* PayPalMessages in Frameworks */ = {isa = PBXBuildFile; productRef = C6E7C4A62A38ADC7003C05E4 /* PayPalMessages */; };
 		F200FF022A86D7FB0002DE25 /* UIKitContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F200FF012A86D7FB0002DE25 /* UIKitContentViewController.swift */; };
 		F200FF042A86D8080002DE25 /* UIKitContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F200FF032A86D8080002DE25 /* UIKitContentView.swift */; };
 		F200FF062A86D8170002DE25 /* SwiftUIContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F200FF052A86D8170002DE25 /* SwiftUIContentView.swift */; };
@@ -26,14 +27,29 @@
 		F200FF1C2A94E8A20002DE25 /* DefaultMessageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F200FF1B2A94E8A20002DE25 /* DefaultMessageConfig.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C67A5ACC2B2A5FE700BBF5F7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C67A5ACB2B2A5FE700BBF5F7 /* PayPalMessages.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		C67A5AC52B2A5DA300BBF5F7 /* PayPalMessages.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PayPalMessages.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C67A5AC92B2A5FE700BBF5F7 /* PayPalMessages.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PayPalMessages.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6CBCBDE2A4A14D200645B38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C6E7C48E2A38AC56003C05E4 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6E7C4912A38AC56003C05E4 /* DemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoApp.swift; sourceTree = "<group>"; };
 		C6E7C4932A38AC56003C05E4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C6E7C4952A38AC5D003C05E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C6E7C4982A38AC5D003C05E4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		C6E7C4A42A38AD96003C05E4 /* ios-native-messages */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ios-native-messages"; path = ..; sourceTree = "<group>"; };
 		F200FF012A86D7FB0002DE25 /* UIKitContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitContentViewController.swift; sourceTree = "<group>"; };
 		F200FF032A86D8080002DE25 /* UIKitContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitContentView.swift; sourceTree = "<group>"; };
 		F200FF052A86D8170002DE25 /* SwiftUIContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIContentView.swift; sourceTree = "<group>"; };
@@ -53,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C6E7C4A72A38ADC7003C05E4 /* PayPalMessages in Frameworks */,
+				C67A5ACA2B2A5FE700BBF5F7 /* PayPalMessages.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,7 +79,6 @@
 		C6E7C4852A38AC56003C05E4 = {
 			isa = PBXGroup;
 			children = (
-				C6E7C4A32A38AD96003C05E4 /* Packages */,
 				C6E7C4902A38AC56003C05E4 /* Demo */,
 				C6E7C48F2A38AC56003C05E4 /* Products */,
 				C6E7C4A52A38ADC7003C05E4 /* Frameworks */,
@@ -104,17 +119,11 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		C6E7C4A32A38AD96003C05E4 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				C6E7C4A42A38AD96003C05E4 /* ios-native-messages */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		C6E7C4A52A38ADC7003C05E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C67A5AC92B2A5FE700BBF5F7 /* PayPalMessages.framework */,
+				C67A5AC52B2A5DA300BBF5F7 /* PayPalMessages.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -152,6 +161,7 @@
 				C6E7C48A2A38AC56003C05E4 /* Sources */,
 				C6E7C48B2A38AC56003C05E4 /* Frameworks */,
 				C6E7C48C2A38AC56003C05E4 /* Resources */,
+				C67A5ACC2B2A5FE700BBF5F7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -159,7 +169,6 @@
 			);
 			name = Demo;
 			packageProductDependencies = (
-				C6E7C4A62A38ADC7003C05E4 /* PayPalMessages */,
 			);
 			productName = Demo;
 			productReference = C6E7C48E2A38AC56003C05E4 /* Demo.app */;
@@ -260,6 +269,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -306,7 +316,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -320,6 +330,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -360,7 +371,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -452,13 +463,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		C6E7C4A62A38ADC7003C05E4 /* PayPalMessages */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PayPalMessages;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C6E7C4862A38AC56003C05E4 /* Project object */;
 }

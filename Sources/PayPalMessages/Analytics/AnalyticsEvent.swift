@@ -1,6 +1,6 @@
 import Foundation
 
-enum ComponentLoggerEvent: Encodable {
+enum AnalyticsEvent: Encodable {
     case messageRender(renderDuration: Int, requestDuration: Int)
     case messageClick(linkName: String, linkSrc: String)
     case messageError(errorName: String, errorDescription: String)
@@ -10,8 +10,8 @@ enum ComponentLoggerEvent: Encodable {
         case eventType = "event_type"
         case renderDuration = "render_duration"
         case requestDuration = "request_duration"
-        case linkName = "link_name"
-        case linkSrc = "link_src"
+        case linkName = "page_view_link_name"
+        case linkSrc = "page_view_link_source"
         case errorName = "error_name"
         case errorDescription = "error_description"
     }
@@ -22,8 +22,8 @@ enum ComponentLoggerEvent: Encodable {
             var container = encoder.container(keyedBy: StaticKey.self)
 
             try container.encode("message_rendered", forKey: .eventType)
-            try container.encode(renderDuration, forKey: .renderDuration)
-            try container.encode(requestDuration, forKey: .requestDuration)
+            try container.encode(renderDuration.description, forKey: .renderDuration)
+            try container.encode(requestDuration.description, forKey: .requestDuration)
 
         case let .messageClick(linkName, linkSrc):
             var container = encoder.container(keyedBy: StaticKey.self)

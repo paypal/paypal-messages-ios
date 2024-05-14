@@ -31,11 +31,7 @@ class UIKitContentViewController: UIViewController {
 
     lazy var buyerCountryLabel = getLabel(text: "Buyer Country")
 
-    lazy var stageTagLabel = getLabel(text: "Stage Tag")
-
     lazy var ignoreCacheLabel = getLabel(text: "Ignore Cache")
-
-    lazy var devTouchpointLabel = getLabel(text: "Dev Touchpoint")
 
     lazy var logoTypePicker: UISegmentedControl = getSegmentedControl(
         action: #selector(updatePayPalMessageMessage),
@@ -49,7 +45,7 @@ class UIKitContentViewController: UIViewController {
 
     lazy var alignmentTypePicker: UISegmentedControl = getSegmentedControl(
         action: #selector(updatePayPalMessageMessage),
-        forType: PayPalMessageTextAlignment.self
+        forType: PayPalMessageTextAlign.self
     )
 
     lazy var offerTypePicker: UISegmentedControl = getSegmentedControl(
@@ -69,19 +65,8 @@ class UIKitContentViewController: UIViewController {
         autoCapitalizationType: .allCharacters
     )
 
-    lazy var stageTagField: UITextField = getTextField(
-        action: #selector(updatePayPalMessageMessage),
-        keyboardType: .default,
-        autoCapitalizationType: .none
-    )
-
     lazy var ignoreCacheSwitch: UISwitch = getSwitch(
         isOn: defaultMessageConfig.data.ignoreCache,
-        action: #selector(updatePayPalMessageMessage)
-    )
-
-    lazy var devTouchpointSwitch: UISwitch = getSwitch(
-        isOn: defaultMessageConfig.data.devTouchpoint,
         action: #selector(updatePayPalMessageMessage)
     )
 
@@ -110,18 +95,7 @@ class UIKitContentViewController: UIViewController {
     }()
 
     lazy var stackView: UIStackView = {
-        let paypalMessageContainer = UIView()
-
-        paypalMessageContainer.addSubview(paypalMessage)
-
         paypalMessage.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            paypalMessage.leadingAnchor.constraint(equalTo: paypalMessageContainer.leadingAnchor),
-            paypalMessage.trailingAnchor.constraint(equalTo: paypalMessageContainer.trailingAnchor),
-            paypalMessage.topAnchor.constraint(equalTo: paypalMessageContainer.topAnchor),
-            paypalMessage.bottomAnchor.constraint(equalTo: paypalMessageContainer.bottomAnchor, constant: 20)
-        ])
-
 
         return getStackView(
             subviews: [
@@ -159,22 +133,13 @@ class UIKitContentViewController: UIViewController {
                 ),
                 getStackView(
                     subviews: [
-                        stageTagLabel,
-                        stageTagField
-                    ],
-                    axis: .horizontal
-                ),
-                getStackView(
-                    subviews: [
                         ignoreCacheSwitch,
-                        ignoreCacheLabel,
-                        devTouchpointSwitch,
-                        devTouchpointLabel
+                        ignoreCacheLabel
                     ],
                     axis: .horizontal
                 ),
                 getSeparator(),
-                paypalMessageContainer
+                paypalMessage
             ],
             padding: 12
         )
@@ -208,11 +173,9 @@ class UIKitContentViewController: UIViewController {
     private func loadDefaultSelections() {
         loadSegmentedIndex(item: defaultMessageConfig.style.logoType, picker: logoTypePicker)
         loadSegmentedIndex(item: defaultMessageConfig.style.color, picker: colorTypePicker)
-        loadSegmentedIndex(item: defaultMessageConfig.style.textAlignment, picker: alignmentTypePicker)
+        loadSegmentedIndex(item: defaultMessageConfig.style.textAlign, picker: alignmentTypePicker)
         buyerCountryField.text = defaultMessageConfig.data.buyerCountry
-        stageTagField.text = defaultMessageConfig.data.stageTag
         ignoreCacheSwitch.isOn = defaultMessageConfig.data.ignoreCache
-        devTouchpointSwitch.isOn = defaultMessageConfig.data.devTouchpoint
 
         if let amount = defaultMessageConfig.data.amount {
             amountTextField.text = String(format: "%f", amount)
@@ -266,20 +229,19 @@ class UIKitContentViewController: UIViewController {
         let config = PayPalMessageConfig(
             data: .init(
                 clientID: getCurrentClientID() ?? defaultMessageConfig.data.clientID,
+                environment: defaultMessageConfig.data.environment,
                 amount: getCurrentAmount(),
                 offerType: getCurrentOfferType()
             ),
             style: .init(
                 logoType: getCurrentLogoType(),
                 color: getCurrentMessageColor(),
-                textAlignment: getCurrentAlignment()
+                textAlign: getCurrentAlignment()
             )
         )
 
         config.data.buyerCountry = getCurrentBuyerCountry()
         config.data.ignoreCache = getCurrentIgnoreCache()
-        config.data.stageTag = getCurrentStageTag()
-        config.data.devTouchpoint = getCurrentDevTouchpoint()
 
         return config
     }
@@ -293,8 +255,8 @@ class UIKitContentViewController: UIViewController {
         PayPalMessageColor.allCases[colorTypePicker.selectedSegmentIndex]
     }
 
-    private func getCurrentAlignment() -> PayPalMessageTextAlignment {
-        PayPalMessageTextAlignment.allCases[alignmentTypePicker.selectedSegmentIndex]
+    private func getCurrentAlignment() -> PayPalMessageTextAlign {
+        PayPalMessageTextAlign.allCases[alignmentTypePicker.selectedSegmentIndex]
     }
 
     private func getCurrentOfferType() -> PayPalMessageOfferType? {
@@ -312,18 +274,8 @@ class UIKitContentViewController: UIViewController {
         return text
     }
 
-    private func getCurrentStageTag() -> String? {
-        guard let text = stageTagField.text, !text.isEmpty else { return nil }
-
-        return text
-    }
-
     private func getCurrentIgnoreCache() -> Bool {
         ignoreCacheSwitch.isOn
-    }
-
-    private func getCurrentDevTouchpoint() -> Bool {
-        devTouchpointSwitch.isOn
     }
 
     private func getCurrentClientID() -> String? {
@@ -410,4 +362,3 @@ extension UIKitContentViewController: PayPalMessageViewEventDelegate {
         statusTextView.text = "Applied"
     }
 }
-// swiftlint:disable:this file_length

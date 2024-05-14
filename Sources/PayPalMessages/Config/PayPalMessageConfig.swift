@@ -13,50 +13,52 @@ public class PayPalMessageData: NSObject {
     /// Price expressed in cents amount based on the current context (i.e. individual product price vs total cart price)
     public var amount: Double?
     /// Message screen location (e.g. product, cart, home)
-    public var placement: PayPalMessagePlacement?
+    public var pageType: PayPalMessagePageType?
     /// Preferred message offer to display
     public var offerType: PayPalMessageOfferType?
     /// Consumer's country (Integrations must be approved by PayPal to use this option)
     public var buyerCountry: String?
+    /// Message content channel
+    public var channel: String
     /// Skips the caching layer
     public var ignoreCache = false
-    /// Uses the content set that is currently under active development. For development purposes only.
-    public var devTouchpoint = false
-    /// Allows the message to pull up a development build of the web modal. For development purposes only.
-    public var stageTag: String?
 
     /// Standard integration
     public init(
         clientID: String,
+        environment: Environment,
         amount: Double? = nil,
-        placement: PayPalMessagePlacement? = nil,
+        pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
-        environment: Environment = .live
+        channel: String = BuildInfo.channel
     ) {
         self.clientID = clientID
         self.amount = amount
-        self.placement = placement
+        self.pageType = pageType
         self.offerType = offerType
         self.environment = environment
+        self.channel = channel
     }
 
     /// Partner integration
     public init(
         clientID: String,
         merchantID: String,
+        environment: Environment,
         partnerAttributionID: String,
         amount: Double? = nil,
-        placement: PayPalMessagePlacement? = nil,
+        pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
-        environment: Environment = .live
+        channel: String = BuildInfo.channel
     ) {
         self.clientID = clientID
         self.merchantID = merchantID
         self.partnerAttributionID = partnerAttributionID
         self.amount = amount
-        self.placement = placement
+        self.pageType = pageType
         self.offerType = offerType
         self.environment = environment
+        self.channel = channel
     }
 
     deinit {}
@@ -69,16 +71,16 @@ public class PayPalMessageStyle: NSObject {
     /// Text and logo color
     public var color: PayPalMessageColor
     /// Text alignment
-    public var textAlignment: PayPalMessageTextAlignment
+    public var textAlign: PayPalMessageTextAlign
 
     public init(
         logoType: PayPalMessageLogoType = .inline,
         color: PayPalMessageColor = .black,
-        textAlignment: PayPalMessageTextAlignment = .right
+        textAlign: PayPalMessageTextAlign = .right
     ) {
         self.logoType = logoType
         self.color = color
-        self.textAlignment = textAlignment
+        self.textAlign = textAlign
     }
 
     deinit {}
@@ -103,13 +105,9 @@ public class PayPalMessageConfig: NSObject {
 
     public static func setGlobalAnalytics(
         integrationName: String,
-        integrationVersion: String,
-        deviceID: String? = nil,
-        sessionID: String? = nil
+        integrationVersion: String
     ) {
-        Logger.integrationName = integrationName
-        Logger.integrationVersion = integrationVersion
-        Logger.deviceID = deviceID
-        Logger.sessionID = sessionID
+        AnalyticsLogger.integrationName = integrationName
+        AnalyticsLogger.integrationVersion = integrationVersion
     }
 }

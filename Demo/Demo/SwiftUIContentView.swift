@@ -9,16 +9,14 @@ struct SwiftUIContentView: View {
 
     @State private var logoType: PayPalMessageLogoType = defaultMessageConfig.style.logoType
     @State private var messageColor: PayPalMessageColor = defaultMessageConfig.style.color
-    @State private var textAlignment: PayPalMessageTextAlignment = defaultMessageConfig.style.textAlignment
+    @State private var textAlign: PayPalMessageTextAlign = defaultMessageConfig.style.textAlign
 
     @State private var clientID: String = defaultMessageConfig.data.clientID
     @State private var amount: Double? = defaultMessageConfig.data.amount
-    @State private var placement: PayPalMessagePlacement? = defaultMessageConfig.data.placement
+    @State private var pageType: PayPalMessagePageType? = defaultMessageConfig.data.pageType
     @State private var offerType: PayPalMessageOfferType? = defaultMessageConfig.data.offerType
-    @State private var stageTag: String = defaultMessageConfig.data.stageTag ?? ""
     @State private var buyerCountry: String = defaultMessageConfig.data.buyerCountry ?? ""
     @State private var ignoreCache: Bool = defaultMessageConfig.data.ignoreCache
-    @State private var devTouchpoint: Bool = defaultMessageConfig.data.devTouchpoint
 
     @State private var messageState: String = ""
     @State private var debounceTimerInterval: TimeInterval = 1
@@ -32,21 +30,22 @@ struct SwiftUIContentView: View {
         let messageConfig: PayPalMessageConfig = .init(
             data: .init(
                 clientID: clientID,
+                environment: defaultMessageConfig.data.environment,
                 amount: amount,
-                placement: placement,
-                offerType: offerType,
-                environment: .sandbox
+                pageType: pageType,
+                offerType: offerType
             ),
             style: .init(
                 logoType: logoType,
                 color: messageColor,
-                textAlignment: textAlignment
+                textAlign: textAlign
             )
         )
 
-        messageConfig.data.buyerCountry = buyerCountry
+        if !buyerCountry.isEmpty {
+            messageConfig.data.buyerCountry = buyerCountry
+        }
         messageConfig.data.ignoreCache = ignoreCache
-        messageConfig.data.devTouchpoint = devTouchpoint
 
         return messageConfig
     }
@@ -101,8 +100,8 @@ struct SwiftUIContentView: View {
                     }
 
                 // Text Alignment
-                ReusablePicker(options: PayPalMessageTextAlignment.allCases, selectedOption: $textAlignment)
-                    .onChange(of: textAlignment) { _ in
+                ReusablePicker(options: PayPalMessageTextAlign.allCases, selectedOption: $textAlign)
+                    .onChange(of: textAlign) { _ in
                         debounceConfigUpdate()
                     }
             }
@@ -143,52 +142,24 @@ struct SwiftUIContentView: View {
                             debounceConfigUpdate()
                         }
                 }
-
-                HStack {
-                    // Stage Tag
-                    ReusableTextView(text: "Stage Tag", font: .subheadline, weight: .semibold)
-
-                    ReusableTextField(text: $stageTag)
-                        .onChange(of: stageTag) { _ in
-                            debounceConfigUpdate()
-                        }
-                }
             }
 
             HStack {
-                HStack {
-                    // Ignore Cache
-                    ReusableToggle(isOn: $ignoreCache, label: "ignoreCache")
+                // Ignore Cache
+                ReusableToggle(isOn: $ignoreCache, label: "ignoreCache")
 
-                    ReusableTextView(
-                        text: "Ignore Cache",
-                        font: .system(size: 14),
-                        weight: .semibold,
-                        padding: .init(top: 0, leading: 16, bottom: 0, trailing: 0)
-                    )
-                    .onChange(of: ignoreCache) { _ in
-                        debounceConfigUpdate()
-                    }
-                }
-                HStack {
-
-                    // Dev Touchpoint
-                    ReusableToggle(isOn: $devTouchpoint, label: "devTouchpoint")
-
-                    ReusableTextView(
-                        text: "Dev Touchpoint",
-                        font: .system(size: 14),
-                        weight: .semibold,
-                        padding: .init(top: 0, leading: 16, bottom: 0, trailing: 0)
-                    )
-                    .onChange(of: devTouchpoint) { _ in
-                        debounceConfigUpdate()
-                    }
+                ReusableTextView(
+                    text: "Ignore Cache",
+                    font: .system(size: 14),
+                    weight: .semibold,
+                    padding: .init(top: 0, leading: 16, bottom: 0, trailing: 0)
+                )
+                .onChange(of: ignoreCache) { _ in
+                    debounceConfigUpdate()
                 }
             }
 
             Divider()
-                .overlay(.gray)
 
             // MARK: PayPal Message
 
@@ -221,13 +192,11 @@ struct SwiftUIContentView: View {
 
         logoType = defaultStyle.logoType
         messageColor = defaultStyle.color
-        textAlignment = defaultStyle.textAlignment
+        textAlign = defaultStyle.textAlign
         offerType = defaultData.offerType
         amount = defaultData.amount
         buyerCountry = defaultData.buyerCountry ?? ""
-        stageTag = defaultData.stageTag ?? ""
         ignoreCache = defaultData.ignoreCache
-        devTouchpoint = defaultData.devTouchpoint
         clientID = defaultData.clientID
     }
 

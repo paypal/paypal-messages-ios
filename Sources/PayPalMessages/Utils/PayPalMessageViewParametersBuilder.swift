@@ -5,10 +5,12 @@ struct PayPalMessageViewParametersBuilder {
     // swiftlint:disable:next function_parameter_count
     func makeParameters(
         message: String,
+        messageAlternative: String?,
+        offerType: PayPalMessageResponseOfferType,
         linkDescription: String,
         logoPlaceholder: String,
         logoType: PayPalMessageLogoType,
-        payPalAlignment: PayPalMessageTextAlignment,
+        payPalAlign: PayPalMessageTextAlign,
         payPalColor: PayPalMessageColor,
         productGroup: PayPalMessageResponseProductGroup
     ) -> PayPalMessageViewParameters {
@@ -23,6 +25,15 @@ struct PayPalMessageViewParametersBuilder {
             productGroup: productGroup
         )
 
+        let brandingText = productGroup == .paypalCredit ? "PayPal Credit" : "PayPal"
+        var accessibilityLabel = (messageAlternative ?? message).replacingOccurrences(of: logoPlaceholder, with: brandingText)
+
+        accessibilityLabel += " \(linkDescription)"
+
+        if !message.contains(logoPlaceholder) {
+            accessibilityLabel = "\(brandingText) - \(accessibilityLabel)"
+        }
+
         return PayPalMessageViewParameters(
             message: message,
             messageColor: getLabelColor(payPalColor),
@@ -33,7 +44,10 @@ struct PayPalMessageViewParametersBuilder {
             linkDescription: linkDescription,
             linkColor: getLinkColor(payPalColor),
             linkUnderlineColor: getUnderlineLinkColor(payPalColor),
-            textAlignment: getAlignment(payPalAlignment)
+            textAlign: getAlignment(payPalAlign),
+            accessibilityLabel: accessibilityLabel,
+            accessibilityTraits: .button,
+            isAccessibilityElement: true
         )
     }
 
@@ -165,8 +179,8 @@ struct PayPalMessageViewParametersBuilder {
         }
     }
 
-    private func getAlignment(_ textAlignment: PayPalMessageTextAlignment) -> NSTextAlignment {
-        switch textAlignment {
+    private func getAlignment(_ textAlign: PayPalMessageTextAlign) -> NSTextAlignment {
+        switch textAlign {
         case .left:
             return .left
 

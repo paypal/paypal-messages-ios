@@ -4,17 +4,13 @@ import XCTest
 // swiftlint:disable:next type_body_length
 final class PayPalMessageViewModelTests: XCTestCase {
 
-    // Message view passed into the view controller that gets passed back
-    // as a refernce in the delegate functions
-    let messageView = PayPalMessageView(config: .init(data: .init(clientID: "testclientid")))
     let mockSender = LogSenderMock()
 
     override func setUp() {
         super.setUp()
 
         // Inject mock sender to intercept log requests
-        let logger = Logger.get(for: "testclientid", in: .live)
-        logger.sender = mockSender
+        AnalyticsService.shared.sender = mockSender
     }
 
     // MARK: - Test Initial Config Values
@@ -77,7 +73,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
         XCTAssertTrue(mockedDelegate.onErrorCalled)
         XCTAssertNil(viewModel.messageParameters)
 
-        guard case .invalidResponse(let paypalDebugID) = mockedDelegate.error else {
+        guard case .invalidResponse(let paypalDebugID, _, _) = mockedDelegate.error else {
             XCTFail("Expected error invalidResponse")
             return
         }
@@ -88,7 +84,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
     // MARK: - Single Parameter Testing
 
     func testSimpleAmountUpdate() {
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -103,32 +99,34 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.amount = newAmount
         XCTAssertEqual(viewModel.amount, newAmount)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
-    func testSimplePlacementUpdate() {
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
+    func testSimplePageTypeUpdate() {
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
             mockedRequest: mockedRequest
         )
 
-        XCTAssertNil(viewModel.placement)
+        XCTAssertNil(viewModel.pageType)
         XCTAssertEqual(mockedRequest.requestsPerformed, 1)
 
         // test the new parameter is being correctly sent
-        let newValue: PayPalMessagePlacement = .payment
-        viewModel.placement = newValue
-        XCTAssertEqual(viewModel.placement, newValue)
+        let newValue: PayPalMessagePageType = .checkout
+        viewModel.pageType = newValue
+        XCTAssertEqual(viewModel.pageType, newValue)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testSimpleOfferTypeUpdate() {
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -143,12 +141,13 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.offerType = newValue
         XCTAssertEqual(viewModel.offerType, newValue)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testBuyerCountryTypeUpdate() {
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -163,13 +162,14 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.buyerCountry = newValue
         XCTAssertEqual(viewModel.buyerCountry, newValue)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testSimpleLogoTypeUpdate() {
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
-        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "test"))
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
+        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -185,13 +185,14 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.logoType = newValue
         XCTAssertEqual(viewModel.logoType, newValue)
 
-        // verify a request has been performed
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testSimpleColorUpdate() {
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
-        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "test"))
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
+        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -207,13 +208,15 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.color = newValue
         XCTAssertEqual(viewModel.color, newValue)
 
+        viewModel.flushUpdates()
+
         // verify a request has NOT been performed as color changes shouldn't trigger them
-        assert(mockedRequest, calledTimes: 1)
+        XCTAssertEqual(mockedRequest.requestsPerformed, 1)
     }
 
     func testSimpleAlignmentUpdate() {
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
-        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "testclientid"))
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
+        let mockedConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -221,22 +224,24 @@ final class PayPalMessageViewModelTests: XCTestCase {
             mockedConfig: mockedConfig
         )
 
-        XCTAssertEqual(viewModel.alignment, mockedConfig.style.textAlignment)
+        XCTAssertEqual(viewModel.textAlign, mockedConfig.style.textAlign)
         XCTAssertEqual(mockedRequest.requestsPerformed, 1)
 
         // test the new AND different parameter is being correctly sent
-        let newValue: PayPalMessageTextAlignment = .center
-        viewModel.alignment = newValue
-        XCTAssertEqual(viewModel.alignment, newValue)
+        let newValue: PayPalMessageTextAlign = .center
+        viewModel.textAlign = newValue
+        XCTAssertEqual(viewModel.textAlign, newValue)
+
+        viewModel.flushUpdates()
 
         // verify a request has NOT been performed as alignment changes shouldn't trigger them
-        assert(mockedRequest, calledTimes: 1)
+        XCTAssertEqual(mockedRequest.requestsPerformed, 1)
     }
 
     // MARK: - Test Duplicated Value Updates
 
     func testDuplicatedAmountUpdate() {
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -250,12 +255,16 @@ final class PayPalMessageViewModelTests: XCTestCase {
         let newAmount = Double.random(in: 0...1000)
         viewModel.amount = newAmount
 
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
 
         // set the same amount again, verify another redundant request hasn't been performed
         viewModel.amount = newAmount
 
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     // MARK: - Test Update In Progress Cases
@@ -290,7 +299,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
 
     func testUpdateInProgressFromParams() {
         let mockedDelegate = PayPalMessageViewDelegateMock()
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -313,12 +322,14 @@ final class PayPalMessageViewModelTests: XCTestCase {
         let newerAmount = newAmount - 1
         viewModel.amount = newerAmount
 
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
     func testUpdateInProgressFromConfig() {
         let mockedDelegate = PayPalMessageViewDelegateMock()
-        let mockedRequest = PayPalMessageRequestMock(scenario: .success)
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
 
         // init ViewModel with mocked delegate in error scenario
         let viewModel = makePayPalMessageViewModel(
@@ -337,13 +348,17 @@ final class PayPalMessageViewModelTests: XCTestCase {
         let newAmount = Double.random(in: 1...1000)
         viewModel.amount = newAmount
 
-        assert(mockedRequest, calledTimes: 2)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
 
         // test a new config being set overrides the update in progress flag and triggers and update
-        let newConfig = PayPalMessageConfig(data: .init(clientID: "testclientid"))
+        let newConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .live))
         viewModel.config = newConfig
 
-        assert(mockedRequest, calledTimes: 3)
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 3)
     }
 
     // MARK: - Test Merchant Provider
@@ -351,7 +366,7 @@ final class PayPalMessageViewModelTests: XCTestCase {
     func testMerchantProviderFailure() {
         let mockedView = PayPalMessageViewMock()
         let mockedDelegate = PayPalMessageViewDelegateMock()
-        let mockedMerchantProfileProvider = MerchantProfileProviderMock(.error)
+        let mockedMerchantProfileProvider = MerchantProfileProviderMock(scenario: .error)
 
         // init ViewModel with mocked delegate
         let viewModel = makePayPalMessageViewModel(
@@ -368,36 +383,30 @@ final class PayPalMessageViewModelTests: XCTestCase {
         XCTAssertNotNil(viewModel.messageParameters)
     }
 
-    // MARK: - Helpers
-
-    private func assert(_ mockRequest: PayPalMessageRequestMock, calledTimes count: Int) {
-        let predicate = NSPredicate { _, _ in
-            print(mockRequest.requestsPerformed, count)
-            return mockRequest.requestsPerformed == count
-        }
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: mockRequest)
-        wait(for: [expectation], timeout: 2)
-    }
-
     private func makePayPalMessageViewModel(
         mockedView: PayPalMessageViewMock = PayPalMessageViewMock(),
         mockedDelegate: PayPalMessageViewDelegateMock = PayPalMessageViewDelegateMock(),
-        mockedRequest: PayPalMessageRequestMock = PayPalMessageRequestMock(scenario: .success),
-        mockedMerchantProfile: MerchantProfileProviderMock
-            = MerchantProfileProviderMock(.success),
-        mockedConfig: PayPalMessageConfig = PayPalMessageConfig(data: .init(clientID: "testclientid"))
+        mockedRequest: PayPalMessageRequestMock = PayPalMessageRequestMock(scenario: .success()),
+        mockedMerchantProfile: MerchantProfileProviderMock = MerchantProfileProviderMock(scenario: .success),
+        mockedConfig: PayPalMessageConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .sandbox))
     ) -> PayPalMessageViewModel {
+        // Intentionally use different `requester` and `merchantProfileProvider` values from the view model to prevent interferring
+        // with mock request counts specifically fired from the view model itself
+        let messageView = PayPalMessageView(
+            config: mockedConfig,
+            requester: PayPalMessageRequestMock(scenario: .success()),
+            merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
+        )
+
         let viewModel = PayPalMessageViewModel(
             config: mockedConfig,
             requester: mockedRequest,
             merchantProfileProvider: mockedMerchantProfile,
-            delegate: mockedView,
-            eventDelegate: mockedDelegate,
             stateDelegate: mockedDelegate,
+            eventDelegate: mockedDelegate,
+            delegate: mockedView,
             messageView: messageView
         )
-
-        viewModel.queueMessageContentUpdate(requiresFetch: true, fireImmediately: true)
 
         return viewModel
     }

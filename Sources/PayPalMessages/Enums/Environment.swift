@@ -1,8 +1,7 @@
 import Foundation
 
 public enum Environment: Equatable {
-    case local(port: String = "8443")
-    case stage(host: String)
+    case develop(host: String, devTouchpoint: Bool = false, stageTag: String? = nil)
     case sandbox
     case live
 
@@ -12,10 +11,8 @@ public enum Environment: Equatable {
             return "production"
         case .sandbox:
             return "sandbox"
-        case .stage:
-            return "stage"
-        case .local:
-            return "local"
+        case .develop:
+            return "develop"
         }
     }
 
@@ -23,7 +20,7 @@ public enum Environment: Equatable {
         switch self {
         case .live, .sandbox:
             return true
-        case .stage, .local:
+        case .develop:
             return false
         }
     }
@@ -32,7 +29,7 @@ public enum Environment: Equatable {
         switch self {
         case .live, .sandbox:
             return URLSession.shared
-        case .stage, .local:
+        case .develop:
             return URLSession(
                 configuration: .default,
                 delegate: DevelopmentSession(),
@@ -44,9 +41,7 @@ public enum Environment: Equatable {
     // swiftlint:disable force_unwrapping
     private var baseURL: URL {
         switch self {
-        case .local(let port):
-            return URL(string: "https://localhost.paypal.com:\(port)")!
-        case .stage(let host):
+        case .develop(let host, _, _):
             return URL(string: "https://www.\(host)")!
         case .sandbox:
             return URL(string: "https://www.sandbox.paypal.com")!
@@ -54,28 +49,59 @@ public enum Environment: Equatable {
             return URL(string: "https://www.paypal.com")!
         }
     }
+
+    // swiftlint:disable force_unwrapping
+    private var loggerBaseURL: URL {
+        switch self {
+        case .develop(let host, _, _):
+            return URL(string: "https://api.\(host)")!
+        case .sandbox:
+            return URL(string: "https://api.sandbox.paypal.com")!
+        case .live:
+            return URL(string: "https://api.paypal.com")!
+        }
+    }
+
     // swiftlint:enable force_unwrapping
 
     enum PayPalMessagePath: String {
         case message = "/credit-presentment/native/message"
         case modal = "/credit-presentment/lander/modal"
         case merchantProfile = "/credit-presentment/merchant-profile"
-        case log = "/credit-presentment/glog"
+        case log = "/v1/credit/upstream-messaging-events"
     }
 
     func url(_ path: PayPalMessagePath, _ queryParams: [String: String?]? = nil) -> URL? {
         var parts = URLComponents()
-        var queryItems: [URLQueryItem]?
+        var queryItems = queryParams?.compactMap { key, value in
+            value != nil ? URLQueryItem(name: key, value: value) : nil
+        } ?? []
 
-        if let queryParams, !queryParams.isEmpty {
-            queryItems = queryParams.map { URLQueryItem(name: $0.key, value: $0.value) }
+        let basePath: URL
+        if path == .log {
+            basePath = loggerBaseURL
+        } else {
+            basePath = baseURL
+
+            // Append dev_touchpoint and stage_tag query parameters only for .develop case
+            if case .develop(_, let devTouchpoint, let stageTag) = self {
+                if devTouchpoint {
+                    queryItems.append(URLQueryItem(name: "dev_touchpoint", value: "\(devTouchpoint)"))
+                }
+                if let stageTag, !stageTag.isEmpty {
+                    queryItems.append(URLQueryItem(name: "stage_tag", value: stageTag))
+                }
+            }
         }
 
-        parts.scheme = baseURL.scheme
-        parts.host = baseURL.host
-        parts.port = baseURL.port
+        parts.scheme = basePath.scheme
+        parts.host = basePath.host
         parts.path = path.rawValue
-        parts.queryItems = queryItems
+
+        if !queryItems.isEmpty {
+            parts.queryItems = queryItems
+        }
+
 
         return parts.url
     }

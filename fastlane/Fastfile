@@ -1,74 +1,304 @@
+require 'json'
+
 skip_docs
 default_platform(:ios)
-ensure_xcode_version(version: "14.2")
+
+def setup_xcode
+  sh "which xcodes > /dev/null || brew install xcodes"
+  xcodes(
+    version: "14.3.1",
+    select_for_current_build_only: true
+  )
+end
+
+# Updates the Carthage JSON file with the specified version
+def version_bump_carthage(path:, version_number:)
+  Dir.chdir("..") do
+    framework_url = "https://github.com/paypal/paypal-messages-ios/releases/download/#{version_number}/PayPalMessages.framework.zip"
+    xcframework_url = "https://github.com/paypal/paypal-messages-ios/releases/download/#{version_number}/PayPalMessages.xcframework.zip"
+
+    parsed_data = JSON.parse(File.read(path)) 
+    parsed_data[version_number] = "#{framework_url}?alt=#{xcframework_url}"
+    json_string = JSON.pretty_generate(parsed_data)
+
+    File.open(path, 'w') { |file| file.puts(json_string) }
+  end
+end
+
+def version_bump_spm(checksum_file:, version_number:)
+  Dir.chdir("..") do
+    sh "sed -i '' -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\\1 = \"#{version_number}\"/' Package.swift"
+    checksum = sh("shasum -a 256 #{checksum_file} | cut -d ' ' -f 1").strip!
+    sh "sed -i '' -E 's/checksum: *\"[0-9a-z]+\"/checksum: \"#{checksum}\"/' Package.swift"
+  end
+end
 
 platform :ios do
 
-    desc "Runs tests & code coverage check"
-    lane :tests do
-        scan(
-            workspace: "PayPalMessages.xcworkspace",
-            scheme: "PayPalMessagesTests",
-            devices: ["iPhone 14"],
-            derived_data_path: "~/Library/Developer/Xcode/DerivedData",
-            skip_build: true,
-            result_bundle: true,
-            code_coverage: true
-        )
+  desc "Runs tests & code coverage check"
+  lane :tests do |options|
+    setup_xcode
 
-        # Ensure the code coverage directory is empty before creating new coverage
-        sh "rm -rf coverage"
+    scan(
+      workspace: "PayPalMessages.xcworkspace",
+      scheme: "PayPalMessagesTests",
+      devices: ["iPhone 14 (16.4)"], # default iOS 17 simulator runs much slower on GitHub Actions
+      derived_data_path: "~/Library/Developer/Xcode/DerivedData",
+      skip_build: true,
+      result_bundle: true,
+      code_coverage: true,
+      xcodebuild_formatter: "xcbeautify --renderer github-actions"
+    )
 
-        xcov(
-            workspace: "PayPalMessages.xcworkspace",
-            scheme: "PayPalMessagesTests",
-            derived_data_path: "~/Library/Developer/Xcode/DerivedData",
-            output_directory: "fastlane/coverage",
-            markdown_report: true,
-            minimum_coverage_percentage: 80.0
-        )
+    # Ensure the code coverage directory is empty before creating new coverage
+    sh "rm -rf coverage"
+
+    begin
+      xcov(
+        workspace: "PayPalMessages.xcworkspace",
+        scheme: "PayPalMessagesTests",
+        derived_data_path: "~/Library/Developer/Xcode/DerivedData",
+        output_directory: "fastlane/coverage",
+        markdown_report: true,
+        minimum_coverage_percentage: 80.0
+      )
+    rescue => e
+      error = e # Store the exception
+    ensure
+      if options[:summary]
+        # Add coverage report to GitHub Actions summary page
+        sh "cat ./coverage/report.md > #{options[:summary]}"
+      end
+      raise error if error # Re-raise the exception if it exists
+    end
+  end
+
+  desc "Runs SwiftLint and returns any unmet warnings or errors"
+  lane :lint do |options|
+    setup_xcode
+
+    # Ensure directory exists since swiftlint command won't create it if missing
+    sh "mkdir -p swiftlint"
+
+    begin
+      swiftlint(
+        mode: :lint,
+        raise_if_swiftlint_error: true,
+        strict: true,
+        reporter: "markdown",
+        output_file: "fastlane/swiftlint/report.md"
+      )
+     rescue => e # only need the summary if there are lint issues
+      if options[:summary]
+        # Add SwiftLint report to GitHub Actions summary page
+        sh "cat ./swiftlint/report.md > #{options[:summary]}"
+      end
+      raise e # Re-raise the exception
+    end
+  end
+
+  desc "Build for Cocoapods"
+  lane :build_pod do
+    setup_xcode
+
+    pod_lib_lint
+  end
+
+  desc "Build for Swift Package Manager"
+  lane :build_spm do
+    setup_xcode
+
+    Dir.chdir("..") do
+      current_commit = sh("git rev-parse HEAD").strip
+      # Point to current commit instead of `main` branch
+      sh "sed -i '' -E 's/kind = branch/kind = revision/' TestApps/SPMTest/SPMTest.xcodeproj/project.pbxproj"
+      sh "sed -i '' -E 's/branch = .*/revision = #{current_commit};/' TestApps/SPMTest/SPMTest.xcodeproj/project.pbxproj"
     end
 
-    desc "Runs SwiftLint and returns any unmet warnings or errors"
-    lane :lint do
-        swiftlint(
-            mode: :lint,
-            raise_if_swiftlint_error: true,
-            strict: true,
-            reporter: "github-actions-logging",
-            quiet: true
-        )
+    gym(
+      project: "TestApps/SPMTest/SPMTest.xcodeproj",
+      scheme: "SPMTest",
+      clean: true,
+      skip_codesigning: true,
+      skip_archive: false,
+      skip_package_ipa: true,
+      skip_package_dependencies_resolution: false
+    )
+  end
+
+  desc "Build for Carthage"
+  lane :build_carthage do
+    setup_xcode
+
+    Dir.chdir("..") do
+      # Point the Cartfile dependency to use from the latest commit
+      current_dir = sh("pwd").strip
+      current_commit = sh("git rev-parse HEAD").strip
+      sh "echo 'git \"file://#{current_dir}\" \"#{current_commit}\"' > TestApps/CarthageTest/Cartfile"
     end
 
-    lane :build do
-        pod_lib_lint
+    # Add built dependencies to <project_root>/Carthage/Build
+    carthage(
+      command: "update",
+      use_xcframeworks: true,
+      project_directory: "TestApps/CarthageTest"
+    )
+    
+    # Build the test app
+    gym(
+      project: "TestApps/CarthageTest/CarthageTest.xcodeproj",
+      scheme: "CarthageTest",
+      clean: true,
+      skip_codesigning: true,
+      skip_archive: false,
+      skip_package_ipa: true,
+      skip_package_dependencies_resolution: true
+    )
+  end
+
+  desc "Update version number in various files"
+  lane :release do |options|
+    return unless options[:version]
+
+    # Update the hardcoded version string in the Swift code 
+    build_info_path = sh "find .. -name 'BuildInfo.swift'"
+    sh "sed -i '' -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\\1 = \"#{options[:version]}\"/' #{build_info_path}"
+
+    # Update the version in the podspec file
+    version_bump_podspec(
+      path: "PayPalMessages.podspec",
+      version_number: options[:version]
+    )
+
+    version_bump_carthage(
+      path: "Carthage/PayPalMessages.json",
+      version_number: options[:version]
+    )
+
+    sh "rm -rf ../build"
+
+    # Manual codesigning below
+    ENV["CODE_SIGN_IDENTITY"] = ""
+    ENV["CODE_SIGNING_REQUIRED"] = "NO"
+    ENV["CODE_SIGN_ENTITLEMENTS"] = ""
+    ENV["CODE_SIGNING_ALLOWED"] = "NO"
+
+    xcodebuild(
+      archive: true,
+      clean: true,
+      project: "PayPalMessages.xcodeproj",
+      scheme: "PayPalMessages",
+      configuration: "Release",
+      sdk: "iphoneos",
+      archive_path: "./build/Archives/Device.xcarchive"
+    )
+
+    xcodebuild(
+      archive: true,
+      clean: true,
+      project: "PayPalMessages.xcodeproj",
+      scheme: "PayPalMessages",
+      configuration: "Release",
+      sdk: "iphonesimulator",
+      archive_path: "./build/Archives/Simulator.xcarchive"
+    )
+
+    # Set global env that will be used in the next xcodebuild command
+    ENV["EXCLUDED_ARCHS"] = "arm64"
+
+    # For the older universal framework asset the device and simulator must be built separately due to conflicting architectures.
+    # Both the device and simulator include amd64 architecture which is incompatible with `lipo`, so arm64 is excluded from the
+    # simulator so that the binaries can be combined
+    xcodebuild(
+      archive: true,
+      clean: true,
+      project: "PayPalMessages.xcodeproj",
+      scheme: "PayPalMessages",
+      configuration: "Release",
+      sdk: "iphonesimulator",
+      archive_path: "./build/Archives/Simulator-NoArm64.xcarchive"
+    )
+
+    create_xcframework(
+      frameworks: [
+        "build/Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework",
+        "build/Archives/Simulator.xcarchive/Products/Library/Frameworks/PayPalMessages.framework"
+      ],
+      output: "build/PayPalMessages.xcframework"
+    )
+
+
+    temp_dir = ENV["RUNNER_TEMP"] || ENV["TMPDIR"]
+    ENV["CERTIFICATE_PATH"] = "#{temp_dir}/distribution_certificate.p12"
+    ENV["KEYCHAIN_PATH"] = "#{temp_dir}/distribution.keychain-db"
+
+    # Import base64 certificate to file
+    sh "echo $DISTRIBUTION_CERTIFICATE_BASE64 | base64 --decode -o $CERTIFICATE_PATH"
+
+    # Create new keychain to import distribution certificate
+    create_keychain(
+      path: ENV["KEYCHAIN_PATH"],
+      password: ENV["KEYCHAIN_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 21600,
+      lock_when_sleeps: true
+    )
+
+    # Import certificate to keychain
+    import_certificate(
+      certificate_path: ENV["CERTIFICATE_PATH"],
+      certificate_password: ENV["DISTRIBUTION_CERTIFICATE_PASSWORD"],
+      keychain_path: ENV["KEYCHAIN_PATH"],
+      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+    )
+
+    begin
+      # Combine device and simulator builds into single universal framework
+      Dir.chdir("../build") do
+        # Base framework
+        sh "cp -R Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework ."
+        # Copy Simulator into base framework
+        sh "cp -R Archives/Simulator-NoArm64.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/Modules/PayPalMessages.swiftmodule/ PayPalMessages.framework/Modules/PayPalMessages.swiftmodule"
+        # Combine binaries
+        sh "lipo Archives/Device.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/PayPalMessages Archives/Simulator-NoArm64.xcarchive/Products/Library/Frameworks/PayPalMessages.framework/PayPalMessages -create -output PayPalMessages.framework/PayPalMessages"
+        # Zip up framework
+        sh "zip -r PayPalMessages.framework.zip PayPalMessages.framework"
+        # Sign xcframework with certificate
+        sh "codesign --timestamp -v --sign \"Braintree Payment Solutions, LLC (43253H4X22)\" PayPalMessages.xcframework"
+        # Zip up xcframework
+        sh "zip -r PayPalMessages.xcframework.zip PayPalMessages.xcframework"
+      end
+    rescue => e
+      error = e # Store the exception
+    ensure
+      # Cleanup keychain from machine
+      delete_keychain(
+        keychain_path: ENV["KEYCHAIN_PATH"]
+      )
+      raise error if error # Re-raise the exception if it exists
     end
 
-    desc "Update version number in various files"
-    lane :release do |options|
-        if options[:version] 
-            # Update the hardcoded version string in the Swift code 
-            sh "BUILD_INFO_PATH=$(find .. -name 'BuildInfo.swift')"
-            sh "sed -i.bak -E 's/version(.*) = \"[0-9a-zA-Z.-]+\"/version\1 = \"#{options[:version]}\"/' $BUILD_INFO_PATH"
-            sh "rm $BUILD_INFO_PATH.bak"
+    version_bump_spm(
+      version_number: options[:version],
+      checksum_file: "build/PayPalMessages.xcframework.zip"
+    )
+  end
 
-            # Update the version in the podspec file
-            version_bump_podspec(
-               path: "../PayPalMessages.podspec",
-               version_number: options[:version]
-            )
-        end
+  desc "Sync develop with main branch"
+  lane :sync do |options|
+    # channel will be 'develop' when doing a prerelease which doesn't
+    # need to sync main back to develop then
+    if options[:channel].nil? || options[:channel].empty?
+      push_to_git_remote(
+        local_branch: "main",
+        remote_branch: "develop"
+      )
     end
+  end
 
-    desc "Sync develop with main branch"
-    lane :sync do
-        push_to_git_remote(
-            local_branch: "main",
-            remote_branch: "develop"
-        )
-    end
-
-    lane :publish do
-      pod_push(path: "PayPalMessages.podspec")
-    end
+  desc "Publish podspec to Trunk"
+  lane :publish do
+    pod_push(path: "PayPalMessages.podspec")
+  end
 end

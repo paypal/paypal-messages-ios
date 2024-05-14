@@ -11,13 +11,12 @@ struct MessageRequestParameters {
     let partnerAttributionID: String?
     let logoType: PayPalMessageLogoType
     let buyerCountry: String?
-    let placement: PayPalMessagePlacement?
+    let pageType: PayPalMessagePageType?
     let amount: Double?
     let offerType: PayPalMessageOfferType?
     let merchantProfileHash: String?
     let ignoreCache: Bool
-    let devTouchpoint: Bool
-    let stageTag: String?
+    let instanceID: String
 }
 
 protocol MessageRequestable {
@@ -44,16 +43,16 @@ class MessageRequest: MessageRequestable {
             "partner_attribution_id": parameters.partnerAttributionID,
             "logo_type": parameters.logoType.rawValue,
             "buyer_country": parameters.buyerCountry,
-            "placement": parameters.placement?.rawValue,
+            "page_type": parameters.pageType?.rawValue,
             "amount": parameters.amount?.description,
             "offer": parameters.offerType?.rawValue,
             "merchant_config": parameters.merchantProfileHash,
-            "stage_tag": parameters.stageTag,
             "ignore_cache": parameters.ignoreCache.description,
-            "dev_touchpoint": parameters.devTouchpoint.description,
-            "integration_version": Logger.integrationVersion,
-            "device_id": Logger.deviceID,
-            "session_id": Logger.sessionID
+            "instance_id": parameters.instanceID,
+            "version": BuildInfo.version,
+            "integration_type": BuildInfo.integrationType,
+            "integration_version": AnalyticsLogger.integrationVersion,
+            "integration_name": AnalyticsLogger.integrationName
         ].filter {
             guard let value = $0.value else { return false }
 
@@ -73,29 +72,39 @@ class MessageRequest: MessageRequestable {
         }
         let startingTimestamp = Date()
 
-        log(.info, "fetchMessage URL is \(url)")
+        log(.debug, "fetchMessage URL is \(url)", for: parameters.environment)
+
         fetch(url, headers: headers, session: parameters.environment.urlSession) { data, response, _ in
+            let requestDuration = startingTimestamp.timeIntervalSinceNow
+
             guard let response = response as? HTTPURLResponse else {
                 onCompletion(.failure(.invalidResponse()))
                 return
             }
-            let requestDuration = startingTimestamp.timeIntervalSinceNow
 
-            guard response.statusCode == 200,
-                  let data,
-                  var messageResponse = try? JSONDecoder().decode(
-                    MessageResponse.self,
-                    from: data
-                  ) else {
-                onCompletion(.failure(
-                    .invalidResponse(paypalDebugID: response.paypalDebugID)
-                ))
-                return
+            switch response.statusCode {
+            case 200:
+                guard let data, var messageResponse = try? JSONDecoder().decode(MessageResponse.self, from: data) else {
+                    onCompletion(.failure(.invalidResponse(paypalDebugID: response.paypalDebugID)))
+                    return
+                }
+
+                messageResponse.requestDuration = requestDuration
+
+                onCompletion(.success(messageResponse))
+
+            default:
+                guard let data, let responseError = try? JSONDecoder().decode(ResponseError.self, from: data) else {
+                    onCompletion(.failure(.invalidResponse(paypalDebugID: response.paypalDebugID)))
+                    return
+                }
+
+                onCompletion(.failure(.invalidResponse(
+                    paypalDebugID: responseError.paypalDebugID,
+                    issue: responseError.issue,
+                    description: responseError.description
+                )))
             }
-
-            messageResponse.requestDuration = requestDuration
-
-            onCompletion(.success(messageResponse))
         }
     }
 }

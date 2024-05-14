@@ -2,34 +2,54 @@
 import WebKit
 import XCTest
 
+// swiftlint:disable:next type_body_length
 final class PayPalMessageModalViewModelTests: XCTestCase {
 
     let navigation = WKNavigation()
     let mockSender = LogSenderMock()
 
+    var modal: PayPalMessageModal?
+
     override func setUp() {
         super.setUp()
 
         // Inject mock sender to intercept log requests
-        let logger = Logger.get(for: "test", in: .live)
-        logger.sender = mockSender
+        AnalyticsService.shared.sender = mockSender
+    }
+
+    // Helper function to convert JSON string to dictionary
+    func convertToDictionary(from jsonString: String) -> [String: Any]? {
+        // Extract JSON data from the string
+        guard let startIndex = jsonString.firstIndex(of: "{"),
+              let endIndex = jsonString.lastIndex(of: "}"),
+              endIndex > startIndex else {
+            print("Failed to extract JSON data from the string. JSON String: \(jsonString)")
+            return nil
+        }
+
+        let jsonDataString = jsonString[startIndex...endIndex]
+
+        guard let data = jsonDataString.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+            print("Failed to convert JSON string to dictionary. JSON String: \(jsonString)")
+            return nil
+        }
+        return json
     }
 
     func testInitialSetup() {
         let config = PayPalMessageModalConfig(
             data: .init(
                 clientID: "testclientid",
+                environment: .live,
                 amount: 100.0,
-                currency: "USD",
-                placement: .home,
+                pageType: .home,
                 offerType: .payLaterLongTerm
             )
         )
         config.data.buyerCountry = "US"
         config.data.channel = "TEST"
-        config.data.devTouchpoint = true
         config.data.ignoreCache = true
-        config.data.stageTag = "test"
 
         let (viewModel, webView, stateDelegate, eventDelegate) = makePayPalMessageModalViewModel(
             config: config
@@ -37,13 +57,10 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.clientID, "testclientid")
         XCTAssertEqual(viewModel.amount, 100.0)
-        XCTAssertEqual(viewModel.currency, "USD")
-        XCTAssertEqual(viewModel.placement, .home)
+        XCTAssertEqual(viewModel.pageType, .home)
         XCTAssertEqual(viewModel.offerType, .payLaterLongTerm)
         XCTAssertEqual(viewModel.buyerCountry, "US")
         XCTAssertEqual(viewModel.channel, "TEST")
-        XCTAssertEqual(viewModel.stageTag, "test")
-        XCTAssertTrue(viewModel.devTouchpoint ?? false)
         XCTAssertTrue(viewModel.ignoreCache ?? false)
         XCTAssertEqual(viewModel.environment, .live)
 
@@ -54,9 +71,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     func testUpdateConfig() {
-        let expectation = expectation(description: "Evaluate JavaScript Callback")
         let (viewModel, webView, _, _) = makePayPalMessageModalViewModel()
-        webView.evaluateJavaScriptCallback = { _ in expectation.fulfill() }
 
         XCTAssertNil(viewModel.amount)
         XCTAssertNil(viewModel.offerType)
@@ -64,6 +79,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         viewModel.setConfig(.init(
             data: .init(
                 clientID: "testclientid",
+                environment: .live,
                 amount: 200.0,
                 offerType: .payLaterShortTerm
             )
@@ -74,19 +90,44 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertFalse(webView.evaluateJavaScriptCalled)
 
-        waitForExpectations(timeout: 0.5)
+        viewModel.flushUpdates()
 
         XCTAssertTrue(webView.evaluateJavaScriptCalled)
-        XCTAssertEqual(
-            webView.evaluateJavaScriptString,
-            "window.actions.updateProps({\"client_id\":\"testclientid\",\"amount\":200,\"offer\":\"PAY_LATER_SHORT_TERM\"})"
-        )
+
+        let expectedJSONString = """
+        {
+            "client_id": "testclientid",
+            "amount": 200,
+            "offer": "PAY_LATER_SHORT_TERM",
+            "channel": "UPSTREAM"
+        }
+        """
+
+        guard let actualJSONString = webView.evaluateJavaScriptString else {
+            XCTFail("Failed to get JavaScript string")
+            return
+        }
+
+        guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
+              let actualDictionary = convertToDictionary(from: actualJSONString) else {
+            XCTFail("Failed to convert JSON strings to dictionaries")
+            return
+        }
+
+        // Check if the actualJSONString matches the desired pattern
+        let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            XCTFail("Failed to create NSRegularExpression")
+            return
+        }
+        let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
+
+        XCTAssertTrue(!matches.isEmpty)
+        XCTAssertEqual(expectedDictionary as NSDictionary, actualDictionary as NSDictionary)
     }
 
     func testUpdateIndividualProperties() {
-        let expectation = expectation(description: "Evaluate JavaScript Callback")
         let (viewModel, webView, _, _) = makePayPalMessageModalViewModel()
-        webView.evaluateJavaScriptCallback = { _ in expectation.fulfill() }
 
         XCTAssertNil(viewModel.amount)
         XCTAssertNil(viewModel.offerType)
@@ -99,19 +140,48 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
 
         XCTAssertFalse(webView.evaluateJavaScriptCalled)
 
-        waitForExpectations(timeout: 0.5)
+        viewModel.flushUpdates()
 
-        XCTAssertTrue(webView.evaluateJavaScriptCalled)
-        XCTAssertEqual(
-            webView.evaluateJavaScriptString,
-            "window.actions.updateProps({\"client_id\":\"testclientid\",\"amount\":300,\"offer\":\"PAYPAL_CREDIT_NO_INTEREST\"})"
-        )
+        let expectedJSONString = """
+        {
+            "client_id": "testclientid",
+            "amount": 300,
+            "offer": "PAYPAL_CREDIT_NO_INTEREST",
+            "channel": "UPSTREAM"
+        }
+        """
+
+        guard let actualJSONString = webView.evaluateJavaScriptString else {
+            XCTFail("Failed to get JavaScript string")
+            return
+        }
+
+        guard let expectedDictionary = convertToDictionary(from: expectedJSONString),
+              let actualDictionary = convertToDictionary(from: actualJSONString) else {
+            XCTFail("Failed to convert JSON strings to dictionaries")
+            return
+        }
+
+        // Check if the actualJSONString matches the desired pattern
+        let pattern = "^window\\.actions\\.updateProps\\(.+\\)$"
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            XCTFail("Failed to create NSRegularExpression")
+            return
+        }
+        let matches = regex.matches(in: actualJSONString, options: [], range: NSRange(location: 0, length: actualJSONString.count))
+
+        XCTAssertTrue(!matches.isEmpty)
+        XCTAssertEqual(expectedDictionary as NSDictionary, actualDictionary as NSDictionary)
     }
 
     func testModalLoadSuccess() {
         let (viewModel, webView, _, _) = makePayPalMessageModalViewModel(
             config: .init(
-                data: .init(clientID: "testclientid", amount: 500.0)
+                data: .init(
+                    clientID: "testclientid",
+                    environment: .live,
+                    amount: 500.0
+                )
             )
         )
         var loadResult: Result<Void, PayPalMessageError>?
@@ -234,8 +304,8 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
                     "name": "onClick",
                     "args": [
                         {
-                            "link_name": "Apply Now Link",
-                            "link_src": "Apply Now Src"
+                            "page_view_link_name": "Apply Now Link",
+                            "page_view_link_source": "Apply Now Src"
                         }
                     ]
                 }
@@ -249,7 +319,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     private func makePayPalMessageModalViewModel(
-        config: PayPalMessageModalConfig = PayPalMessageModalConfig(data: .init(clientID: "testclientid"))
+        config: PayPalMessageModalConfig = PayPalMessageModalConfig(data: .init(clientID: "testclientid", environment: .live))
     ) -> ( // swiftlint:disable:this large_tuple
         PayPalMessageModalViewModel,
         PayPalMessageModalWebViewMock,
@@ -268,9 +338,12 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,
-            eventDelegate: eventDelegate
+            eventDelegate: eventDelegate,
+            modal: modal
         )
-        viewModel.modal = modal
+
+        // Create a strong reference so the modal does not get cleaned up immediatedly after getting passed into the view model
+        self.modal = modal
 
         return (
             viewModel,

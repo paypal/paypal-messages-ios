@@ -1,5 +1,5 @@
 name: Linting
-on: [pull_request, workflow_dispatch]
+on: [pull_request, workflow_dispatch, workflow_call]
 
 concurrency:
   group: lint-${{ github.event.number }}
@@ -8,13 +8,13 @@ concurrency:
 jobs:
   linting:
     name: Linting
-    runs-on: macOS-latest
+    runs-on: macos-13
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Dependencies
         run: bundle install
 
       - name: Run Linting
-        run: bundle exec fastlane lint
+        run: bundle exec fastlane lint summary:$GITHUB_STEP_SUMMARY
