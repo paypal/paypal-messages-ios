@@ -3,6 +3,7 @@ import UIKit
 import WebKit
 
 class ModalWebView: WKWebView {
+    
     override var inputAccessoryView: UIView? {
         return nil
     }
