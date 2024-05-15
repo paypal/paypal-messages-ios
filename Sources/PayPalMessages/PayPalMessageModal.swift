@@ -76,7 +76,6 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // MARK: - Subviews
 
-    //    private let webView = WKWebView(frame: .zero)
     private let webView = ModalWebView(frame: .zero)
     private let backgroundView = UIView(frame: .zero)
     private let loadingCircleView = UIImageView(frame: .zero)
