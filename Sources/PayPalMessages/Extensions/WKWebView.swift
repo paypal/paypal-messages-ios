@@ -1,15 +1,18 @@
+// swiftlint:disable line_length
 import WebKit
 
-fileprivate final class InputAccessoryHackHelper: NSObject {
+private final class InputAccessoryHackHelper: NSObject {
+
     @objc var inputAccessoryView: AnyObject? { return nil }
 }
 
 extension WKWebView {
+
     func hack_removeInputAccessory() {
-        print("s")
         guard let target = scrollView.subviews.first(where: {
             String(describing: type(of: $0)).hasPrefix("WKContent")
         }), let superclass = target.superclass else {
+
             return
         }
 
@@ -27,8 +30,8 @@ extension WKWebView {
         guard let noInputAccessoryClass = newClass, let originalMethod = class_getInstanceMethod(InputAccessoryHackHelper.self, #selector(getter: InputAccessoryHackHelper.inputAccessoryView)) else {
             return
         }
+
         class_addMethod(noInputAccessoryClass.self, #selector(getter: InputAccessoryHackHelper.inputAccessoryView), method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
         object_setClass(target, noInputAccessoryClass)
     }
 }
-

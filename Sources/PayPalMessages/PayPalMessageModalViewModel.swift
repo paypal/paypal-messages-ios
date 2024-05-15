@@ -316,4 +316,3 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         loadCompletionHandler?(.success(()))
     }
 }
-
