@@ -129,8 +129,6 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
 
         super.init()
 
-        // Used to remove input accessory bar (next/previous/Done)
-        webView.hack_removeInputAccessory()
         // Used to hook into navigation lifecycle events
         webView.navigationDelegate = self
         // Used to communicate inside the webview
