@@ -3,7 +3,8 @@ import UIKit
 import WebKit
 
 class ModalWebView: WKWebView {
-    
+
+    // Used to remove input accessory bar to avoid layout constraints violations
     override var inputAccessoryView: UIView? {
         return nil
     }
