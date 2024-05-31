@@ -2,6 +2,14 @@ import SafariServices
 import UIKit
 import WebKit
 
+class ModalWebView: WKWebView {
+
+    // Used to remove input accessory bar to avoid layout constraints violations
+    override var inputAccessoryView: UIView? {
+        return nil
+    }
+}
+
 final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     typealias Proxy<T> = AnyProxy<PayPalMessageModal, T>
@@ -70,7 +78,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // MARK: - Subviews
 
-    private let webView = WKWebView(frame: .zero)
+    private let webView = ModalWebView(frame: .zero)
     private let backgroundView = UIView(frame: .zero)
     private let loadingCircleView = UIImageView(frame: .zero)
     private lazy var closeButton: CloseButton = {
