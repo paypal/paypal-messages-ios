@@ -31,9 +31,7 @@ public class PayPalMessageData: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
-        channel: String = BuildInfo.channel,
-        buyerCountry: String? = nil,
-        features: String? = nil
+        channel: String = BuildInfo.channel
     ) {
         self.clientID = clientID
         self.amount = amount
@@ -41,8 +39,6 @@ public class PayPalMessageData: NSObject {
         self.offerType = offerType
         self.environment = environment
         self.channel = channel
-        self.buyerCountry = buyerCountry
-        self.features = features
     }
 
     /// Partner integration
@@ -54,9 +50,7 @@ public class PayPalMessageData: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
-        channel: String = BuildInfo.channel,
-        buyerCountry: String? = nil,
-        features: String? = nil
+        channel: String = BuildInfo.channel
     ) {
         self.clientID = clientID
         self.merchantID = merchantID
@@ -66,8 +60,6 @@ public class PayPalMessageData: NSObject {
         self.offerType = offerType
         self.environment = environment
         self.channel = channel
-        self.buyerCountry = buyerCountry
-        self.features = features
     }
 
     deinit {}

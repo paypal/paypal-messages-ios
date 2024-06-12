@@ -79,7 +79,6 @@ class AnalyticsLogger: Encodable {
             try container.encodeIfPresent(message.logoType.rawValue, forKey: .styleLogoType)
             try container.encodeIfPresent(message.color.rawValue, forKey: .styleColor)
             try container.encodeIfPresent(message.textAlign.rawValue, forKey: .styleTextAlign)
-        //            try container.encodeIfPresent(message.features, forKey: .features)
 
         case .modal(let weakModal):
             guard let modal = weakModal.value else { return }
