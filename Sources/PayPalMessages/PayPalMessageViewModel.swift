@@ -62,6 +62,10 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         didSet { queueUpdate(from: oldValue, to: channel )}
     }
 
+    var features: String? {
+        didSet { queueUpdate(from: oldValue, to: features) }
+    }
+
     /// Changing its value will cause the message content being refetched only if an update is detected.
     var logoType: PayPalMessageLogoType {
         didSet { queueUpdate(from: oldValue, to: logoType) }
@@ -139,6 +143,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.pageType = config.data.pageType
         self.offerType = config.data.offerType
         self.buyerCountry = config.data.buyerCountry
+        self.features = config.data.features
         self.channel = config.data.channel
         self.color = config.style.color
         self.logoType = config.style.logoType
@@ -166,6 +171,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.offerType = config.data.offerType
         self.buyerCountry = config.data.buyerCountry
         self.channel = config.data.channel
+        self.features = config.data.features
         self.color = config.style.color
         self.logoType = config.style.logoType
         self.textAlign = config.style.textAlign
@@ -309,7 +315,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             offerType: offerType,
             merchantProfileHash: merchantProfileHash,
             ignoreCache: ignoreCache,
-            instanceID: logger.instanceId
+            instanceID: logger.instanceId,
+            features: features
         )
     }
 

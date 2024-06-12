@@ -45,6 +45,7 @@ class PayPalMessageModalDataConfig: NSObject {
     var channel: String
     var ignoreCache: Bool? // swiftlint:disable:this discouraged_optional_boolean
     var modalCloseButton: ModalCloseButtonConfig
+    var features: String?
 
     /// Standard integration
     init(
@@ -123,6 +124,7 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         case channel
         case pageType
         case ignoreCache
+        case features
     }
 
     func encode(to encoder: Encoder) throws {
@@ -137,5 +139,6 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         try container.encodeIfPresent(data.channel, forKey: .channel)
         try container.encodeIfPresent(data.pageType?.rawValue, forKey: .pageType)
         try container.encodeIfPresent(data.ignoreCache, forKey: .ignoreCache)
+        try container.encodeIfPresent(data.features, forKey: .features)
     }
 }

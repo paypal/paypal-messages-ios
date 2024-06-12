@@ -22,6 +22,7 @@ public class PayPalMessageData: NSObject {
     public var channel: String
     /// Skips the caching layer
     public var ignoreCache = false
+    public var features: String?
 
     /// Standard integration
     public init(
@@ -30,7 +31,9 @@ public class PayPalMessageData: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
-        channel: String = BuildInfo.channel
+        channel: String = BuildInfo.channel,
+        buyerCountry: String? = nil,
+        features: String? = nil
     ) {
         self.clientID = clientID
         self.amount = amount
@@ -38,6 +41,8 @@ public class PayPalMessageData: NSObject {
         self.offerType = offerType
         self.environment = environment
         self.channel = channel
+        self.buyerCountry = buyerCountry
+        self.features = features
     }
 
     /// Partner integration
@@ -49,7 +54,9 @@ public class PayPalMessageData: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
-        channel: String = BuildInfo.channel
+        channel: String = BuildInfo.channel,
+        buyerCountry: String? = nil,
+        features: String? = nil
     ) {
         self.clientID = clientID
         self.merchantID = merchantID
@@ -59,6 +66,8 @@ public class PayPalMessageData: NSObject {
         self.offerType = offerType
         self.environment = environment
         self.channel = channel
+        self.buyerCountry = buyerCountry
+        self.features = features
     }
 
     deinit {}

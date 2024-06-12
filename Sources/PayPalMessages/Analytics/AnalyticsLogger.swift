@@ -56,6 +56,7 @@ class AnalyticsLogger: Encodable {
         case instanceId = "instance_id"
         // Component Events
         case events = "component_events"
+        case features = "features"
     }
 
     func encode(to encoder: Encoder) throws {
@@ -78,6 +79,7 @@ class AnalyticsLogger: Encodable {
             try container.encodeIfPresent(message.logoType.rawValue, forKey: .styleLogoType)
             try container.encodeIfPresent(message.color.rawValue, forKey: .styleColor)
             try container.encodeIfPresent(message.textAlign.rawValue, forKey: .styleTextAlign)
+        //            try container.encodeIfPresent(message.features, forKey: .features)
 
         case .modal(let weakModal):
             guard let modal = weakModal.value else { return }

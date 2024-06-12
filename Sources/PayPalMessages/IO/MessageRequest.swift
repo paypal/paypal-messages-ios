@@ -17,6 +17,7 @@ struct MessageRequestParameters {
     let merchantProfileHash: String?
     let ignoreCache: Bool
     let instanceID: String
+    let features: String?
 }
 
 protocol MessageRequestable {
@@ -52,7 +53,8 @@ class MessageRequest: MessageRequestable {
             "version": BuildInfo.version,
             "integration_type": BuildInfo.integrationType,
             "integration_version": AnalyticsLogger.integrationVersion,
-            "integration_name": AnalyticsLogger.integrationName
+            "integration_name": AnalyticsLogger.integrationName,
+            "features": parameters.features
         ].filter {
             guard let value = $0.value else { return false }
 
