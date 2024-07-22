@@ -1,7 +1,7 @@
 import Foundation
 
 /// State Delegate
-protocol PayPalMessageModalStateDelegate: AnyObject {
+public protocol PayPalMessageModalStateDelegate: AnyObject {
     /// Function invoked when the message first starts to fetch data
     func onLoading(_ paypalMessageModal: PayPalMessageModal)
     /// Function invoked when the message has rendered
@@ -14,7 +14,7 @@ protocol PayPalMessageModalStateDelegate: AnyObject {
 }
 
 /// Event Delegate
-protocol PayPalMessageModalEventDelegate: AnyObject {
+public protocol PayPalMessageModalEventDelegate: AnyObject {
     /// Function invoked when element within modal is tapped
     func onClick(
         _ paypalMessageModal: PayPalMessageModal,
@@ -33,7 +33,7 @@ protocol PayPalMessageModalEventDelegate: AnyObject {
 
 // MARK: - Delegate Data Classes
 
-class PayPalMessageModalClickData: NSObject {
+public class PayPalMessageModalClickData: NSObject {
 
     let linkName: String
     let linkSrc: String
@@ -46,7 +46,7 @@ class PayPalMessageModalClickData: NSObject {
     deinit {}
 }
 
-class PayPalMessageModalCalculateData: NSObject {
+public class PayPalMessageModalCalculateData: NSObject {
 
     let value: Double
 
