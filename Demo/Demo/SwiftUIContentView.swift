@@ -167,6 +167,13 @@ struct SwiftUIContentView: View {
                 .background(backgroundColor)
 
             HStack {
+                Spacer()
+                Button("Show Standalone Modal", action: showStandaloneModal)
+                    .foregroundColor(.blue)
+                Spacer()
+            }
+
+            HStack {
                 // Reset configuration
                 Button("Reset", action: loadDefaultSelections)
                     .foregroundColor(.blue)
@@ -198,6 +205,17 @@ struct SwiftUIContentView: View {
         buyerCountry = defaultData.buyerCountry ?? ""
         ignoreCache = defaultData.ignoreCache
         clientID = defaultData.clientID
+    }
+
+    // MARK: - Open Standalone Modal
+    public func showStandaloneModal() {
+        let config = PayPalMessageModalConfig(data: .init(
+            clientID: clientID,
+            environment: defaultMessageConfig.data.environment
+        ))
+
+        let modal = PayPalMessageModal(config: config)
+        modal.show()
     }
 
     // MARK: - Delegates
