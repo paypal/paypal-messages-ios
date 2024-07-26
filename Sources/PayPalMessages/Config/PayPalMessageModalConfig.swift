@@ -84,7 +84,7 @@ public class PayPalMessageModalDataConfig: NSObject {
     }
 
     /// Partner integration
-    init(
+    public init(
         clientID: String,
         merchantID: String,
         environment: Environment,

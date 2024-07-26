@@ -95,7 +95,7 @@ class UIKitContentViewController: UIViewController {
     }()
 
     lazy var standaloneModalButton: UIButton = {
-        getButton(title: "Open Standalone Modal", action: #selector(learnMoreConfig(_:)))
+        getButton(title: "Show Standalone Modal", action: #selector(showStandaloneModal(_:)))
     }()
 
     lazy var stackView: UIStackView = {
@@ -229,14 +229,14 @@ class UIKitContentViewController: UIViewController {
         loadDefaultSelections()
     }
 
-    @objc private func learnMoreConfig(_ sender: UIView) {
+    @objc private func showStandaloneModal(_ sender: UIView) {
         let config = PayPalMessageModalConfig(data: .init(
             clientID: getCurrentClientID() ??
                 defaultMessageConfig.data.clientID,
             environment: defaultMessageConfig.data.environment
         ))
 
-        let modal = PayPalMessageModal(config: config)
+        let modal = PayPalMessageModalViewController(config: config)
         modal.show()
     }
 

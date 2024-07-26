@@ -1,6 +1,6 @@
 import WebKit
 
-class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
+class PayPalMessageModalViewControllerModel: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
 
     // MARK: - Properties
 
@@ -9,7 +9,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     /// Delegate property in charge of interaction-related events.
     weak var eventDelegate: PayPalMessageModalEventDelegate?
     /// modal view controller passed into logger and delegate functions
-    weak var modal: PayPalMessageModal?
+    weak var modal: PayPalMessageModalViewController?
 
     var environment: Environment {
         didSet { queueUpdate(from: oldValue, to: environment) }
@@ -108,7 +108,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         webView: WKWebView,
         stateDelegate: PayPalMessageModalStateDelegate? = nil,
         eventDelegate: PayPalMessageModalEventDelegate? = nil,
-        modal: PayPalMessageModal
+        modal: PayPalMessageModalViewController
     ) {
         environment = config.data.environment
         clientID = config.data.clientID

@@ -28,7 +28,7 @@ class AnalyticsLogger: Encodable {
 
     enum Component {
         case message(Weak<PayPalMessageView>)
-        case modal(Weak<PayPalMessageModal>)
+        case modal(Weak<PayPalMessageModalViewController>)
     }
 
     init(_ component: Component) {

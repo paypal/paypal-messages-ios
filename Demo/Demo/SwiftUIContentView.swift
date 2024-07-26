@@ -214,7 +214,7 @@ struct SwiftUIContentView: View {
             environment: defaultMessageConfig.data.environment
         ))
 
-        let modal = PayPalMessageModal(config: config)
+        let modal = PayPalMessageModalViewController(config: config)
         modal.show()
     }
 

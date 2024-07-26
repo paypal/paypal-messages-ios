@@ -10,9 +10,9 @@ class ModalWebView: WKWebView {
     }
 }
 
-public final class PayPalMessageModal: UIViewController, WKUIDelegate {
+public final class PayPalMessageModalViewController: UIViewController, WKUIDelegate {
 
-    public typealias Proxy<T> = AnyProxy<PayPalMessageModal, T>
+    public typealias Proxy<T> = AnyProxy<PayPalMessageModalViewController, T>
 
     // MARK: - Properties
 
@@ -70,7 +70,7 @@ public final class PayPalMessageModal: UIViewController, WKUIDelegate {
     // MARK: - Private Properties
 
     // swiftlint:disable:next implicitly_unwrapped_optional
-    private var viewModel: PayPalMessageModalViewModel!
+    private var viewModel: PayPalMessageModalViewControllerModel!
 
     /// Flag set when modal webview has successfully loaded the first time which will prevent
     /// reloading the webview after reopening the modal after an error state
@@ -104,7 +104,7 @@ public final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
         super.init(nibName: nil, bundle: nil)
 
-        self.viewModel = PayPalMessageModalViewModel(
+        self.viewModel = PayPalMessageModalViewControllerModel(
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,
