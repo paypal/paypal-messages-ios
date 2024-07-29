@@ -7,15 +7,15 @@ class PayPalMessageModalStateDelegateMock: PayPalMessageModalStateDelegate {
     var onLoadingCalled = false
     var onSuccessCalled = false
 
-    func onError(_ modal: PayPalMessageModal, error: PayPalMessageError) {
+    func onError(_ modal: PayPalMessageModalViewController, error: PayPalMessageError) {
         onErrorCalled = true
     }
 
-    func onLoading(_ modal: PayPalMessageModal) {
+    func onLoading(_ modal: PayPalMessageModalViewController) {
         onLoadingCalled = true
     }
 
-    func onSuccess(_ modal: PayPalMessageModal) {
+    func onSuccess(_ modal: PayPalMessageModalViewController) {
         onSuccessCalled = true
     }
 }
@@ -29,21 +29,21 @@ class PayPalMessageModalEventDelegateMock: PayPalMessageModalEventDelegate {
     var onShowCalled = false
     var onCloseCalled = false
 
-    func onClick(_ modal: PayPalMessageModal, data: PayPalMessageModalClickData) {
+    func onClick(_ modal: PayPalMessageModalViewController, data: PayPalMessageModalClickData) {
         onClickCalled = true
         onClickData = data
     }
 
-    func onCalculate(_ modal: PayPalMessageModal, data: PayPalMessageModalCalculateData) {
+    func onCalculate(_ modal: PayPalMessageModalViewController, data: PayPalMessageModalCalculateData) {
         onCalculateCalled = true
         onCalculateData = data
     }
 
-    func onShow(_ modal: PayPalMessageModal) {
+    func onShow(_ modal: PayPalMessageModalViewController) {
         onShowCalled = true
     }
 
-    func onClose(_ modal: PayPalMessageModal) {
+    func onClose(_ modal: PayPalMessageModalViewController) {
         onCloseCalled = true
     }
 }
