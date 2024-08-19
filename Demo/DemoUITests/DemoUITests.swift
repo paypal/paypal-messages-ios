@@ -21,7 +21,6 @@ final class DemoUITests: XCTestCase {
 
         let window = app.windows.element(boundBy: 0)
         app.buttons["Show Standalone Modal"].tap()
-        print(app.debugDescription)
         let modalCloseButton = app.buttons["PayPal learn more modal close"]
         XCTAssert(window.frame.contains(modalCloseButton.frame))
     }
