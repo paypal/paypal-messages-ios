@@ -1,10 +1,3 @@
-//
-//  DemoTests.swift
-//  DemoTests
-//
-//  Created by Daniel Haas on 8/19/24.
-//
-
 import XCTest
 
 final class DemoUITests: XCTestCase {
@@ -22,12 +15,15 @@ final class DemoUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testModalViewIsOnScreen() throws {
         let app = XCUIApplication()
         app.launch()
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let window = app.windows.element(boundBy: 0)
+        app.buttons["Show Standalone Modal"].tap()
+        print(app.debugDescription)
+        let modalCloseButton = app.buttons["PayPal learn more modal close"]
+        XCTAssert(window.frame.contains(modalCloseButton.frame))
     }
 
     func testLaunchPerformance() throws {
