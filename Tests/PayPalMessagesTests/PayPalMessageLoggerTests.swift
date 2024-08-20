@@ -24,7 +24,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
         requester: PayPalMessageRequestMock(scenario: .success()),
         merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
     )
-    let modal = PayPalMessageModal(
+    let modal = PayPalMessageModalViewController(
         config: .init(
             data: .init(
                 clientID: "testloggerclientid",

@@ -10,67 +10,67 @@ class ModalWebView: WKWebView {
     }
 }
 
-final class PayPalMessageModal: UIViewController, WKUIDelegate {
+public final class PayPalMessageModalViewController: UIViewController, WKUIDelegate {
 
-    typealias Proxy<T> = AnyProxy<PayPalMessageModal, T>
+    public typealias Proxy<T> = AnyProxy<PayPalMessageModalViewController, T>
 
     // MARK: - Properties
 
     /// Delegate property in charge of announcing rendering and fetching events.
     @Proxy(\.viewModel.stateDelegate)
-    var stateDelegate: PayPalMessageModalStateDelegate?
+    public var stateDelegate: PayPalMessageModalStateDelegate?
 
     /// Delegate property in charge of interaction-related events.
     @Proxy(\.viewModel.eventDelegate)
-    var eventDelegate: PayPalMessageModalEventDelegate?
+    public var eventDelegate: PayPalMessageModalEventDelegate?
 
     @Proxy(\.viewModel.clientID)
-    var clientID: String
+    public var clientID: String
 
     @Proxy(\.viewModel.merchantID)
-    var merchantID: String?
+    public var merchantID: String?
 
     @Proxy(\.viewModel.partnerAttributionID)
-    var partnerAttributionID: String?
+    public var partnerAttributionID: String?
 
     @Proxy(\.viewModel.environment)
-    var environment: Environment
+    public var environment: Environment
 
     @Proxy(\.viewModel.amount)
-    var amount: Double?
-
-    @Proxy(\.viewModel.buyerCountry)
-    var buyerCountry: String?
-
-    @Proxy(\.viewModel.offerType)
-    var offerType: PayPalMessageOfferType?
-
-    // Content channel
-    @Proxy(\.viewModel.channel)
-    var channel: String
+    public var amount: Double?
 
     // Location within the application
     @Proxy(\.viewModel.pageType)
-    var pageType: PayPalMessagePageType?
+    public var pageType: PayPalMessagePageType?
+
+    @Proxy(\.viewModel.offerType)
+    public var offerType: PayPalMessageOfferType?
+
+    @Proxy(\.viewModel.buyerCountry)
+    public var buyerCountry: String?
+
+    // Content channel
+    @Proxy(\.viewModel.channel)
+    public var channel: String
 
     // Skip Juno cache
     @Proxy(\.viewModel.ignoreCache)
-    var ignoreCache: Bool?
+    public var ignoreCache: Bool?
 
     // Standalone modal
     @Proxy(\.viewModel.integrationIdentifier)
-    var integrationIdentifier: String?
+    public var integrationIdentifier: String?
 
     @Proxy(\.viewModel.merchantProfileHash)
-    var merchantProfileHash: String?
+    public var merchantProfileHash: String?
 
     // Modal close button
-    var modalCloseButtonConfig: ModalCloseButtonConfig
+    public var modalCloseButtonConfig: ModalCloseButtonConfig
 
     // MARK: - Private Properties
 
     // swiftlint:disable:next implicitly_unwrapped_optional
-    private var viewModel: PayPalMessageModalViewModel!
+    private var viewModel: PayPalMessageModalViewControllerModel!
 
     /// Flag set when modal webview has successfully loaded the first time which will prevent
     /// reloading the webview after reopening the modal after an error state
@@ -89,13 +89,13 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // TODO: These should probably be removed as they don't appear supported for formSheet modals
     // Force modal ViewController to portrait orientation
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation { .portrait }
-    override var shouldAutorotate: Bool { false }
+    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
+    override public var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation { .portrait }
+    override public var shouldAutorotate: Bool { false }
 
     // MARK: - Initializers
 
-    required init(
+    public required init(
         config: PayPalMessageModalConfig,
         stateDelegate: PayPalMessageModalStateDelegate? = nil,
         eventDelegate: PayPalMessageModalEventDelegate? = nil
@@ -104,7 +104,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
         super.init(nibName: nil, bundle: nil)
 
-        self.viewModel = PayPalMessageModalViewModel(
+        self.viewModel = PayPalMessageModalViewControllerModel(
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,
@@ -126,14 +126,14 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // MARK: - ViewController Lifecycle Functions
 
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         stateDelegate?.onLoading(self)
         configViews()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         eventDelegate?.onShow(self)
@@ -164,7 +164,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         }
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
+    override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
         eventDelegate?.onClose(self)
@@ -312,7 +312,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // MARK: - Modal Control Functions
 
-    func show(config: PayPalMessageModalConfig? = nil) {
+    public func show(config: PayPalMessageModalConfig? = nil) {
         if let safeConfig = config {
             viewModel.setConfig(safeConfig)
         }
@@ -330,7 +330,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         presentingViewController.present(self, animated: true)
     }
 
-    @objc func hide() {
+    @objc public func hide() {
         dismiss(animated: true)
     }
 
@@ -340,7 +340,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // MARK: - WKUIDelegate Protocol Functions
 
-    func webView(
+    public func webView(
         _ webView: WKWebView,
         createWebViewWith configuration: WKWebViewConfiguration,
         for navigationAction: WKNavigationAction,

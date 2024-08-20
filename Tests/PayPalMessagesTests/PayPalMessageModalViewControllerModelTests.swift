@@ -3,12 +3,12 @@ import WebKit
 import XCTest
 
 // swiftlint:disable:next type_body_length
-final class PayPalMessageModalViewModelTests: XCTestCase {
+final class PayPalMessageModalViewControllerModelTests: XCTestCase {
 
     let navigation = WKNavigation()
     let mockSender = LogSenderMock()
 
-    var modal: PayPalMessageModal?
+    var modal: PayPalMessageModalViewController?
 
     override func setUp() {
         super.setUp()
@@ -51,7 +51,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         config.data.channel = "TEST"
         config.data.ignoreCache = true
 
-        let (viewModel, webView, stateDelegate, eventDelegate) = makePayPalMessageModalViewModel(
+        let (viewModel, webView, stateDelegate, eventDelegate) = makePayPalMessageModalViewControllerModel(
             config: config
         )
 
@@ -71,7 +71,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     func testUpdateConfig() {
-        let (viewModel, webView, _, _) = makePayPalMessageModalViewModel()
+        let (viewModel, webView, _, _) = makePayPalMessageModalViewControllerModel()
 
         XCTAssertNil(viewModel.amount)
         XCTAssertNil(viewModel.offerType)
@@ -127,7 +127,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     func testUpdateIndividualProperties() {
-        let (viewModel, webView, _, _) = makePayPalMessageModalViewModel()
+        let (viewModel, webView, _, _) = makePayPalMessageModalViewControllerModel()
 
         XCTAssertNil(viewModel.amount)
         XCTAssertNil(viewModel.offerType)
@@ -175,7 +175,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     func testModalLoadSuccess() {
-        let (viewModel, webView, _, _) = makePayPalMessageModalViewModel(
+        let (viewModel, webView, _, _) = makePayPalMessageModalViewControllerModel(
             config: .init(
                 data: .init(
                     clientID: "testclientid",
@@ -221,7 +221,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     func testModalLoadFailure() {
-        let (viewModel, webView, _, _) = makePayPalMessageModalViewModel()
+        let (viewModel, webView, _, _) = makePayPalMessageModalViewControllerModel()
         var loadResult: Result<Void, PayPalMessageError>?
 
         XCTAssertFalse(webView.loadCalled)
@@ -260,7 +260,7 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
     }
 
     func testCallsEventDelegate() {
-        let (viewModel, _, _, eventDelegate) = makePayPalMessageModalViewModel()
+        let (viewModel, _, _, eventDelegate) = makePayPalMessageModalViewControllerModel()
         let userContentController = WKUserContentController()
 
         viewModel.userContentController(
@@ -318,10 +318,10 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         XCTAssertEqual(eventDelegate.onClickData?.linkSrc, "Apply Now Src")
     }
 
-    private func makePayPalMessageModalViewModel(
+    private func makePayPalMessageModalViewControllerModel(
         config: PayPalMessageModalConfig = PayPalMessageModalConfig(data: .init(clientID: "testclientid", environment: .live))
     ) -> ( // swiftlint:disable:this large_tuple
-        PayPalMessageModalViewModel,
+        PayPalMessageModalViewControllerModel,
         PayPalMessageModalWebViewMock,
         PayPalMessageModalStateDelegateMock,
         PayPalMessageModalEventDelegateMock
@@ -329,12 +329,12 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         let webView = PayPalMessageModalWebViewMock()
         let stateDelegate = PayPalMessageModalStateDelegateMock()
         let eventDelegate = PayPalMessageModalEventDelegateMock()
-        let modal = PayPalMessageModal(
+        let modal = PayPalMessageModalViewController(
             config: config,
             stateDelegate: stateDelegate,
             eventDelegate: eventDelegate
         )
-        let viewModel = PayPalMessageModalViewModel(
+        let viewModel = PayPalMessageModalViewControllerModel(
             config: config,
             webView: webView,
             stateDelegate: stateDelegate,

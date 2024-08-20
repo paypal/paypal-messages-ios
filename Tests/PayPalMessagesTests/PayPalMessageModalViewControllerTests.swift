@@ -13,11 +13,11 @@ final class PayPalMessageModalTests: XCTestCase {
         )
     )
 
-    var modalViewController: PayPalMessageModal?
+    var modalViewController: PayPalMessageModalViewController?
 
     override func setUp() {
         super.setUp()
-        modalViewController = PayPalMessageModal(config: config)
+        modalViewController = PayPalMessageModalViewController(config: config)
         modalViewController?.loadViewIfNeeded()
     }
 
@@ -27,7 +27,7 @@ final class PayPalMessageModalTests: XCTestCase {
     }
 
     func testInitialPropertyValues() {
-        let modalViewController = PayPalMessageModal(config: config)
+        let modalViewController = PayPalMessageModalViewController(config: config)
 
         let supportedOrientations = modalViewController.supportedInterfaceOrientations
         let preferredOrientation = modalViewController.preferredInterfaceOrientationForPresentation

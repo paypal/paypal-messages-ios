@@ -1,17 +1,24 @@
 import Foundation
 import UIKit
 
-class ModalCloseButtonConfig: NSObject {
+public class ModalCloseButtonConfig: NSObject {
 
-    var width: Int
-    var height: Int
-    var availableWidth: Int
-    var availableHeight: Int
-    var color: UIColor
-    var colorType: String
-    var alternativeText: String
+    /// Width of icon in pixels
+    public var width: Int
+    /// Height of icon in pixels
+    public var height: Int
+    /// Width available to touch-responsive area in pixels
+    public var availableWidth: Int
+    /// Height available to touch-responsive area in pixels
+    public var availableHeight: Int
+    /// Color of button
+    public var color: UIColor
+    /// Color type, i.e. "light" or "dark" for light or dark mode
+    public var colorType: String
+    /// Text alternative to visual appearance that would be recited by a screen reader
+    public var alternativeText: String
 
-    init(
+    public init(
         width: Int? = nil,
         height: Int? = nil,
         availableWidth: Int? = nil,
@@ -32,22 +39,33 @@ class ModalCloseButtonConfig: NSObject {
     deinit {}
 }
 
-class PayPalMessageModalDataConfig: NSObject {
+public class PayPalMessageModalDataConfig: NSObject {
 
-    var clientID: String
-    var merchantID: String?
-    var partnerAttributionID: String?
-    var environment: Environment
-    var amount: Double?
-    var buyerCountry: String?
-    var offerType: PayPalMessageOfferType?
-    var pageType: PayPalMessagePageType?
-    var channel: String
-    var ignoreCache: Bool? // swiftlint:disable:this discouraged_optional_boolean
-    var modalCloseButton: ModalCloseButtonConfig
+    /// PayPal developer client ID
+    public var clientID: String
+    /// PayPal encrypted merchant ID. For partner integrations only.
+    public var merchantID: String?
+    /// Partner BN Code / Attribution ID assigned to the account. For partner integrations only.
+    public var partnerAttributionID: String?
+    /// PayPal execution environment
+    public var environment: Environment
+    /// Price expressed in cents amount based on the current context (i.e. individual product price vs total cart price)
+    public var amount: Double?
+    /// Message screen location (e.g. product, cart, home)
+    public var pageType: PayPalMessagePageType?
+    /// Preferred message offer to display
+    public var offerType: PayPalMessageOfferType?
+    /// Consumer's country (Integrations must be approved by PayPal to use this option)
+    public var buyerCountry: String?
+    /// Message content channel
+    public var channel: String
+    /// Skips the caching layer
+    public var ignoreCache: Bool? // swiftlint:disable:this discouraged_optional_boolean
+    /// Configuration for modal close button
+    public var modalCloseButton: ModalCloseButtonConfig
 
     /// Standard integration
-    init(
+    public init(
         clientID: String,
         environment: Environment,
         amount: Double? = nil,
@@ -66,7 +84,7 @@ class PayPalMessageModalDataConfig: NSObject {
     }
 
     /// Partner integration
-    init(
+    public init(
         clientID: String,
         merchantID: String,
         environment: Environment,
@@ -91,11 +109,11 @@ class PayPalMessageModalDataConfig: NSObject {
     deinit {}
 }
 
-class PayPalMessageModalConfig: NSObject, Encodable {
+public class PayPalMessageModalConfig: NSObject, Encodable {
 
-    var data: PayPalMessageModalDataConfig
+    public var data: PayPalMessageModalDataConfig
 
-    init(
+    public init(
         data: PayPalMessageModalDataConfig
     ) {
         self.data = data
@@ -125,7 +143,7 @@ class PayPalMessageModalConfig: NSObject, Encodable {
         case ignoreCache
     }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encodeIfPresent(data.clientID, forKey: .clientID)

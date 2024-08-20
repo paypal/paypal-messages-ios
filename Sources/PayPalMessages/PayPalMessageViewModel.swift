@@ -115,7 +115,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private let merchantProfileProvider: MerchantProfileHashGetable
 
     /// modal instance attached to the message
-    private var modal: PayPalMessageModal?
+    private var modal: PayPalMessageModalViewController?
 
     /// Tracking logger
     private let logger: AnalyticsLogger
@@ -414,7 +414,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         ))
 
         if modal == nil {
-            modal = PayPalMessageModal(config: makeModalConfig(), eventDelegate: self)
+            modal = PayPalMessageModalViewController(config: makeModalConfig(), eventDelegate: self)
         }
 
         if let modal {
@@ -425,14 +425,14 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
     // MARK: Modal Event Delegate Functions
 
-    func onClick(_ modal: PayPalMessageModal, data: PayPalMessageModalClickData) {
+    func onClick(_ modal: PayPalMessageModalViewController, data: PayPalMessageModalClickData) {
         if let eventDelegate, let messageView, data.linkName.contains("Apply Now") {
             eventDelegate.onApply(messageView)
         }
     }
 
-    func onCalculate(_ modal: PayPalMessageModal, data: PayPalMessageModalCalculateData) {}
-    func onShow(_ modal: PayPalMessageModal) {}
-    func onClose(_ modal: PayPalMessageModal) {}
+    func onCalculate(_ modal: PayPalMessageModalViewController, data: PayPalMessageModalCalculateData) {}
+    func onShow(_ modal: PayPalMessageModalViewController) {}
+    func onClose(_ modal: PayPalMessageModalViewController) {}
 }
 // swiftlint:disable:this file_length

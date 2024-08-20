@@ -94,6 +94,10 @@ class UIKitContentViewController: UIViewController {
         getButton(title: "Reset", action: #selector(resetConfig(_:)))
     }()
 
+    lazy var standaloneModalButton: UIButton = {
+        getButton(title: "Show Standalone Modal", action: #selector(showStandaloneModal(_:)))
+    }()
+
     lazy var stackView: UIStackView = {
         paypalMessage.translatesAutoresizingMaskIntoConstraints = false
 
@@ -139,7 +143,8 @@ class UIKitContentViewController: UIViewController {
                     axis: .horizontal
                 ),
                 getSeparator(),
-                paypalMessage
+                paypalMessage,
+                standaloneModalButton
             ],
             padding: 12
         )
@@ -222,6 +227,17 @@ class UIKitContentViewController: UIViewController {
     @objc private func resetConfig(_ sender: UIView) {
         paypalMessage.setConfig(defaultMessageConfig)
         loadDefaultSelections()
+    }
+
+    @objc private func showStandaloneModal(_ sender: UIView) {
+        let config = PayPalMessageModalConfig(data: .init(
+            clientID: getCurrentClientID() ??
+                defaultMessageConfig.data.clientID,
+            environment: defaultMessageConfig.data.environment
+        ))
+
+        let modal = PayPalMessageModalViewController(config: config)
+        modal.show()
     }
 
     // MARK: - Styling Helpers

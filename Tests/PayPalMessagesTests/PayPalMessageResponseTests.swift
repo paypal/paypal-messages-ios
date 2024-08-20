@@ -54,11 +54,12 @@ final class MessageResponseTests: XCTestCase {
             }
         }
         """
-            // swiftlint:disable force_unwrapping
-            .data(using: .utf8)!
+        guard let jsonData = json.data(using: .utf8) else {
+            fatalError("Failed to convert string to data")
+        }
 
         let decoder = JSONDecoder()
-        let messageResponse = try decoder.decode(MessageResponse.self, from: json)
+        let messageResponse = try decoder.decode(MessageResponse.self, from: jsonData)
 
         XCTAssertEqual(messageResponse.offerType, .payLaterLongTerm)
         XCTAssertEqual(messageResponse.productGroup, .payLater)
