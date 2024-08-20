@@ -22,7 +22,7 @@ final class AnyCodableTests: XCTestCase {
         let encoder = JSONEncoder()
         let data = try encoder.encode(intValue)
 
-        let jsonString = String(data: data, encoding: .utf8)
+        let jsonString = String(decoding: data, as: UTF8.self)
         XCTAssertEqual(jsonString, "42")
     }
 
@@ -34,7 +34,7 @@ final class AnyCodableTests: XCTestCase {
         let encoder = JSONEncoder()
         let data = try encoder.encode(stringValue)
 
-        let jsonString = String(data: data, encoding: .utf8)
+        let jsonString = String(decoding: data, as: UTF8.self)
         XCTAssertEqual(jsonString, "\"Hello, World!\"")
     }
 
@@ -45,7 +45,7 @@ final class AnyCodableTests: XCTestCase {
         let encoder = JSONEncoder()
         let data = try encoder.encode(boolValue)
 
-        let jsonString = String(data: data, encoding: .utf8)
+        let jsonString = String(decoding: data, as: UTF8.self)
         XCTAssertEqual(jsonString, "true")
     }
 
@@ -56,7 +56,7 @@ final class AnyCodableTests: XCTestCase {
         let encoder = JSONEncoder()
         let data = try encoder.encode(nilValue)
 
-        let jsonString = String(data: data, encoding: .utf8)
+        let jsonString = String(decoding: data, as: UTF8.self)
         XCTAssertEqual(jsonString, "null")
     }
 }

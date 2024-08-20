@@ -203,8 +203,11 @@ class PayPalMessageModalViewControllerModel: NSObject, WKNavigationDelegate, WKS
 
     // Exposed internally for tests
     func flushUpdates() {
-        guard let jsonData = try? JSONEncoder().encode(self.makeConfig()),
-              let jsonString = String(data: jsonData, encoding: .utf8) else { return }
+        guard let jsonData = try? JSONEncoder().encode(self.makeConfig()) else {
+            log(.error, "Failed to encode configuration.", for: environment)
+            return
+        }
+        let jsonString = String(decoding: jsonData, as: UTF8.self)
 
         log(.debug, "Update props: \(jsonString)", for: environment)
 

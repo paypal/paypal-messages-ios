@@ -20,11 +20,12 @@ final class ResponseErrorTests: XCTestCase {
             "debug_id": "12345"
         }
         """
-            // swiftlint:disable force_unwrapping
-            .data(using: .utf8)!
+        guard let jsonData = json.data(using: .utf8) else {
+            fatalError("Failed to convert string to data")
+        }
 
         let decoder = JSONDecoder()
-        let responseError = try decoder.decode(ResponseError.self, from: json)
+        let responseError = try decoder.decode(ResponseError.self, from: jsonData)
 
         XCTAssertEqual(responseError.paypalDebugID, "12345")
         XCTAssertNil(responseError.issue)
@@ -45,11 +46,12 @@ final class ResponseErrorTests: XCTestCase {
             ]
         }
         """
-            // swiftlint:disable force_unwrapping
-            .data(using: .utf8)!
+        guard let jsonData = json.data(using: .utf8) else {
+            fatalError("Failed to convert string to data")
+        }
 
         let decoder = JSONDecoder()
-        let responseError = try decoder.decode(ResponseError.self, from: json)
+        let responseError = try decoder.decode(ResponseError.self, from: jsonData)
 
         XCTAssertEqual(responseError.paypalDebugID, "12345")
         XCTAssertEqual(responseError.issue, "TEST_ISSUE")
