@@ -21,7 +21,7 @@ func log(_ level: LogLevel, _ message: String, with data: Data? = nil, for envir
                 options: .prettyPrinted
               ) else { return }
         message += "\n"
-        message += String(decoding: jsonData, as: UTF8.self)
+        message += String(data: jsonData, encoding: .utf8) ?? ""
     }
 
     print(message)

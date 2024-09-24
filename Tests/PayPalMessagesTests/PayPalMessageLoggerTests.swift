@@ -542,8 +542,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
             withJSONObject: expected,
             options: .prettyPrinted
            ) {
-            let payloadString = String(decoding: payloadData, as: UTF8.self)
-            let expectedString = String(decoding: expectedData, as: UTF8.self)
+            let payloadString = String(data: payloadData, encoding: .utf8) ?? ""
+            let expectedString = String(data: expectedData, encoding: .utf8) ?? ""
 
             print("Expected:\n\(expectedString)\n\nReceived:\n\(payloadString)")
         }
