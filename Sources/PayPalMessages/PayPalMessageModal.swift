@@ -42,6 +42,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     @Proxy(\.viewModel.buyerCountry)
     var buyerCountry: String?
 
+    @Proxy(\.viewModel.language)
+    var language: String?
+
+    @Proxy(\.viewModel.locale)
+    var locale: String?
+
     @Proxy(\.viewModel.offerType)
     var offerType: PayPalMessageOfferType?
 

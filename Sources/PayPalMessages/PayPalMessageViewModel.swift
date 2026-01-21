@@ -410,6 +410,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         config.data.partnerAttributionID = partnerAttributionID
         // Non-standard options
         config.data.buyerCountry = buyerCountry
+        config.data.language = language
+        config.data.locale = locale
         config.data.modalCloseButton = modalCloseButton
         // Dev options
         config.data.ignoreCache = ignoreCache
