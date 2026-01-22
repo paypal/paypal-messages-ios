@@ -17,6 +17,8 @@ jobs:
         run: bundle install
 
       - name: Run pod lib lint
+        env:
+          BUNDLE_DISABLE_EXEC_LOAD: "1"
         run: bundle exec fastlane build_pod
 
   spm:
