@@ -8,7 +8,7 @@ concurrency:
 jobs:
   cocoapods:
     name: CocoaPods
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
 
   spm:
     name: Swift Package Manager
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -34,7 +34,7 @@ jobs:
 
   carthage:
     name: Carthage
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v3

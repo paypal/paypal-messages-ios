@@ -4,6 +4,12 @@ skip_docs
 default_platform(:ios)
 
 def setup_xcode
+  # In CI, prefer the preinstalled Xcode on the runner
+  if ENV["CI"] == "true"
+    UI.message("CI detected: using preinstalled Xcode; skipping xcodes install")
+    return
+  end
+
   sh "which xcodes > /dev/null || brew install xcodes"
   xcodes(
     version: "14.3.1",
@@ -42,7 +48,7 @@ platform :ios do
     scan(
       workspace: "PayPalMessages.xcworkspace",
       scheme: "PayPalMessagesTests",
-      devices: ["iPhone 14 (16.4)"], # default iOS 17 simulator runs much slower on GitHub Actions
+      # Do not pin a simulator device; use the default available simulator on CI
       derived_data_path: "~/Library/Developer/Xcode/DerivedData",
       skip_build: true,
       result_bundle: true,

@@ -8,7 +8,7 @@ concurrency:
 jobs:
   linting:
     name: Linting
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
