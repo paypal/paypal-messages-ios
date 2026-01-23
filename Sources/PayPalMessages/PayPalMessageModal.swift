@@ -344,6 +344,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
         viewModel.setConfig(config)
     }
 
+    /// Marks the modal to reload its web content on next presentation.
+    /// This allows changes in app parameters (e.g., language/locale) to take effect.
+    public func markNeedsReload() {
+        hasSuccessfullyLoaded = false
+    }
+
     // MARK: - WKUIDelegate Protocol Functions
 
     func webView(

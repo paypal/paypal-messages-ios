@@ -303,6 +303,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         if let modal {
             modal.merchantProfileHash = merchantProfileHash
             modal.setConfig(makeModalConfig())
+            // Ensure the modal reloads with new URL params on next presentation
+            modal.markNeedsReload()
         }
 
         log(.debug, "onMessageRequestReceived is \(String(describing: response.defaultMainContent))", for: environment)
