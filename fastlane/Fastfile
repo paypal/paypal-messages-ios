@@ -50,7 +50,7 @@ platform :ios do
       scheme: "PayPalMessagesTests",
       # Do not pin a simulator device; use the default available simulator on CI
       derived_data_path: "~/Library/Developer/Xcode/DerivedData",
-      skip_build: true,
+      skip_build: false,
       result_bundle: true,
       code_coverage: true,
       xcodebuild_formatter: "xcbeautify --renderer github-actions"
@@ -60,10 +60,15 @@ platform :ios do
     sh "rm -rf coverage"
 
     begin
+      # Locate latest .xcresult to make xcov more reliable on Xcode 16+
+      xcresult = sh("ls -t ~/Library/Developer/Xcode/DerivedData/*/Logs/Test/*.xcresult | head -n 1").strip rescue ""
+      UI.message("xcresult: #{xcresult}")
       xcov(
         workspace: "PayPalMessages.xcworkspace",
         scheme: "PayPalMessagesTests",
         derived_data_path: "~/Library/Developer/Xcode/DerivedData",
+        xcresult: (xcresult.empty? ? nil : xcresult),
+        only_project_targets: true,
         output_directory: "fastlane/coverage",
         markdown_report: true,
         minimum_coverage_percentage: 80.0
