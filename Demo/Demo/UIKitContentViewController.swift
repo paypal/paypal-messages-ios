@@ -378,33 +378,4 @@ class UIKitContentViewController: UIViewController {
     }
 }
 
-// MARK: - Delegates
-extension UIKitContentViewController: PayPalMessageViewStateDelegate {
-
-    func onLoading(_ paypalMessageView: PayPalMessageView) {
-        statusTextView.text = "Loading..."
-    }
-
-    func onSuccess(_ paypalMessageView: PayPalMessageView) {
-        statusTextView.text = "Success"
-    }
-
-    func onError(_ paypalMessageView: PayPalMessageView, error: PayPalMessageError) {
-        if let paypalDebugID = error.paypalDebugId {
-            statusTextView.text = "Error (\(paypalDebugID))"
-        } else {
-            statusTextView.text = "Error"
-        }
-    }
-}
-
-extension UIKitContentViewController: PayPalMessageViewEventDelegate {
-
-    func onClick(_ paypalMessageView: PayPalMessageView) {
-        statusTextView.text = "Clicked"
-    }
-
-    func onApply(_ paypalMessageView: PayPalMessageView) {
-        statusTextView.text = "Applied"
-    }
-}
+// Delegates moved to Extensions/UIKitContentViewController+PayPalMessageDelegates.swift
