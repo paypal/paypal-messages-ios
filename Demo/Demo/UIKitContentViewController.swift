@@ -31,6 +31,10 @@ class UIKitContentViewController: UIViewController {
 
     lazy var buyerCountryLabel = getLabel(text: "Buyer Country")
 
+    lazy var languageLabel = getLabel(text: "Language")
+
+    lazy var localeLabel = getLabel(text: "Locale")
+
     lazy var ignoreCacheLabel = getLabel(text: "Ignore Cache")
 
     lazy var logoTypePicker: UISegmentedControl = getSegmentedControl(
@@ -63,6 +67,18 @@ class UIKitContentViewController: UIViewController {
         action: #selector(updatePayPalMessageMessage),
         keyboardType: .alphabet,
         autoCapitalizationType: .allCharacters
+    )
+
+    lazy var languageField: UITextField = getTextField(
+        action: #selector(updatePayPalMessageMessage),
+        keyboardType: .default,
+        autoCapitalizationType: .none
+    )
+
+    lazy var localeField: UITextField = getTextField(
+        action: #selector(updatePayPalMessageMessage),
+        keyboardType: .default,
+        autoCapitalizationType: .none
     )
 
     lazy var ignoreCacheSwitch: UISwitch = getSwitch(
@@ -133,6 +149,20 @@ class UIKitContentViewController: UIViewController {
                 ),
                 getStackView(
                     subviews: [
+                        languageLabel,
+                        languageField
+                    ],
+                    axis: .horizontal
+                ),
+                getStackView(
+                    subviews: [
+                        localeLabel,
+                        localeField
+                    ],
+                    axis: .horizontal
+                ),
+                getStackView(
+                    subviews: [
                         ignoreCacheSwitch,
                         ignoreCacheLabel
                     ],
@@ -175,6 +205,8 @@ class UIKitContentViewController: UIViewController {
         loadSegmentedIndex(item: defaultMessageConfig.style.color, picker: colorTypePicker)
         loadSegmentedIndex(item: defaultMessageConfig.style.textAlign, picker: alignmentTypePicker)
         buyerCountryField.text = defaultMessageConfig.data.buyerCountry
+        languageField.text = defaultMessageConfig.data.language
+        localeField.text = defaultMessageConfig.data.locale
         ignoreCacheSwitch.isOn = defaultMessageConfig.data.ignoreCache
 
         if let amount = defaultMessageConfig.data.amount {
@@ -241,6 +273,8 @@ class UIKitContentViewController: UIViewController {
         )
 
         config.data.buyerCountry = getCurrentBuyerCountry()
+        config.data.language = getCurrentLanguage()
+        config.data.locale = getCurrentLocale()
         config.data.ignoreCache = getCurrentIgnoreCache()
 
         return config
@@ -270,6 +304,18 @@ class UIKitContentViewController: UIViewController {
 
     private func getCurrentBuyerCountry() -> String? {
         guard let text = buyerCountryField.text, !text.isEmpty else { return nil }
+
+        return text
+    }
+
+    private func getCurrentLanguage() -> String? {
+        guard let text = languageField.text, !text.isEmpty else { return nil }
+
+        return text
+    }
+
+    private func getCurrentLocale() -> String? {
+        guard let text = localeField.text, !text.isEmpty else { return nil }
 
         return text
     }

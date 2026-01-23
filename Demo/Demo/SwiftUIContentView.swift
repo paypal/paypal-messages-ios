@@ -16,6 +16,8 @@ struct SwiftUIContentView: View {
     @State private var pageType: PayPalMessagePageType? = defaultMessageConfig.data.pageType
     @State private var offerType: PayPalMessageOfferType? = defaultMessageConfig.data.offerType
     @State private var buyerCountry: String = defaultMessageConfig.data.buyerCountry ?? ""
+    @State private var language: String = defaultMessageConfig.data.language ?? ""
+    @State private var locale: String = defaultMessageConfig.data.locale ?? ""
     @State private var ignoreCache: Bool = defaultMessageConfig.data.ignoreCache
 
     @State private var messageState: String = ""
@@ -44,6 +46,12 @@ struct SwiftUIContentView: View {
 
         if !buyerCountry.isEmpty {
             messageConfig.data.buyerCountry = buyerCountry
+        }
+        if !language.isEmpty {
+            messageConfig.data.language = language
+        }
+        if !locale.isEmpty {
+            messageConfig.data.locale = locale
         }
         messageConfig.data.ignoreCache = ignoreCache
 
@@ -142,6 +150,42 @@ struct SwiftUIContentView: View {
                             debounceConfigUpdate()
                         }
                 }
+
+                HStack {
+                    // Language
+                    ReusableTextView(text: "Language", font: .subheadline, weight: .semibold)
+
+                    Group {
+                        if #available(iOS 15.0, *) {
+                            ReusableTextField(text: $language)
+                                .textInputAutocapitalization(.never)
+                        } else {
+                            ReusableTextField(text: $language)
+                                .autocapitalization(.none)
+                        }
+                    }
+                    .onChange(of: language) { _ in
+                        debounceConfigUpdate()
+                    }
+                }
+
+                HStack {
+                    // Locale
+                    ReusableTextView(text: "Locale", font: .subheadline, weight: .semibold)
+
+                    Group {
+                        if #available(iOS 15.0, *) {
+                            ReusableTextField(text: $locale)
+                                .textInputAutocapitalization(.never)
+                        } else {
+                            ReusableTextField(text: $locale)
+                                .autocapitalization(.none)
+                        }
+                    }
+                    .onChange(of: locale) { _ in
+                        debounceConfigUpdate()
+                    }
+                }
             }
 
             HStack {
@@ -196,6 +240,8 @@ struct SwiftUIContentView: View {
         offerType = defaultData.offerType
         amount = defaultData.amount
         buyerCountry = defaultData.buyerCountry ?? ""
+        language = defaultData.language ?? ""
+        locale = defaultData.locale ?? ""
         ignoreCache = defaultData.ignoreCache
         clientID = defaultData.clientID
     }
