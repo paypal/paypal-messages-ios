@@ -442,6 +442,57 @@ final class PayPalMessageViewModelTests: XCTestCase {
         XCTAssertEqual(mockedRequest.lastParamsReceived?.locale, "es-ES")
     }
 
+    func testDuplicatedLanguageUpdateDoesNotRefetch() {
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
+
+        let viewModel = makePayPalMessageViewModel(
+            mockedRequest: mockedRequest
+        )
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 1)
+
+        viewModel.language = "fr"
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
+
+        // Setting the same language again should not trigger another request
+        viewModel.language = "fr"
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
+    }
+
+    func testShowModalTriggersOnClickWhenInteractive() {
+        let mockedView = PayPalMessageViewMock()
+        let mockedDelegate = PayPalMessageViewDelegateMock()
+        let viewModel = makePayPalMessageViewModel(
+            mockedView: mockedView,
+            mockedDelegate: mockedDelegate
+        )
+
+        // Enable interactivity and call showModal
+        viewModel.isMessageViewInteractive = true
+        viewModel.showModal()
+
+        XCTAssertTrue(mockedDelegate.onClickCalled)
+    }
+
+    func testShowModalDoesNotTriggerOnClickWhenNotInteractive() {
+        let mockedView = PayPalMessageViewMock()
+        let mockedDelegate = PayPalMessageViewDelegateMock()
+        let viewModel = makePayPalMessageViewModel(
+            mockedView: mockedView,
+            mockedDelegate: mockedDelegate
+        )
+
+        // Ensure interactivity is disabled (default) and call showModal
+        viewModel.isMessageViewInteractive = false
+        viewModel.showModal()
+
+        XCTAssertFalse(mockedDelegate.onClickCalled)
+    }
+
     private func makePayPalMessageViewModel(
         mockedView: PayPalMessageViewMock = PayPalMessageViewMock(),
         mockedDelegate: PayPalMessageViewDelegateMock = PayPalMessageViewDelegateMock(),
