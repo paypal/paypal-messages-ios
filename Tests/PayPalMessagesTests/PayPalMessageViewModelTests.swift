@@ -383,6 +383,65 @@ final class PayPalMessageViewModelTests: XCTestCase {
         XCTAssertNotNil(viewModel.messageParameters)
     }
 
+    // MARK: - Language/Locale Propagation
+
+    func testRequesterReceivesLanguageAndLocaleParameters() {
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
+
+        let viewModel = makePayPalMessageViewModel(
+            mockedRequest: mockedRequest
+        )
+
+        // Initial request after init
+        XCTAssertEqual(mockedRequest.requestsPerformed, 1)
+
+        // Set language only
+        viewModel.language = "fr"
+        viewModel.locale = nil
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
+        XCTAssertEqual(mockedRequest.lastParamsReceived?.language, "fr")
+        XCTAssertNil(mockedRequest.lastParamsReceived?.locale)
+
+        // Prefer locale when both are set
+        viewModel.language = "fr"
+        viewModel.locale = "fr-CA"
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 3)
+        XCTAssertEqual(mockedRequest.lastParamsReceived?.language, "fr")
+        XCTAssertEqual(mockedRequest.lastParamsReceived?.locale, "fr-CA")
+
+        // Clearing locale should reflect in next request
+        viewModel.locale = nil
+        viewModel.flushUpdates()
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 4)
+        XCTAssertEqual(mockedRequest.lastParamsReceived?.language, "fr")
+        XCTAssertNil(mockedRequest.lastParamsReceived?.locale)
+    }
+
+    func testChangingLanguageOrLocaleTriggersFetch() {
+        let mockedRequest = PayPalMessageRequestMock(scenario: .success())
+
+        let viewModel = makePayPalMessageViewModel(
+            mockedRequest: mockedRequest
+        )
+
+        XCTAssertEqual(mockedRequest.requestsPerformed, 1)
+
+        viewModel.language = "es"
+        viewModel.flushUpdates()
+        XCTAssertEqual(mockedRequest.requestsPerformed, 2)
+        XCTAssertEqual(mockedRequest.lastParamsReceived?.language, "es")
+
+        viewModel.locale = "es-ES"
+        viewModel.flushUpdates()
+        XCTAssertEqual(mockedRequest.requestsPerformed, 3)
+        XCTAssertEqual(mockedRequest.lastParamsReceived?.locale, "es-ES")
+    }
+
     private func makePayPalMessageViewModel(
         mockedView: PayPalMessageViewMock = PayPalMessageViewMock(),
         mockedDelegate: PayPalMessageViewDelegateMock = PayPalMessageViewDelegateMock(),
