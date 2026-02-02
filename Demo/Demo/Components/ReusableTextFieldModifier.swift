@@ -3,17 +3,17 @@ import SwiftUI
 struct ReusableTextFieldModifier: ViewModifier {
 
     var binding: Binding<String>?
-// trigger workflow
+
     @ViewBuilder
     func body(content: Content) -> some View {
         applyAutocorrection(to: content
-            .frame(width: 200)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .textFieldStyle(RoundedBorderTextFieldStyle()))
+                                .frame(width: 200)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .textFieldStyle(RoundedBorderTextFieldStyle()))
             .truncationMode(Text.TruncationMode.tail)
             .overlay(clearButtonOverlay(for: binding))
     }
-    
+
     @ViewBuilder
     private func applyAutocorrection<V: View>(to view: V) -> some View {
         if #available(iOS 15.0, *) {
