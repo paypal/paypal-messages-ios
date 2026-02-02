@@ -6,20 +6,26 @@ struct ReusableTextFieldModifier: ViewModifier {
 
     @ViewBuilder
     func body(content: Content) -> some View {
-        applyAutocorrection(to: content
-                                .frame(width: 200)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .textFieldStyle(RoundedBorderTextFieldStyle()))
-            .truncationMode(Text.TruncationMode.tail)
-            .overlay(clearButtonOverlay(for: binding))
-    }
-
-    @ViewBuilder
-    private func applyAutocorrection<V: View>(to view: V) -> some View {
         if #available(iOS 15.0, *) {
-            view.autocorrectionDisabled(true)
+            content
+                .frame(width: 200)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocorrectionDisabled(true)
+                .truncationMode(Text.TruncationMode.tail)
+                .overlay(
+                    clearButtonOverlay(for: binding)
+                )
         } else {
-            view.disableAutocorrection(true)
+            content
+                .frame(width: 200)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .disableAutocorrection(true)
+                .truncationMode(Text.TruncationMode.tail)
+                .overlay(
+                    clearButtonOverlay(for: binding)
+                )
         }
     }
 
