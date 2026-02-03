@@ -1,4 +1,10 @@
-@ViewBuilder
+import SwiftUI
+
+struct ReusableTextFieldModifier: ViewModifier {
+
+    var binding: Binding<String>?
+
+    @ViewBuilder
     func body(content: Content) -> some View {
         applyAutocorrection(to: content
             .frame(width: 200)
@@ -16,3 +22,23 @@
             view.disableAutocorrection(true)
         }
     }
+
+    private func clearButtonOverlay(for binding: Binding<String>?) -> some View {
+        HStack {
+            if let binding = binding, !binding.wrappedValue.isEmpty {
+                Spacer()
+                Button(
+                    action: {
+                        binding.wrappedValue = ""
+                    },
+                    label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
+                    }
+                )
+                .background(Color.white)
+                .padding(.trailing, 1)
+            }
+        }
+    }
+}
