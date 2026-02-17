@@ -42,6 +42,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
     @Proxy(\.viewModel.buyerCountry)
     var buyerCountry: String?
 
+    @Proxy(\.viewModel.language)
+    var language: String?
+
+    @Proxy(\.viewModel.locale)
+    var locale: String?
+
     @Proxy(\.viewModel.offerType)
     var offerType: PayPalMessageOfferType?
 
@@ -336,6 +342,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     func setConfig(_ config: PayPalMessageModalConfig) {
         viewModel.setConfig(config)
+    }
+
+    /// Marks the modal to reload its web content on next presentation.
+    /// This allows changes in app parameters (e.g., language/locale) to take effect.
+    public func markNeedsReload() {
+        hasSuccessfullyLoaded = false
     }
 
     // MARK: - WKUIDelegate Protocol Functions

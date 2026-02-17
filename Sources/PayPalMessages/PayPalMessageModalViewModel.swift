@@ -33,6 +33,12 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     var buyerCountry: String? {
         didSet { queueUpdate(from: oldValue, to: buyerCountry) }
     }
+    var language: String? {
+        didSet { queueUpdate(from: oldValue, to: language) }
+    }
+    var locale: String? {
+        didSet { queueUpdate(from: oldValue, to: locale) }
+    }
     var offerType: PayPalMessageOfferType? {
         didSet { queueUpdate(from: oldValue, to: offerType) }
     }
@@ -59,7 +65,7 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
     // MARK: - Computed Private Properties
 
     private var url: URL? {
-        let queryParams: [String: String?] = [
+        var queryParams: [String: String?] = [
             "env": environment.rawValue,
             "client_id": clientID,
             "merchant_id": merchantID,
@@ -76,13 +82,22 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
             "integration_version": AnalyticsLogger.integrationVersion,
             "integration_name": AnalyticsLogger.integrationName,
             "features": "native-modal"
-        ].filter {
+        ]
+
+        // Use the same parameter name that was set (locale or language)
+        if let locale = locale {
+            queryParams["locale"] = locale
+        } else if let language = language {
+            queryParams["language"] = language
+        }
+
+        let filteredParams = queryParams.filter {
             guard let value = $0.value else { return false }
 
             return !value.isEmpty && value.lowercased() != "false"
         }
 
-        return environment.url(.modal, queryParams)
+        return environment.url(.modal, filteredParams)
     }
 
     // MARK: - Private Typealias
@@ -117,6 +132,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         amount = config.data.amount
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
+        language = config.data.language
+        locale = config.data.locale
         channel = config.data.channel
         pageType = config.data.pageType
         ignoreCache = config.data.ignoreCache
@@ -147,6 +164,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         amount = config.data.amount
         offerType = config.data.offerType
         buyerCountry = config.data.buyerCountry
+        language = config.data.language
+        locale = config.data.locale
         channel = config.data.channel
         pageType = config.data.pageType
         ignoreCache = config.data.ignoreCache
@@ -164,6 +183,8 @@ class PayPalMessageModalViewModel: NSObject, WKNavigationDelegate, WKScriptMessa
         config.data.merchantID = merchantID
         config.data.partnerAttributionID = partnerAttributionID
         config.data.buyerCountry = buyerCountry
+        config.data.language = language
+        config.data.locale = locale
         config.data.channel = channel
         config.data.ignoreCache = ignoreCache
 

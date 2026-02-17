@@ -40,6 +40,8 @@ class PayPalMessageModalDataConfig: NSObject {
     var environment: Environment
     var amount: Double?
     var buyerCountry: String?
+    var language: String?
+    var locale: String?
     var offerType: PayPalMessageOfferType?
     var pageType: PayPalMessagePageType?
     var channel: String
@@ -53,6 +55,8 @@ class PayPalMessageModalDataConfig: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
+        language: String? = nil,
+        locale: String? = nil,
         channel: String = BuildInfo.channel,
         modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
@@ -60,6 +64,8 @@ class PayPalMessageModalDataConfig: NSObject {
         self.amount = amount
         self.pageType = pageType
         self.offerType = offerType
+        self.language = language
+        self.locale = locale
         self.modalCloseButton = modalCloseButton
         self.environment = environment
         self.channel = channel
@@ -74,6 +80,8 @@ class PayPalMessageModalDataConfig: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
+        language: String? = nil,
+        locale: String? = nil,
         channel: String = BuildInfo.channel,
         modalCloseButton: ModalCloseButtonConfig = ModalCloseButtonConfig()
     ) {
@@ -83,6 +91,8 @@ class PayPalMessageModalDataConfig: NSObject {
         self.amount = amount
         self.pageType = pageType
         self.offerType = offerType
+        self.language = language
+        self.locale = locale
         self.modalCloseButton = modalCloseButton
         self.environment = environment
         self.channel = channel

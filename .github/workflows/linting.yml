@@ -8,10 +8,13 @@ concurrency:
 jobs:
   linting:
     name: Linting
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
 
       - name: Install Dependencies
         run: bundle install

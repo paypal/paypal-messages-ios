@@ -18,6 +18,10 @@ public class PayPalMessageData: NSObject {
     public var offerType: PayPalMessageOfferType?
     /// Consumer's country (Integrations must be approved by PayPal to use this option)
     public var buyerCountry: String?
+    /// Preferred language for localized content (e.g., "fr-CA" or "en-US"). Optional.
+    public var language: String?
+    /// Preferred locale for localized content (e.g., "fr_CA" or "en_US"). Optional.
+    public var locale: String?
     /// Message content channel
     public var channel: String
     /// Skips the caching layer
@@ -30,6 +34,8 @@ public class PayPalMessageData: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
+        language: String? = nil,
+        locale: String? = nil,
         channel: String = BuildInfo.channel
     ) {
         self.clientID = clientID
@@ -37,6 +43,8 @@ public class PayPalMessageData: NSObject {
         self.pageType = pageType
         self.offerType = offerType
         self.environment = environment
+        self.language = language
+        self.locale = locale
         self.channel = channel
     }
 
@@ -49,6 +57,8 @@ public class PayPalMessageData: NSObject {
         amount: Double? = nil,
         pageType: PayPalMessagePageType? = nil,
         offerType: PayPalMessageOfferType? = nil,
+        language: String? = nil,
+        locale: String? = nil,
         channel: String = BuildInfo.channel
     ) {
         self.clientID = clientID
@@ -58,6 +68,8 @@ public class PayPalMessageData: NSObject {
         self.pageType = pageType
         self.offerType = offerType
         self.environment = environment
+        self.language = language
+        self.locale = locale
         self.channel = channel
     }
 

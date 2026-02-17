@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 @testable import PayPalMessages
 import WebKit
 import XCTest
@@ -257,6 +258,92 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         case .failure(let error):
             XCTAssertEqual(error, .invalidResponse(paypalDebugID: "123abc"))
         }
+    }
+
+    func testModalURLUsesLocaleOverLanguageWhenBothProvided() {
+        var config = PayPalMessageModalConfig(
+            data: .init(
+                clientID: "testclientid",
+                environment: .live,
+                amount: 100.0,
+                pageType: .home,
+                offerType: .payLaterLongTerm,
+                language: "fr",
+                locale: "fr-CA"
+            )
+        )
+        config.data.channel = "TEST"
+
+        let (viewModel, webView, _, _) = makePayPalMessageModalViewModel(config: config)
+
+        viewModel.loadModal { _ in }
+        XCTAssertTrue(webView.loadCalled)
+        guard let url = webView.loadRequest?.url,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let items = components.queryItems else {
+            return XCTFail("Missing URL or components")
+        }
+
+        let localeItem = items.first { $0.name == "locale" }
+        let languageItem = items.first { $0.name == "language" }
+        XCTAssertEqual(localeItem?.value, "fr-CA")
+        XCTAssertNil(languageItem)
+    }
+
+    func testModalURLUsesLanguageWhenNoLocaleProvided() {
+        var config = PayPalMessageModalConfig(
+            data: .init(
+                clientID: "testclientid",
+                environment: .live,
+                amount: 100.0,
+                pageType: .home,
+                offerType: .payLaterLongTerm,
+                language: "de",
+                locale: nil
+            )
+        )
+        config.data.channel = "TEST"
+
+        let (viewModel, webView, _, _) = makePayPalMessageModalViewModel(config: config)
+
+        viewModel.loadModal { _ in }
+        XCTAssertTrue(webView.loadCalled)
+        guard let url = webView.loadRequest?.url,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let items = components.queryItems else {
+            return XCTFail("Missing URL or components")
+        }
+
+        let languageItem = items.first { $0.name == "language" }
+        let localeItem = items.first { $0.name == "locale" }
+        XCTAssertEqual(languageItem?.value, "de")
+        XCTAssertNil(localeItem)
+    }
+
+    func testModalURLOmitsLanguageAndLocaleWhenNoneProvided() {
+        var config = PayPalMessageModalConfig(
+            data: .init(
+                clientID: "testclientid",
+                environment: .live,
+                amount: 100.0,
+                pageType: .home,
+                offerType: .payLaterLongTerm
+            )
+        )
+        config.data.channel = "TEST"
+
+        let (viewModel, webView, _, _) = makePayPalMessageModalViewModel(config: config)
+
+        viewModel.loadModal { _ in }
+        XCTAssertTrue(webView.loadCalled)
+        guard let url = webView.loadRequest?.url,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let items = components.queryItems else {
+            return XCTFail("Missing URL or components")
+        }
+
+        XCTAssertNil(items.first { $0.name == "language" })
+        XCTAssertNil(items.first { $0.name == "locale" })
     }
 
     func testCallsEventDelegate() {
