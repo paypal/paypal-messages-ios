@@ -101,6 +101,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -176,6 +177,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "number_key": 50.5,
                         "string_key": "hello",
                         "boolean_key": true,
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "modal_click",
@@ -246,6 +248,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -261,6 +264,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "page_type": "product-details",
                         "type": "modal",
                         "string_key": "world",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "modal_click",
@@ -314,6 +318,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -371,6 +376,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_clicked",
@@ -437,6 +443,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
