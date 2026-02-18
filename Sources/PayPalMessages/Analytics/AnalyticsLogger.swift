@@ -93,10 +93,6 @@ class AnalyticsLogger: Encodable {
             try container.encodeIfPresent(modal.pageType?.rawValue, forKey: .pageType)
             try container.encodeIfPresent(modal.buyerCountry, forKey: .buyerCountryCode)
             try container.encodeIfPresent(modal.channel, forKey: .channel)
-            let languageRequested = modal.locale?.replacingOccurrences(of: "_", with: "-")
-                ?? modal.language
-                ?? "undefined"
-            try container.encodeIfPresent(languageRequested, forKey: .languageRequested)
         }
     }
 
