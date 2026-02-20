@@ -490,6 +490,45 @@ final class PayPalMessageLoggerTests: XCTestCase {
         XCTAssert(clientID1 == "testloggerclientid3" || clientID2 == "testloggerclientid3")
     }
 
+    // Language Requested Tests
+
+    func testLanguageRequestedWithLocale() {
+        message.locale = "en_US"
+        XCTAssertEqual(getLanguageRequested(), "en-US")
+    }
+
+    func testLanguageRequestedWithLanguageOnly() {
+        message.language = "fr-CA"
+        XCTAssertEqual(getLanguageRequested(), "fr-CA")
+    }
+
+    func testLanguageRequestedPreferesLocaleOverLanguage() {
+        message.language = "en-US"
+         message.locale = "fr_CA"
+        XCTAssertEqual(getLanguageRequested(), "fr_CA")
+    }
+
+    func testLanguageRequestedDefaultsToUndefined() {
+        XCTAssertEqual(getLanguageRequested(), "undefined")
+    }
+
+    private func getLanguageRequested() -> String? {
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
+        messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
+        AnalyticsService.shared.flushEvents()
+
+        guard let data = mockSender.calls.last,
+              let jsonData = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let loggerData = jsonData["data"] as? [String: Any],
+              let components = loggerData["components"] as? [[String: Any]],
+              let firstComponent = components.first else {
+            XCTFail("invalid JSON data")
+            return nil
+        }
+
+        return firstComponent["language_requested"] as? String
+    }
+
     // MARK: - Helper assert functions
 
     private func assert(payload: [String: Any], equals expectedPayload: [String: Any]) {
