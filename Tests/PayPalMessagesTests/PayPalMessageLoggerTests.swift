@@ -504,8 +504,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
 
     func testLanguageRequestedPreferesLocaleOverLanguage() {
         message.language = "en-US"
-         message.locale = "fr_CA"
-        XCTAssertEqual(getLanguageRequested(), "fr_CA")
+        message.locale = "fr_CA"
+        XCTAssertEqual(getLanguageRequested(), "fr-CA")
     }
 
     func testLanguageRequestedDefaultsToUndefined() {
