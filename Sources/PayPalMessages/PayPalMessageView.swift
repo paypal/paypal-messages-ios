@@ -43,6 +43,14 @@ public final class PayPalMessageView: UIControl {
     @Proxy(\.viewModel.buyerCountry)
     public var buyerCountry: String?
 
+    /// Read-write property that holds the preferred language.
+    @Proxy(\.viewModel.language)
+    public var language: String?
+
+    /// Read-write property that holds the preferred locale.
+    @Proxy(\.viewModel.locale)
+    public var locale: String?
+
     @Proxy(\.viewModel.channel)
     public var channel: String
 

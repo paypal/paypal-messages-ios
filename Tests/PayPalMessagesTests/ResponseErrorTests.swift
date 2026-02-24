@@ -13,15 +13,13 @@ final class ResponseErrorTests: XCTestCase {
     }
 
     func testErrorWithoutDetails() throws {
-        let json = """
+        let json = Data("""
         {
             "name": "UNPROCESSABLE_ENTITY",
             "message": "The requested action could not be performed, semantically incorrect, or failed business validation.",
             "debug_id": "12345"
         }
-        """
-            // swiftlint:disable force_unwrapping
-            .data(using: .utf8)!
+        """.utf8)
 
         let decoder = JSONDecoder()
         let responseError = try decoder.decode(ResponseError.self, from: json)
@@ -32,7 +30,7 @@ final class ResponseErrorTests: XCTestCase {
     }
 
     func testErrorWithDetails() throws {
-        let json = """
+        let json = Data("""
         {
             "name": "UNPROCESSABLE_ENTITY",
             "message": "The requested action could not be performed, semantically incorrect, or failed business validation.",
@@ -44,9 +42,7 @@ final class ResponseErrorTests: XCTestCase {
                 }
             ]
         }
-        """
-            // swiftlint:disable force_unwrapping
-            .data(using: .utf8)!
+        """.utf8)
 
         let decoder = JSONDecoder()
         let responseError = try decoder.decode(ResponseError.self, from: json)

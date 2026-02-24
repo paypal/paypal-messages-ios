@@ -58,10 +58,20 @@ class LogSender: LogSendable {
 
     func send(_ data: Data, to environment: Environment) {
         guard let url = environment.url(.log) else { return }
+
+        // Create authorization header from client_id
+        var authString: String = "Basic "
+        guard let jsonAny = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+              let jsonData = jsonAny["data"] as? AnyObject,
+              let clientId = jsonData["client_id"] as? String,
+              let clientIdData = clientId.data(using: .utf8) else { return }
+        authString += clientIdData.base64EncodedString()
+
         let headers: [HTTPHeader: String] = [
             .acceptLanguage: "en_US",
             .accept: "application/json",
-            .contentType: "application/cloudevents+json"
+            .contentType: "application/cloudevents+json",
+            .authorization: authString
         ]
 
         log(.debug, "log_payload", with: data, for: environment)

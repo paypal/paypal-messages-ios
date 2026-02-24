@@ -5,7 +5,7 @@ import XCTest
 final class MessageResponseTests: XCTestCase {
 
     func testDecodeMessageResponse() throws {
-        let json = """
+        let json = Data("""
         {
             "meta": {
                 "credit_product_group": "PAY_LATER",
@@ -53,9 +53,7 @@ final class MessageResponseTests: XCTestCase {
                 }
             }
         }
-        """
-            // swiftlint:disable force_unwrapping
-            .data(using: .utf8)!
+        """.utf8)
 
         let decoder = JSONDecoder()
         let messageResponse = try decoder.decode(MessageResponse.self, from: json)

@@ -101,6 +101,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -246,6 +247,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -314,6 +316,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -371,6 +374,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_clicked",
@@ -437,6 +441,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_logo_type": "inline",
                         "style_color": "black",
                         "style_text_align": "left",
+                        "language_requested": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -483,6 +488,45 @@ final class PayPalMessageLoggerTests: XCTestCase {
         XCTAssert(clientID1 != clientID2)
         XCTAssert(clientID1 == "testloggerclientid2" || clientID2 == "testloggerclientid2")
         XCTAssert(clientID1 == "testloggerclientid3" || clientID2 == "testloggerclientid3")
+    }
+
+    // Language Requested Tests
+
+    func testLanguageRequestedWithLocale() {
+        message.locale = "en_US"
+        XCTAssertEqual(getLanguageRequested(), "en-US")
+    }
+
+    func testLanguageRequestedWithLanguageOnly() {
+        message.language = "fr-CA"
+        XCTAssertEqual(getLanguageRequested(), "fr-CA")
+    }
+
+    func testLanguageRequestedPreferesLocaleOverLanguage() {
+        message.language = "en-US"
+        message.locale = "fr_CA"
+        XCTAssertEqual(getLanguageRequested(), "fr-CA")
+    }
+
+    func testLanguageRequestedDefaultsToUndefined() {
+        XCTAssertEqual(getLanguageRequested(), "undefined")
+    }
+
+    private func getLanguageRequested() -> String? {
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
+        messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
+        AnalyticsService.shared.flushEvents()
+
+        guard let data = mockSender.calls.last,
+              let jsonData = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let loggerData = jsonData["data"] as? [String: Any],
+              let components = loggerData["components"] as? [[String: Any]],
+              let firstComponent = components.first else {
+            XCTFail("invalid JSON data")
+            return nil
+        }
+
+        return firstComponent["language_requested"] as? String
     }
 
     // MARK: - Helper assert functions
@@ -542,8 +586,8 @@ final class PayPalMessageLoggerTests: XCTestCase {
             withJSONObject: expected,
             options: .prettyPrinted
            ) {
-            let payloadString = String(decoding: payloadData, as: UTF8.self)
-            let expectedString = String(decoding: expectedData, as: UTF8.self)
+            let payloadString = String(data: payloadData, encoding: .utf8) ?? ""
+            let expectedString = String(data: expectedData, encoding: .utf8) ?? ""
 
             print("Expected:\n\(expectedString)\n\nReceived:\n\(payloadString)")
         }

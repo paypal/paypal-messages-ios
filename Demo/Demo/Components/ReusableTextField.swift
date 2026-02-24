@@ -7,6 +7,6 @@ struct ReusableTextField: View {
     var body: some View {
         TextField("", text: $text)
             .modifier(ReusableTextFieldModifier(binding: $text))
-            .truncationMode(.tail)
+            .truncationMode(Text.TruncationMode.tail)
     }
 }

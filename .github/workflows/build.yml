@@ -8,7 +8,7 @@ concurrency:
 jobs:
   cocoapods:
     name: CocoaPods
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -17,11 +17,13 @@ jobs:
         run: bundle install
 
       - name: Run pod lib lint
+        env:
+          BUNDLE_DISABLE_EXEC_LOAD: "1"
         run: bundle exec fastlane build_pod
 
   spm:
     name: Swift Package Manager
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -34,7 +36,7 @@ jobs:
 
   carthage:
     name: Carthage
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v3

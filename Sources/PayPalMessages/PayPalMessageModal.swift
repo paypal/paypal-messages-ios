@@ -2,6 +2,14 @@ import SafariServices
 import UIKit
 import WebKit
 
+class ModalWebView: WKWebView {
+
+    // Used to remove input accessory bar to avoid layout constraints violations
+    override var inputAccessoryView: UIView? {
+        return nil
+    }
+}
+
 final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     typealias Proxy<T> = AnyProxy<PayPalMessageModal, T>
@@ -33,6 +41,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     @Proxy(\.viewModel.buyerCountry)
     var buyerCountry: String?
+
+    @Proxy(\.viewModel.language)
+    var language: String?
+
+    @Proxy(\.viewModel.locale)
+    var locale: String?
 
     @Proxy(\.viewModel.offerType)
     var offerType: PayPalMessageOfferType?
@@ -70,7 +84,7 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     // MARK: - Subviews
 
-    private let webView = WKWebView(frame: .zero)
+    private let webView = ModalWebView(frame: .zero)
     private let backgroundView = UIView(frame: .zero)
     private let loadingCircleView = UIImageView(frame: .zero)
     private lazy var closeButton: CloseButton = {
@@ -328,6 +342,12 @@ final class PayPalMessageModal: UIViewController, WKUIDelegate {
 
     func setConfig(_ config: PayPalMessageModalConfig) {
         viewModel.setConfig(config)
+    }
+
+    /// Marks the modal to reload its web content on next presentation.
+    /// This allows changes in app parameters (e.g., language/locale) to take effect.
+    public func markNeedsReload() {
+        hasSuccessfullyLoaded = false
     }
 
     // MARK: - WKUIDelegate Protocol Functions

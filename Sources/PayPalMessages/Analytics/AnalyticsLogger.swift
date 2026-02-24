@@ -47,6 +47,7 @@ class AnalyticsLogger: Encodable {
         case pageType = "page_type"
         case buyerCountryCode = "buyer_country_code"
         case channel = "presentment_channel"
+        case languageRequested = "language_requested"
         // Message Only
         case styleLogoType = "style_logo_type"
         case styleColor = "style_color"
@@ -78,6 +79,10 @@ class AnalyticsLogger: Encodable {
             try container.encodeIfPresent(message.logoType.rawValue, forKey: .styleLogoType)
             try container.encodeIfPresent(message.color.rawValue, forKey: .styleColor)
             try container.encodeIfPresent(message.textAlign.rawValue, forKey: .styleTextAlign)
+            let languageRequested = message.locale?.replacingOccurrences(of: "_", with: "-")
+                ?? message.language
+                ?? "undefined"
+            try container.encodeIfPresent(languageRequested, forKey: .languageRequested)
 
         case .modal(let weakModal):
             guard let modal = weakModal.value else { return }

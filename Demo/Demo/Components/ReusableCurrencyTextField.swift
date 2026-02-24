@@ -20,7 +20,7 @@ struct ReusableCurrencyTextField: View {
         )
         return TextField("", text: stringBinding)
             .modifier(ReusableTextFieldModifier(binding: stringBinding))
-            .truncationMode(.tail)
+            .truncationMode(Text.TruncationMode.tail)
             .onChange(of: value) { newValue in
                 if let newValue {
                     stringValue = newValue.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(newValue)) : newValue.description

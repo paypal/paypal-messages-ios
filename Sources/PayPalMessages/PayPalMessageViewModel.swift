@@ -58,6 +58,16 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         didSet { queueUpdate(from: oldValue, to: buyerCountry) }
     }
 
+    /// Changing its value will cause the message content being refetched only if an update is detected.
+    var language: String? {
+        didSet { queueUpdate(from: oldValue, to: language) }
+    }
+
+    /// Changing its value will cause the message content being refetched only if an update is detected.
+    var locale: String? {
+        didSet { queueUpdate(from: oldValue, to: locale) }
+    }
+
     var channel: String {
         didSet { queueUpdate(from: oldValue, to: channel )}
     }
@@ -139,6 +149,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.pageType = config.data.pageType
         self.offerType = config.data.offerType
         self.buyerCountry = config.data.buyerCountry
+        self.language = config.data.language
+        self.locale = config.data.locale
         self.channel = config.data.channel
         self.color = config.style.color
         self.logoType = config.style.logoType
@@ -165,6 +177,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         self.pageType = config.data.pageType
         self.offerType = config.data.offerType
         self.buyerCountry = config.data.buyerCountry
+        self.language = config.data.language
+        self.locale = config.data.locale
         self.channel = config.data.channel
         self.color = config.style.color
         self.logoType = config.style.logoType
@@ -304,6 +318,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
             partnerAttributionID: partnerAttributionID,
             logoType: logoType,
             buyerCountry: buyerCountry,
+            language: language,
+            locale: locale,
             pageType: pageType,
             amount: amount,
             offerType: offerType,
@@ -341,7 +357,9 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
                 environment: environment,
                 amount: amount,
                 pageType: pageType,
-                offerType: offerType
+                offerType: offerType,
+                language: language,
+                locale: locale
             ),
             style: .init(
                 logoType: logoType,
@@ -392,6 +410,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
         config.data.partnerAttributionID = partnerAttributionID
         // Non-standard options
         config.data.buyerCountry = buyerCountry
+        config.data.language = language
+        config.data.locale = locale
         config.data.modalCloseButton = modalCloseButton
         // Dev options
         config.data.ignoreCache = ignoreCache
@@ -419,6 +439,8 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
         if let modal {
             modal.merchantProfileHash = merchantProfileHash
+            // Ensure the modal reloads with updated params when being shown
+            modal.markNeedsReload()
             modal.show()
         }
     }
