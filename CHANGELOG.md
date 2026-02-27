@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0](https://github.com/paypal/paypal-messages-ios/compare/1.0.0...1.1.0) (2026-02-27)
+
+
+### Features
+
+* add auth header for log route ([#40](https://github.com/paypal/paypal-messages-ios/issues/40)) ([062e5be](https://github.com/paypal/paypal-messages-ios/commit/062e5bec0344e98b99d005413074c48f438984e5))
+* Added `language_requested` fpti for analytics ([#46](https://github.com/paypal/paypal-messages-ios/issues/46)) ([cd5b3eb](https://github.com/paypal/paypal-messages-ios/commit/cd5b3eb174cea7656de1b2230c4fae8fe40e5690))
+* support language and locale params ([#45](https://github.com/paypal/paypal-messages-ios/issues/45)) ([6796586](https://github.com/paypal/paypal-messages-ios/commit/67965865437f4b5f4c5c1a05d47427a31cb4790f))
+
+
+### Bug Fixes
+
+* remove modal input accessory bar ([#36](https://github.com/paypal/paypal-messages-ios/issues/36)) ([5890546](https://github.com/paypal/paypal-messages-ios/commit/5890546e2f9830321f5186528f8782e6a95c522e))
+* remove webrick by updating dependencies ([#39](https://github.com/paypal/paypal-messages-ios/issues/39)) ([f3f757b](https://github.com/paypal/paypal-messages-ios/commit/f3f757b7934e8dc10bf46ba64d3db3f9189c9778))
+
 ## 1.0.0 (2024-05-14)
 
 
