@@ -38,8 +38,8 @@ final class PayPalMessageAttributedStringBuilder {
             attributedText.append(makeSpaceAttributedString(2))
         }
 
-        // main message
-        attributedText.append(makeMainMessageAttributedString(parameters))
+        // main message with bold formatting
+        attributedText.append(makeMainMessageAttributedStringWithBold(parameters))
 
         // if logo has a custom location, search for placeholder and replace
         if !parameters.shouldDisplayLeadingLogo {
@@ -61,6 +61,58 @@ final class PayPalMessageAttributedStringBuilder {
         )
 
         return attributedText
+    }
+    /// Returns the main message attributed string, applying bold formatting to substrings wrapped in %bold%...%bold%.
+    private func makeMainMessageAttributedStringWithBold(_ parameters: PayPalMessageViewParameters) -> NSAttributedString {
+        let message = parameters.message
+        let baseFont = getDynamicTypeFont(for: .systemFont(ofSize: Constants.fontSize))
+        let boldFont = getDynamicTypeFont(for: .boldSystemFont(ofSize: Constants.fontSize))
+        let color = parameters.messageColor
+
+        let result = NSMutableAttributedString()
+        var currentIndex = message.startIndex
+
+        while let boldStart = message.range(of: "%bold%", range: currentIndex..<message.endIndex) {
+            // Add text before bold marker
+            let beforeBold = String(message[currentIndex..<boldStart.lowerBound])
+            if !beforeBold.isEmpty {
+                let normalAttr = NSAttributedString(string: beforeBold, attributes: [
+                    .font: baseFont,
+                    .foregroundColor: color
+                ])
+                result.append(normalAttr)
+            }
+            // Find end marker
+            let afterBoldStart = boldStart.upperBound
+            if let boldEnd = message.range(of: "%bold%", range: afterBoldStart..<message.endIndex) {
+                let boldText = String(message[afterBoldStart..<boldEnd.lowerBound])
+                let boldAttr = NSAttributedString(string: boldText, attributes: [
+                    .font: boldFont,
+                    .foregroundColor: color
+                ])
+                result.append(boldAttr)
+                currentIndex = boldEnd.upperBound
+            } else {
+                // No end marker, treat rest as normal
+                let rest = String(message[afterBoldStart..<message.endIndex])
+                let normalAttr = NSAttributedString(string: rest, attributes: [
+                    .font: baseFont,
+                    .foregroundColor: color
+                ])
+                result.append(normalAttr)
+                break
+            }
+        }
+        // Add any remaining text after last bold marker
+        if currentIndex < message.endIndex {
+            let remaining = String(message[currentIndex..<message.endIndex])
+            let normalAttr = NSAttributedString(string: remaining, attributes: [
+                .font: baseFont,
+                .foregroundColor: color
+            ])
+            result.append(normalAttr)
+        }
+        return result
     }
 
     // MARK: - Private Helpers
