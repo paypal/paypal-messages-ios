@@ -488,9 +488,9 @@ final class PayPalMessageViewModelTests: XCTestCase {
             mockedDelegate: mockedDelegate
         )
         // Setters should trigger queueUpdate
-        viewModel.pageType = .product
+        viewModel.pageType = .checkout
         viewModel.amount = 123.45
-        viewModel.offerType = .installment
+        viewModel.offerType = .payPalCreditNoInterest
         viewModel.buyerCountry = "US"
         viewModel.language = "en"
         viewModel.locale = "en_US"
@@ -526,49 +526,6 @@ final class PayPalMessageViewModelTests: XCTestCase {
         let clickData = PayPalMessageModalClickData(linkName: "Apply Now", linkSrc: "src")
         viewModel.onClick(modal, data: clickData)
         // No assertion needed, just exercise onClick for coverage
-    }
-
-    func testOnMessageRequestFailedDisablesInteraction() {
-        let mockedView = PayPalMessageViewMock()
-        let mockedDelegate = PayPalMessageViewDelegateMock()
-        let viewModel = makePayPalMessageViewModel(
-            mockedView: mockedView,
-            mockedDelegate: mockedDelegate
-        )
-        let error = PayPalMessageError(issue: "TestError", description: "desc")
-        // Use reflection to call private method for coverage
-        let selector = NSSelectorFromString("onMessageRequestFailed:")
-        if viewModel.responds(to: selector) {
-            _ = viewModel.perform(selector, with: error)
-        }
-    }
-
-    private func makePayPalMessageViewModel(
-        mockedView: PayPalMessageViewMock = PayPalMessageViewMock(),
-        mockedDelegate: PayPalMessageViewDelegateMock = PayPalMessageViewDelegateMock(),
-        mockedRequest: PayPalMessageRequestMock = PayPalMessageRequestMock(scenario: .success()),
-        mockedMerchantProfile: MerchantProfileProviderMock = MerchantProfileProviderMock(scenario: .success),
-        mockedConfig: PayPalMessageConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .sandbox))
-    ) -> PayPalMessageViewModel {
-        // Intentionally use different `requester` and `merchantProfileProvider` values from the view model to prevent interferring
-        // with mock request counts specifically fired from the view model itself
-        let messageView = PayPalMessageView(
-            config: mockedConfig,
-            requester: PayPalMessageRequestMock(scenario: .success()),
-            merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
-        )
-
-        let viewModel = PayPalMessageViewModel(
-            config: mockedConfig,
-            requester: mockedRequest,
-            merchantProfileProvider: mockedMerchantProfile,
-            stateDelegate: mockedDelegate,
-            eventDelegate: mockedDelegate,
-            delegate: mockedView,
-            messageView: messageView
-        )
-
-        return viewModel
     }
 }
 // swiftlint:disable:this file_length
