@@ -63,7 +63,7 @@ final class PayPalMessageAttributedStringBuilder {
         return attributedText
     }
     /// Returns the main message attributed string, applying bold formatting to substrings wrapped in %bold%...%bold%.
-    private func makeMainMessageAttributedStringWithBold(_ parameters: PayPalMessageViewParameters) -> NSAttributedString {
+    func makeMainMessageAttributedStringWithBold(_ parameters: PayPalMessageViewParameters) -> NSAttributedString {
         let message = parameters.message
         let baseFont = getDynamicTypeFont(for: .systemFont(ofSize: Constants.fontSize))
         let boldFont = getDynamicTypeFont(for: .boldSystemFont(ofSize: Constants.fontSize))
