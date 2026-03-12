@@ -405,6 +405,14 @@ final class PayPalMessageModalViewModelTests: XCTestCase {
         XCTAssertEqual(eventDelegate.onClickData?.linkSrc, "Apply Now Src")
     }
 
+    func testFlushUpdatesUpdatesWebViewProps() {
+        let (viewModel, webView, _, _) = makePayPalMessageModalViewModel()
+        // Simulate update
+        viewModel.flushUpdates()
+        // Check that evaluateJavaScript was called
+        XCTAssertTrue(webView.evaluateJavaScriptCalled)
+    }
+
     private func makePayPalMessageModalViewModel(
         config: PayPalMessageModalConfig = PayPalMessageModalConfig(data: .init(clientID: "testclientid", environment: .live))
     ) -> ( // swiftlint:disable:this large_tuple

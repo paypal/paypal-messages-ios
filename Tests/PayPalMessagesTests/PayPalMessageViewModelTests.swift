@@ -463,6 +463,23 @@ final class PayPalMessageViewModelTests: XCTestCase {
         XCTAssertEqual(mockedRequest.requestsPerformed, 2)
     }
 
+    func testFlushUpdatesTriggersDelegateOrFetch() {
+        let mockedView = PayPalMessageViewMock()
+        let mockedDelegate = PayPalMessageViewDelegateMock()
+        let viewModel = makePayPalMessageViewModel(
+            mockedView: mockedView,
+            mockedDelegate: mockedDelegate
+        )
+        // Simulate pending fetch
+        viewModel.queueMessageContentUpdate(requiresFetch: true)
+        viewModel.flushUpdates()
+        XCTAssertFalse(viewModel.fetchMessageContentPending)
+        // Simulate no pending fetch
+        viewModel.queueMessageContentUpdate(requiresFetch: false)
+        viewModel.flushUpdates()
+        XCTAssertTrue(mockedView.refreshContentCalled)
+    }
+
     private func makePayPalMessageViewModel(
         mockedView: PayPalMessageViewMock = PayPalMessageViewMock(),
         mockedDelegate: PayPalMessageViewDelegateMock = PayPalMessageViewDelegateMock(),
