@@ -101,7 +101,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
 
     // MARK: - Private Properties
     /// used to avoid property update related requests from being executed when there's a config requesting a fetch
-    private var fetchMessageContentPending = false
+    var fetchMessageContentPending = false
 
     /// Config update queue debounce time interval
     private let queueTimeInterval: TimeInterval = 0.001
@@ -199,7 +199,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     }
 
     /// When the message is being fetch from a Property update, it considers whether an update is not being currently executed or requested
-    private func queueMessageContentUpdate(requiresFetch: Bool = true, fireImmediately: Bool = false) {
+    func queueMessageContentUpdate(requiresFetch: Bool = true, fireImmediately: Bool = false) {
         renderStart = Date()
 
         if requiresFetch {
