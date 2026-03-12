@@ -527,5 +527,29 @@ final class PayPalMessageViewModelTests: XCTestCase {
         viewModel.onClick(modal, data: clickData)
         // No assertion needed, just exercise onClick for coverage
     }
+
+    // Helper for test setup
+    private func makePayPalMessageViewModel(
+        mockedView: PayPalMessageViewMock = PayPalMessageViewMock(),
+        mockedDelegate: PayPalMessageViewDelegateMock = PayPalMessageViewDelegateMock(),
+        mockedRequest: PayPalMessageRequestMock = PayPalMessageRequestMock(scenario: .success()),
+        mockedMerchantProfile: MerchantProfileProviderMock = MerchantProfileProviderMock(scenario: .success),
+        mockedConfig: PayPalMessageConfig = PayPalMessageConfig(data: .init(clientID: "testclientid", environment: .sandbox))
+    ) -> PayPalMessageViewModel {
+        let messageView = PayPalMessageView(
+            config: mockedConfig,
+            requester: PayPalMessageRequestMock(scenario: .success()),
+            merchantProfileProvider: MerchantProfileProviderMock(scenario: .success)
+        )
+        let viewModel = PayPalMessageViewModel(
+            config: mockedConfig,
+            requester: mockedRequest,
+            merchantProfileProvider: mockedMerchantProfile,
+            stateDelegate: mockedDelegate,
+            eventDelegate: mockedDelegate,
+            delegate: mockedView,
+            messageView: messageView
+        )
+        return viewModel
+    }
 }
-// swiftlint:disable:this file_length
