@@ -111,4 +111,31 @@ final class PayPalMessageAttributedStringTests: XCTestCase {
         let length = attributedString.string.count
         XCTAssertFalse(attributedString.containsAttachments(in: NSRange(location: 0, length: length)))
     }
+
+    func testBoldFormattingInMessage() {
+        let message = "Normal %bold%BoldText%bold% NormalEnd"
+        let params = buildParameters()
+        let paramsWithBold = PayPalMessageViewParameters(
+            message: message,
+            messageColor: .black,
+            shouldDisplayLeadingLogo: params.shouldDisplayLeadingLogo,
+            logoPlaceholder: params.logoPlaceholder,
+            logoImage: params.logoImage,
+            productName: params.productName,
+            linkDescription: params.linkDescription,
+            linkColor: params.linkColor,
+            linkUnderlineColor: params.linkUnderlineColor,
+            textAlign: params.textAlign,
+            accessibilityLabel: params.accessibilityLabel,
+            accessibilityTraits: params.accessibilityTraits,
+            isAccessibilityElement: params.isAccessibilityElement
+        )
+        let attributed = stringBuilder.makeMainMessageAttributedStringWithBold(paramsWithBold)
+        let string = attributed.string
+        XCTAssertTrue(string.contains("BoldText"))
+        let range = (string as NSString).range(of: "BoldText")
+        let font = attributed.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont
+        XCTAssertNotNil(font)
+        XCTAssertTrue(font?.fontDescriptor.symbolicTraits.contains(.traitBold) ?? false)
+    }
 }
