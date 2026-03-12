@@ -1,3 +1,4 @@
+// swiftlint:disable file_length line_length
 @testable import PayPalMessages
 import XCTest
 
