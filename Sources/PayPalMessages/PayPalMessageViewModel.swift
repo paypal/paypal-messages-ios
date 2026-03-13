@@ -284,6 +284,7 @@ class PayPalMessageViewModel: PayPalMessageModalEventDelegate {
     private func onMessageRequestReceived(response: MessageResponse) {
         messageResponse = response
         logger.dynamicData = response.trackingData
+        logger.languageRendered = response.language
 
         if let stateDelegate, let messageView {
             stateDelegate.onSuccess(messageView)

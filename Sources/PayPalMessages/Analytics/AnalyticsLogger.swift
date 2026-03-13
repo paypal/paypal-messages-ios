@@ -20,6 +20,9 @@ class AnalyticsLogger: Encodable {
 
     var instanceId: String
 
+    // Language returned by the server in the message response
+    var languageRendered: String?
+
     // Includes things like fdata, experience IDs, debug IDs, and the like
     var dynamicData: [String: AnyCodable] = [:]
 
@@ -48,6 +51,7 @@ class AnalyticsLogger: Encodable {
         case buyerCountryCode = "buyer_country_code"
         case channel = "presentment_channel"
         case languageRequested = "language_requested"
+        case languageRendered = "language_rendered"
         // Message Only
         case styleLogoType = "style_logo_type"
         case styleColor = "style_color"
@@ -79,10 +83,12 @@ class AnalyticsLogger: Encodable {
             try container.encodeIfPresent(message.logoType.rawValue, forKey: .styleLogoType)
             try container.encodeIfPresent(message.color.rawValue, forKey: .styleColor)
             try container.encodeIfPresent(message.textAlign.rawValue, forKey: .styleTextAlign)
+            // Language requested by the merchant via locale/language config
             let languageRequested = message.locale?.replacingOccurrences(of: "_", with: "-")
                 ?? message.language
                 ?? "undefined"
             try container.encodeIfPresent(languageRequested, forKey: .languageRequested)
+            try container.encodeIfPresent(languageRendered ?? "undefined", forKey: .languageRendered)
 
         case .modal(let weakModal):
             guard let modal = weakModal.value else { return }

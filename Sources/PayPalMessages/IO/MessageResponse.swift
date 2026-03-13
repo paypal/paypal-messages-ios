@@ -25,6 +25,8 @@ struct MessageResponse: Decodable {
 
     let logoPlaceholder: String
 
+    let language: String?
+
     let trackingData: [String: AnyCodable]
 
     var requestDuration: TimeInterval?
@@ -48,6 +50,7 @@ struct MessageResponse: Decodable {
         modalCloseButtonColor: String,
         modalCloseButtonColorType: String,
         modalCloseButtonAlternativeText: String,
+        language: String? = nil,
         trackingData: [String: AnyCodable] = [:]
     ) {
         self.offerType = offerType
@@ -66,6 +69,7 @@ struct MessageResponse: Decodable {
         self.modalCloseButtonColor = modalCloseButtonColor
         self.modalCloseButtonColorType = modalCloseButtonColorType
         self.modalCloseButtonAlternativeText = modalCloseButtonAlternativeText
+        self.language = language
         self.trackingData = trackingData
     }
 
@@ -133,6 +137,11 @@ struct MessageResponse: Decodable {
         productGroup = try metaContainer.decode(
             PayPalMessageResponseProductGroup.self,
             forKey: .creditProductGroup
+        )
+
+        language = try metaContainer.decodeIfPresent(
+            String.self,
+            forKey: .language
         )
 
         // MARK: - Variable Container
@@ -219,6 +228,7 @@ struct MessageResponse: Decodable {
     enum MetaKeys: String, CodingKey {
         case offerType = "offer_type"
         case creditProductGroup = "credit_product_group"
+        case language
         case modalCloseButton = "modal_close_button"
         case variables
         case trackingKeys = "tracking_keys"
