@@ -102,6 +102,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_color": "black",
                         "style_text_align": "left",
                         "language_requested": "undefined",
+                        "language_rendered": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -248,6 +249,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_color": "black",
                         "style_text_align": "left",
                         "language_requested": "undefined",
+                        "language_rendered": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -317,6 +319,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_color": "black",
                         "style_text_align": "left",
                         "language_requested": "undefined",
+                        "language_rendered": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -375,6 +378,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_color": "black",
                         "style_text_align": "left",
                         "language_requested": "undefined",
+                        "language_rendered": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_clicked",
@@ -442,6 +446,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
                         "style_color": "black",
                         "style_text_align": "left",
                         "language_requested": "undefined",
+                        "language_rendered": "undefined",
                         "component_events": [
                             [
                                 "event_type": "message_rendered",
@@ -490,32 +495,52 @@ final class PayPalMessageLoggerTests: XCTestCase {
         XCTAssert(clientID1 == "testloggerclientid3" || clientID2 == "testloggerclientid3")
     }
 
-    // Language Requested Tests
+    // Language Tests
 
     func testLanguageRequestedWithLocale() {
         message.locale = "en_US"
-        XCTAssertEqual(getLanguageRequested(), "en-US")
+        XCTAssertEqual(getLanguageField(key: "language_requested"), "en-US")
     }
 
     func testLanguageRequestedWithLanguageOnly() {
         message.language = "fr-CA"
-        XCTAssertEqual(getLanguageRequested(), "fr-CA")
+        XCTAssertEqual(getLanguageField(key: "language_requested"), "fr-CA")
     }
 
     func testLanguageRequestedPreferesLocaleOverLanguage() {
         message.language = "en-US"
         message.locale = "fr_CA"
-        XCTAssertEqual(getLanguageRequested(), "fr-CA")
+        XCTAssertEqual(getLanguageField(key: "language_requested"), "fr-CA")
     }
 
     func testLanguageRequestedDefaultsToUndefined() {
-        XCTAssertEqual(getLanguageRequested(), "undefined")
+        XCTAssertEqual(getLanguageField(key: "language_requested"), "undefined")
     }
 
-    private func getLanguageRequested() -> String? {
+    func testLanguageRenderedFromResponse() {
         let messageLogger = AnalyticsLogger(.message(Weak(message)))
+        messageLogger.languageRendered = "en-CA"
         messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
         AnalyticsService.shared.flushEvents()
+
+        XCTAssertEqual(getLanguageField(key: "language_rendered", logger: messageLogger), "en-CA")
+    }
+
+    func testLanguageRenderedWhenNil() {
+        let messageLogger = AnalyticsLogger(.message(Weak(message)))
+        messageLogger.languageRendered = nil
+        messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
+        AnalyticsService.shared.flushEvents()
+
+        XCTAssertEqual(getLanguageField(key: "language_rendered", logger: messageLogger), "undefined")
+    }
+
+    private func getLanguageField(key: String, logger: AnalyticsLogger? = nil) -> String? {
+        let messageLogger = logger ?? AnalyticsLogger(.message(Weak(message)))
+        if logger == nil {
+            messageLogger.addEvent(.messageRender(renderDuration: 10, requestDuration: 15))
+            AnalyticsService.shared.flushEvents()
+        }
 
         guard let data = mockSender.calls.last,
               let jsonData = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -526,7 +551,7 @@ final class PayPalMessageLoggerTests: XCTestCase {
             return nil
         }
 
-        return firstComponent["language_requested"] as? String
+        return firstComponent[key] as? String
     }
 
     // MARK: - Helper assert functions
