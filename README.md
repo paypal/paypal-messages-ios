@@ -1,6 +1,8 @@
 # PayPal iOS SDK Messages Module
 
-Welcome to the PayPal iOS SDK Messages Module. This package facilitates rendering PayPal messages to promote offers such as Pay Later and PayPal Credit to customers. **It is recommended to integrate this package using the [PayPal iOS SDK](https://github.com/paypal/paypal-ios)**.
+Welcome to the PayPal iOS SDK Messages Module. This package facilitates rendering PayPal messages to promote offers such as Pay Later and PayPal Credit to customers.
+
+> **Note:** This messaging component is intended for use with the **[Braintree SDK](https://developer.paypal.com/braintree/docs/guides/paypal/messaging/ios/v6)** only. To integrate PayPal messaging in your iOS app, you must have a Braintree account and the Braintree SDK integrated. PPCP SDK integrations are not supported.
 
 **The PayPalMessages package permits a deployment target of iOS 14.0 or higher**. It requires Xcode 14.3+ and Swift 5.8+.
 
