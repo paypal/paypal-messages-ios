@@ -92,7 +92,7 @@ struct PayPalMessageViewParametersBuilder {
             asset = isPayLater ? ImageAsset.logoPrimaryMonochrome : ImageAsset.logoPrimaryMonochromeCredit
 
         case .grayscale:
-            asset = isPayLater ? ImageAsset.logoPrimaryGrayscale : ImageAsset.logoPrimaryGrayscaleCredit
+            asset = isPayLater ? ImageAsset.logoPrimaryMonochrome : ImageAsset.logoPrimaryMonochromeCredit
         }
 
         return ImageAsset.image(asset)
@@ -115,7 +115,7 @@ struct PayPalMessageViewParametersBuilder {
             asset = isPayLater ? ImageAsset.logoAlternativeMonochrome : ImageAsset.logoAlternativeMonochromeCredit
 
         case .grayscale:
-            asset = isPayLater ? ImageAsset.logoAlternativeGrayscale : ImageAsset.logoAlternativeGrayscaleCredit
+            asset = isPayLater ? ImageAsset.logoAlternativeMonochrome : ImageAsset.logoAlternativeMonochromeCredit
         }
 
         return ImageAsset.image(asset)
@@ -138,7 +138,7 @@ struct PayPalMessageViewParametersBuilder {
             asset = isPayLater ? ImageAsset.logoInlineMonochrome : ImageAsset.logoInlineMonochromeCredit
 
         case .grayscale:
-            asset = isPayLater ? ImageAsset.logoInlineGrayscale : ImageAsset.logoInlineGrayscaleCredit
+            asset = isPayLater ? ImageAsset.logoInlineMonochrome : ImageAsset.logoInlineMonochromeCredit
         }
 
         return ImageAsset.image(asset)

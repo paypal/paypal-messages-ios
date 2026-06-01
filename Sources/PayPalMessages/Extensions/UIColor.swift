@@ -2,7 +2,7 @@ import UIKit
 
 extension UIColor {
 
-    static let colorBlue600 = UIColor(red: 0.00, green: 0.44, blue: 0.73, alpha: 1)
+    static let colorBlue600 = UIColor(hexString: "#0065F2")
     static let colorGrey700 = UIColor(red: 0.17, green: 0.18, blue: 0.18, alpha: 1)
 
     convenience init(hexString: String) {

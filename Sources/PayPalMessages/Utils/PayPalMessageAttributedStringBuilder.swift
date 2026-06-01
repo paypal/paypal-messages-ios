@@ -189,25 +189,17 @@ final class PayPalMessageAttributedStringBuilder {
         includesMonogram: Bool,
         icon: UIImage
     ) -> CGRect {
-        // Use the cap height of the displayed raw text as the basis for calculations.
-        // The cap height is the distance from the baseline to the highest point of a capital letter.
-        // The height of 'P' would be the cap height.
-        let capHeight = getDynamicTypeFont(for: .systemFont(ofSize: fontSize)).capHeight
-        // The descender is the lowest part of the text that goes below the baseline.
-        // The difference in height between 'a' and 'y' would be the descender, where the
-        // descender is just the bottom part of 'y'. We calculate it ourselves instead of pulling it
-        // from the font because the PayPal logo has a slightly different descender ratio.
+        let font = getDynamicTypeFont(for: .systemFont(ofSize: fontSize))
+        let capHeight = font.capHeight
         let descender = capHeight * Constants.capHeightToDescenderRatio + Constants.descenderOffset
-        // Used to scale up the calculations when the image includes a monogram since the
-        // "PayPal" portion is smaller than the "PP" monogram
         let monogramMultiplier = includesMonogram ? Constants.monogramToPayPalRatio : 1
-        // Ratio which is used to calculate the correctly scaled width of the boundary
         let iconRatio = icon.size.width / icon.size.height
-        // The height consists of the cap height ('P') and descender (bottom of 'y') and an optional
-        // monogram ratio upscale when present
         let iconHeight = (capHeight + descender) * monogramMultiplier
-        // Veritical shift down so that the descender (bottom of 'y') falls below the baseline
-        let iconYOffset = -1 * descender
+        // Leading badge: center vertically on the text line's midpoint
+        // Inline logo: shift down so the logo's descender falls below the baseline
+        let iconYOffset = includesMonogram
+            ? (font.ascender + font.descender) / 2 - iconHeight / 2
+            : -1 * descender
 
         return CGRect(
             x: 0,
