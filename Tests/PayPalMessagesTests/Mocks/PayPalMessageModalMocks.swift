@@ -87,7 +87,7 @@ class MockNavigationResponse: WKNavigationResponse {
 
     var statusCode: Int = 200
     var debugId: String?
-    var url = URL(string: "https://www.paypal.com")! // swiftlint:disable:this force_unwrapping
+    var url = URL(string: "https://www.paypal.com")!
 
     convenience init(statusCode: Int, debugId: String? = nil, url: URL? = nil) {
         self.init()

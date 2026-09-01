@@ -84,7 +84,7 @@ public enum Environment: Equatable {
             basePath = baseURL
 
             // Append dev_touchpoint and stage_tag query parameters only for .develop case
-            if case .develop(_, let devTouchpoint, let stageTag) = self {
+            if case let .develop(_, devTouchpoint, stageTag) = self {
                 if devTouchpoint {
                     queryItems.append(URLQueryItem(name: "dev_touchpoint", value: "\(devTouchpoint)"))
                 }

@@ -5,7 +5,7 @@ let version = "1.2.0"
 
 let package = Package(
     name: "PayPalMessages",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v15)],
     products: [
         .library(
             name: "PayPalMessages",
