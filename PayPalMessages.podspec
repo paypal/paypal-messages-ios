@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source          = { :git => "https://github.com/paypal/paypal-messages-ios.git", :tag => s.version }
   s.swift_version   = "5.8"
 
-  s.platform        = :ios, "14.0"
+  s.platform        = :ios, "15.0"
   s.compiler_flags  = "-Wall -Werror -Wextra"
 
   s.source_files    = "Sources/PayPalMessages/**/*.swift"
