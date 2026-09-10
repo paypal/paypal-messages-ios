@@ -1,7 +1,7 @@
 // swift-tools-version: 5.8
 import PackageDescription
 
-let version = "1.2.0"
+let version = "2.0.0"
 
 let package = Package(
     name: "PayPalMessages",
@@ -15,7 +15,7 @@ let package = Package(
         .binaryTarget(
             name: "PayPalMessages",
             url: "https://github.com/paypal/paypal-messages-ios/releases/download/\(version)/PayPalMessages.xcframework.zip",
-            checksum: "819604d748397409167cc17278ce3c1c9c4e73f18dbdde903878839849069e95")
+            checksum: "d4411c4c49367fc096b8352f2dceba36fc8f601adc6c6d498be92e065cb41f5f")
     ],
     swiftLanguageVersions: [.v5]
 )
