@@ -24,6 +24,10 @@ This package supports:
 - UIKit
 - SwiftUI
 
+## Guides
+
+- [Using PayPal Messages in a reusable list](Documentation/ReusableListIntegration.md) — integrating a message into a `UITableView`/`UICollectionView` cell, where content loads asynchronously and the row has to grow to fit it.
+
 ## Client ID
 
 In order to display PayPal messages within your iOS application, a Client ID is required. This can be found in your [PayPal Developer Dashboard](https://developer.paypal.com/api/rest/#link-getstarted).
