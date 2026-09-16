@@ -61,7 +61,7 @@ enum ImageAsset: String {
 
         let renderFormat = UIGraphicsImageRendererFormat.default()
         renderFormat.opaque = false
-
+        
         let renderer = UIGraphicsImageRenderer(size: sized, format: renderFormat)
 
         let newImage = renderer.image { _ in

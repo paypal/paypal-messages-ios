@@ -92,7 +92,7 @@ final class PayPalMessageLogoTests: XCTestCase {
             logoType: .primary,
             color: .grayscale,
             productGroup: .payLater,
-            expectedAsset: .logoPrimaryGrayscale
+            expectedAsset: .logoPrimaryMonochrome
         )
     }
 
@@ -101,7 +101,7 @@ final class PayPalMessageLogoTests: XCTestCase {
             logoType: .primary,
             color: .grayscale,
             productGroup: .paypalCredit,
-            expectedAsset: .logoPrimaryGrayscaleCredit
+            expectedAsset: .logoPrimaryMonochromeCredit
         )
     }
 
@@ -166,7 +166,7 @@ final class PayPalMessageLogoTests: XCTestCase {
             logoType: .alternative,
             color: .grayscale,
             productGroup: .payLater,
-            expectedAsset: .logoAlternativeGrayscale
+            expectedAsset: .logoAlternativeMonochrome
         )
     }
 
@@ -175,7 +175,7 @@ final class PayPalMessageLogoTests: XCTestCase {
             logoType: .alternative,
             color: .grayscale,
             productGroup: .paypalCredit,
-            expectedAsset: .logoAlternativeGrayscaleCredit
+            expectedAsset: .logoAlternativeMonochromeCredit
         )
     }
 
@@ -240,7 +240,7 @@ final class PayPalMessageLogoTests: XCTestCase {
             logoType: .inline,
             color: .grayscale,
             productGroup: .payLater,
-            expectedAsset: .logoInlineGrayscale
+            expectedAsset: .logoInlineMonochrome
         )
     }
 
@@ -249,7 +249,7 @@ final class PayPalMessageLogoTests: XCTestCase {
             logoType: .inline,
             color: .grayscale,
             productGroup: .paypalCredit,
-            expectedAsset: .logoInlineGrayscaleCredit
+            expectedAsset: .logoInlineMonochromeCredit
         )
     }
 
